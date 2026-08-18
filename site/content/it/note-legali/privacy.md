@@ -2,8 +2,8 @@
 title: "Informativa sul trattamento dei dati personali"
 translationKey: "legal-privacy"
 description: "Chi tratta i tuoi dati quando usi ReactiveNET, quali dati, per quanto tempo e con quali diritti. La risposta breve: quasi nessuno, perché le app girano nel tuo browser."
-version: "1.5"
-updated: "2026-08-15"
+version: "1.6"
+updated: "2026-08-18"
 weight: 10
 ---
 
@@ -79,7 +79,10 @@ dato delle app viene trasmesso in questa richiesta. Pirsch agisce quale
 responsabile del trattamento.
 
 - **Dati**: pagina visitata, referente, data e ora, paese, tipo di dispositivo,
-  browser e sistema operativo, lingua.
+  browser e sistema operativo, lingua; sul sito, la pressione di alcuni pulsanti
+  (apertura della piattaforma, apertura o download di un'app del catalogo, copia
+  dell'indirizzo MCP, link a GitHub e LinkedIn) è contata come evento anonimo,
+  senza alcun dato su chi ha premuto.
 - **Finalità**: conoscere in forma aggregata quali contenuti sono letti, per
   decidere cosa scrivere e cosa correggere.
 - **Base giuridica**: legittimo interesse del titolare a una misurazione

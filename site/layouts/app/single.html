@@ -30,8 +30,13 @@
          via che non dipende da nessun servizio. */}}
     {{ $file := printf "/app/%s.md" (.Params.appid | default "") }}
     <div class="app-actions">
-      <a class="hero-btn" href="https://app.reactivenet.ai/c/{{ .Params.appid }}">{{ i18n "appOpen" }}</a>
-      <a class="hero-btn-ghost" href="{{ $file }}" download>{{ i18n "appDownload" }}</a>
+      {{/* data-pirsch-event: gli eventi dicono QUALE app del catalogo viene
+           aperta o scaricata — è il dato che le pageview non hanno, perché
+           l'apertura avviene su app.reactivenet.ai. */}}
+      <a class="hero-btn" href="https://app.reactivenet.ai/c/{{ .Params.appid }}"
+         data-pirsch-event="Apri app" data-pirsch-meta-app="{{ .Params.appid }}" data-pirsch-meta-posizione="scheda">{{ i18n "appOpen" }}</a>
+      <a class="hero-btn-ghost" href="{{ $file }}" download
+         data-pirsch-event="Scarica documento" data-pirsch-meta-app="{{ .Params.appid }}">{{ i18n "appDownload" }}</a>
     </div>
     <p class="app-note">{{ i18n "appOpenNote" }}</p>
   </header>
@@ -76,7 +81,8 @@
     <h2>{{ i18n "appCtaTitle" }}</h2>
     <p class="cta-sub">{{ i18n "appCtaSub" }}</p>
     {{ if $link }}
-    <p><a class="hero-btn" href="{{ $link }}">{{ i18n "appOpen" }}</a></p>
+    <p><a class="hero-btn" href="{{ $link }}"
+          data-pirsch-event="Apri app" data-pirsch-meta-app="{{ .Params.appid }}" data-pirsch-meta-posizione="cta-scheda">{{ i18n "appOpen" }}</a></p>
     {{ end }}
   </section>
 </article>

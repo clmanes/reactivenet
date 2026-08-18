@@ -11,11 +11,13 @@
       {{ range site.Menus.main }}
       <a href="{{ .URL }}">{{ .Name }}</a>
       {{ end }}
-      <a href="https://app.reactivenet.ai">{{ i18n "openApp" }}</a>
+      <a href="https://app.reactivenet.ai"
+         data-pirsch-event="Apri la piattaforma" data-pirsch-meta-posizione="footer">{{ i18n "openApp" }}</a>
       {{ with site.Params.github }}
       {{/* Il conteggio viene da github-stars.html (letto al build — vedi lì);
            si aggiorna a ogni deploy, e senza risposta il link resta da solo. */}}
-      <a class="gh-link" href="{{ . }}" rel="noopener">{{ partial "github-mark.svg" (dict "size" 16) }} GitHub{{ with partialCached "github-stars.html" . }}<span class="gh-stars">★ {{ lang.FormatNumber 0 . }}</span>{{ end }}</a>
+      <a class="gh-link" href="{{ . }}" rel="noopener"
+         data-pirsch-event="GitHub" data-pirsch-meta-posizione="footer">{{ partial "github-mark.svg" (dict "size" 16) }} GitHub{{ with partialCached "github-stars.html" . }}<span class="gh-stars">★ {{ lang.FormatNumber 0 . }}</span>{{ end }}</a>
       {{ end }}
       {{ with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}
       <a href="{{ .RelPermalink }}">RSS</a>

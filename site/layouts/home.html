@@ -17,7 +17,13 @@
     <p class="tagline">{{ i18n "heroTagline" }}</p>
     <div class="hero-cta">
       <div class="hero-btns">
-        <a class="hero-btn" href="https://app.reactivenet.ai">{{ i18n "heroCtaMain" }}</a>
+        {{/* data-pirsch-event: pa.js aggancia da solo click e middle-click su
+             questi attributi e invia con sendBeacon, quindi il conteggio
+             sopravvive alla navigazione. In dev lo script non c'è e gli
+             attributi sono inerti. Gli eventi contano solo QUALE controllo è
+             stato premuto — la cookie policy (§3) li dichiara. */}}
+        <a class="hero-btn" href="https://app.reactivenet.ai"
+           data-pirsch-event="Apri la piattaforma" data-pirsch-meta-posizione="hero">{{ i18n "heroCtaMain" }}</a>
         <a class="hero-btn-ghost" href="{{ (site.GetPage "/guida").RelPermalink }}">{{ i18n "heroCtaGhost" }}</a>
       </div>
       <p class="hero-cta-sub">{{ i18n "heroCtaSub" }}</p>
@@ -26,7 +32,8 @@
       <p class="hero-mcp-msg">{{ i18n "heroMcpMsg" }}</p>
       <div class="hero-mcp-row">
         <button class="hero-mcp-copy" type="button" data-url="https://mcp.reactivenet.ai/mcp"
-                data-copied="{{ i18n "heroMcpCopied" }}" aria-label="{{ i18n "heroMcpCopy" }}" title="{{ i18n "heroMcpCopy" }}">
+                data-copied="{{ i18n "heroMcpCopied" }}" aria-label="{{ i18n "heroMcpCopy" }}" title="{{ i18n "heroMcpCopy" }}"
+                data-pirsch-event="Copia endpoint MCP">
           <code>mcp.reactivenet.ai/mcp</code>
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
           <span class="visually-hidden" role="status"></span>
@@ -175,7 +182,8 @@
 
 <section class="cta-band">
   <h2>{{ i18n "ctaTitle" }}</h2>
-  <p><a class="hero-btn" href="https://app.reactivenet.ai">{{ i18n "heroCtaMain" }}</a></p>
+  <p><a class="hero-btn" href="https://app.reactivenet.ai"
+        data-pirsch-event="Apri la piattaforma" data-pirsch-meta-posizione="cta-home">{{ i18n "heroCtaMain" }}</a></p>
   <p class="hero-cta-sub">{{ i18n "heroCtaSub" }}</p>
 </section>
 {{ end }}

@@ -2,8 +2,8 @@
 title: "Privacy policy"
 translationKey: "legal-privacy"
 description: "Who processes your data when you use ReactiveNET, which data, for how long and with what rights. The short answer: almost nobody, because the apps run in your browser."
-version: "1.5"
-updated: "2026-08-15"
+version: "1.6"
+updated: "2026-08-18"
 ---
 
 # Privacy policy
@@ -75,7 +75,10 @@ not retain. No document and no app data travels in that request. Pirsch acts as
 a processor.
 
 - **Data**: page visited, referrer, date and time, country, device type, browser
-  and operating system, language.
+  and operating system, language; on the website, pressing certain buttons
+  (opening the platform, opening or downloading a catalogue app, copying the
+  MCP address, the GitHub and LinkedIn links) is counted as an anonymous event,
+  with no data about who pressed it.
 - **Purpose**: knowing, in aggregate form, which content is read, so as to decide
   what to write and what to fix.
 - **Legal basis**: the controller's legitimate interest in aggregate measurement

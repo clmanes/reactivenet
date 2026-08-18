@@ -31,7 +31,8 @@
          github-stars.html). Il nome lo porta l'aria-label — il testo visibile
          è solo il conteggio, che da solo non direbbe dove si va. */}}
     {{ with site.Params.github }}
-    <a class="gh-link" href="{{ . }}" aria-label="GitHub" title="GitHub" rel="noopener">
+    <a class="gh-link" href="{{ . }}" aria-label="GitHub" title="GitHub" rel="noopener"
+       data-pirsch-event="GitHub" data-pirsch-meta-posizione="header">
       {{ partial "github-mark.svg" (dict "size" 20) }}{{ with partialCached "github-stars.html" . }}<span class="gh-stars">★ {{ lang.FormatNumber 0 . }}</span>{{ end }}
     </a>
     {{ end }}

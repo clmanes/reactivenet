@@ -2,8 +2,8 @@
 title: "Cookie policy"
 translationKey: "legal-cookie"
 description: "Questo sito non usa cookie. L'app usa l'archivio locale del browser per tenere le tue app, che è dove devono stare. Qui è spiegato cosa c'è dentro e come si cancella."
-version: "1.3"
-updated: "2026-08-15"
+version: "1.4"
+updated: "2026-08-18"
 weight: 20
 ---
 
@@ -53,7 +53,13 @@ perché è possibile misurare un sito senza inseguire chi lo legge.
 - **I dati restano in Germania**, su server dell'Unione europea.
 
 Sono rilevati: pagina visitata, referente, data e ora, paese, tipo di
-dispositivo, browser, sistema operativo, lingua del browser. Nient'altro.
+dispositivo, browser, sistema operativo, lingua del browser. Sul sito, inoltre,
+la pressione di alcuni pulsanti è contata come **evento anonimo**: l'apertura
+della piattaforma, l'apertura o il download di un'app del catalogo (con il nome
+dell'app), la copia dell'indirizzo MCP, i link a GitHub e LinkedIn. L'evento
+dice quale controllo è stato premuto e niente su chi lo ha premuto, con le
+stesse garanzie di cui sopra: nessun cookie, nessun identificatore persistente.
+Nient'altro.
 Sul sito come nell'applicazione lo script è caricato da `api.pirsch.io` e i
 conteggi sono inviati lì: il browser contatta quel dominio direttamente, e nel
 farlo espone indirizzo IP e user agent, che Pirsch usa come sopra e non

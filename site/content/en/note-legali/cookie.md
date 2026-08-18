@@ -2,8 +2,8 @@
 title: "Cookie policy"
 translationKey: "legal-cookie"
 description: "This site uses no cookies. The app uses your browser's local storage to hold your apps, which is where they belong. Here is what is in there and how to clear it."
-version: "1.3"
-updated: "2026-08-15"
+version: "1.4"
+updated: "2026-08-18"
 weight: 20
 ---
 
@@ -55,7 +55,12 @@ the people who read it.
 - **The data stays in Germany**, on European Union servers.
 
 What is recorded: page visited, referrer, date and time, country, device type,
-browser, operating system, browser language. Nothing else. On the website and in
+browser, operating system, browser language. On the website, pressing certain
+buttons is additionally counted as an **anonymous event**: opening the
+platform, opening or downloading a catalogue app (with the app's name), copying
+the MCP address, the GitHub and LinkedIn links. The event says which control
+was pressed and nothing about who pressed it, with the same guarantees as
+above: no cookie, no persistent identifier. Nothing else. On the website and in
 the application alike, the script is loaded from `api.pirsch.io` and the counts
 are sent there: the browser contacts that domain directly, exposing its IP
 address and user agent, which Pirsch uses as above and does not retain. It is
