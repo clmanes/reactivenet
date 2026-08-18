@@ -52,5 +52,5 @@
 <!-- Genera la social preview del repository GitHub (Settings → Social preview):
      google-chrome --headless=new --window-size=1280,640 --hide-scrollbars \
        --screenshot=social-preview.png file://$PWD/scripts/social-preview.html
-     Il font è il woff2 del sito, quindi il percorso in @font-face va adattato
-     se il repo non sta in ~/Developer/reactivenet-platform. -->
+     Il font è il woff2 del sito, referenziato con percorso relativo a questo
+     file: il comando funziona da qualunque cwd, ma il file non va spostato. -->
