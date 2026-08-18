@@ -247,17 +247,27 @@ html.js .site-header.hero-nav:not(.on) {
    l'aria-label), icona + testo nel footer. Il marchio è in currentColor,
    così segue il colore dei link del posto che lo ospita. */
 .gh-link svg { flex: none; }
+/* Nell'header è un badge a pillola — icona + stelle in un bordo tondo, come
+   il badge di GitHub — così il conteggio non galleggia da solo nel vuoto. */
 .site-nav > .gh-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   color: var(--muted);
   /* §2.5.8 — il padding porta il target sopra i 24×24 CSS px */
-  padding: 0.5rem 0.6rem;
-  border-radius: 0.5rem;
-  transition: background 0.15s, color 0.15s;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.site-nav > .gh-link:hover { background: var(--bg-raised); color: var(--fg); }
+.site-nav > .gh-link:hover {
+  background: var(--bg-raised);
+  color: var(--fg);
+  border-color: var(--muted);
+}
+.site-nav > .gh-link .gh-stars { font-weight: 600; }
+.gh-stars { font-variant-numeric: tabular-nums; }
 .sf-nav .gh-link {
   display: inline-flex;
   align-items: center;

@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: "Space Grotesk";
+    src: url("../site/static/fonts/space-grotesk-latin-700.woff2") format("woff2");
+    font-weight: 700;
+  }
+  * { margin: 0; padding: 0; }
+  body {
+    width: 1280px; height: 640px; overflow: hidden;
+    background: #16161d;
+    font-family: "Space Grotesk", sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  /* Le due ellissi del logo, enormi e appena accennate, come texture di fondo */
+  .bg { position: absolute; inset: 0; opacity: 0.14; }
+  .card { display: flex; align-items: center; gap: 56px; position: relative; }
+  .badge { width: 200px; height: 200px; border-radius: 44px; }
+  h1 { color: #f4f4f6; font-size: 92px; font-weight: 700; letter-spacing: -0.02em; }
+  p  { color: #9aa0ab; font-size: 34px; font-weight: 700; margin-top: 10px;
+       font-family: "Space Grotesk", sans-serif; }
+  .accent { color: #65c3c8; }
+</style>
+</head>
+<body>
+  <svg class="bg" viewBox="0 0 1280 640" preserveAspectRatio="xMidYMid slice">
+    <g fill="none" stroke-width="26" transform="translate(640,320)">
+      <ellipse rx="560" ry="216" transform="rotate(-45)" stroke="#3f8f95"/>
+      <ellipse rx="560" ry="216" transform="rotate(45)" stroke="#65c3c8"/>
+    </g>
+  </svg>
+  <div class="card">
+    <svg class="badge" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="112" fill="#101016"/>
+      <g fill="none" stroke-width="20">
+        <ellipse cx="256" cy="256" rx="186" ry="72" transform="rotate(-45 256 256)" stroke="#3f8f95"/>
+        <ellipse cx="256" cy="256" rx="186" ry="72" transform="rotate(45 256 256)" stroke="#65c3c8"/>
+      </g>
+      <circle cx="256" cy="256" r="60" fill="#65c3c8"/>
+    </svg>
+    <div>
+      <h1>Reactive<span class="accent">NET</span></h1>
+      <p>Apps written in Markdown, run in the browser.<br>No cloud, no account.</p>
+    </div>
+  </div>
+</body>
+</html>
+<!-- Genera la social preview del repository GitHub (Settings → Social preview):
+     google-chrome --headless=new --window-size=1280,640 --hide-scrollbars \
+       --screenshot=social-preview.png file://$PWD/scripts/social-preview.html
+     Il font è il woff2 del sito, quindi il percorso in @font-face va adattato
+     se il repo non sta in ~/Developer/reactivenet-platform. -->
