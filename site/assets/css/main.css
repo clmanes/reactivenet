@@ -250,6 +250,7 @@ html.js .site-header.hero-nav:not(.on) {
 .site-nav > .gh-link {
   display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
   color: var(--muted);
   /* §2.5.8 — il padding porta il target sopra i 24×24 CSS px */
   padding: 0.5rem 0.6rem;

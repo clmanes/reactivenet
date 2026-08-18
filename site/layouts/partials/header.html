@@ -27,11 +27,12 @@
       {{ end }}
     </nav>
     {{ end }}
-    {{/* Il repository pubblico. Icona sola: "GitHub" come testo la duplica il
-         footer; qui il nome lo porta l'aria-label, che è anche il tooltip. */}}
+    {{/* Il repository pubblico: icona + stelle (dal build, vedi
+         github-stars.html). Il nome lo porta l'aria-label — il testo visibile
+         è solo il conteggio, che da solo non direbbe dove si va. */}}
     {{ with site.Params.github }}
     <a class="gh-link" href="{{ . }}" aria-label="GitHub" title="GitHub" rel="noopener">
-      {{ partial "github-mark.svg" (dict "size" 20) }}
+      {{ partial "github-mark.svg" (dict "size" 20) }}{{ with partialCached "github-stars.html" . }}<span class="gh-stars">★ {{ lang.FormatNumber 0 . }}</span>{{ end }}
     </a>
     {{ end }}
   </div>
