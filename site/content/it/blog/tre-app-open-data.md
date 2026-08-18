@@ -1,6 +1,6 @@
 ---
 title: "Tre app che mettono al lavoro i dati pubblici"
-description: "Gli open data di Reactive crescono: ai vocabolari ufficiali si aggiungono i fatti vivi — i prezzi dei carburanti aggiornati ogni mattina, oltre 2,6 milioni di gare pubbliche, la popolazione e l'anagrafe delle PA. E tre app pronte all'uso lo dimostrano: il distributore più economico vicino a te, le gare del tuo comune, la norma giusta descritta a parole."
+description: "Ai vocabolari si aggiungono i fatti vivi: prezzi dei carburanti, 2,6 milioni di gare ANAC, popolazione e IndicePA. Tre app pronte li mettono al lavoro."
 date: 2026-07-18
 author: "Cosimo Luigi Manes"
 translationKey: "tre-app-open-data"

@@ -1,6 +1,7 @@
 ---
 title: "Il 3D entra nelle app: modelli, realtà aumentata e pezzi da stampare"
-description: "Due nuove direttive portano la terza dimensione in Reactive: ::model visualizza modelli 3D con vista in realtà aumentata, ::cad genera pezzi parametrici con OpenSCAD — un form fa da pannello dei parametri e l'STL è pronto per la stampante."
+seotitle: "Il 3D entra nelle app: modelli, AR e stampa"
+description: "::model mostra modelli 3D con vista in realtà aumentata; ::cad genera pezzi parametrici OpenSCAD nel browser, con STL pronto per la stampante 3D."
 date: 2026-07-15
 author: "Cosimo Luigi Manes"
 translationKey: "pezzi-3d-nel-browser"

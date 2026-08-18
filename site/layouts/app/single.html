@@ -49,7 +49,10 @@
       {{ with resources.Get (printf "img/app/%s" $shot.src) }}
       {{ $small := .Resize "760x webp q82" }}
       {{ $large := .Resize "1520x webp q82" }}
-      <a href="{{ .RelPermalink }}">
+      {{/* aria-label: il nome accessibile del link è già l'alt dell'immagine
+           dentro, ma i crawler SEO non lo contano e segnalano un'ancora vuota;
+           dichiararlo esplicito accontenta entrambi senza cambiare l'annuncio. */}}
+      <a href="{{ .RelPermalink }}" aria-label="{{ $shot.alt }}">
         <img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} 760w, {{ $large.RelPermalink }} 1520w"
              sizes="(min-width: 60rem) 56rem, 100vw"
              width="{{ $small.Width }}" height="{{ $small.Height }}" loading="lazy" alt="{{ $shot.alt }}">

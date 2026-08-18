@@ -1,10 +1,10 @@
 ---
 title: "School timetable"
 translationKey: "app-orario-scolastico"
-seotitle: "School timetable: software for building the weekly lesson grid"
+seotitle: "School timetable builder and generator"
 appid: "orario-scolastico"
 weight: 20
-description: "Building and running a secondary school's lesson timetable: registers, teaching assignments, automatic room choice, blocks of consecutive hours, co-teaching, rules between subjects, a drag-and-drop day-by-hour grid, constraints checked in the open, a monitor that says whether the timetable can exist before you generate it, assisted generation that runs in the browser. Registers and assignments import from a CSV or an Excel sheet, and every table exports back the same way. And daily cover: the uncovered lessons, the candidates in order, and the count of who has done how many. With a sample school already inside."
+description: "Build and run a secondary school's weekly timetable: registers, drag-and-drop grid, constraint checks, in-browser generation and daily cover."
 lead: "The solver proposes, the school decides. It picks the room too, keeps lab blocks whole, honours co-teaching, leaves classes no gaps in their day, and never makes a teacher change site from one hour to the next — and it can be stopped while keeping the best result found so far."
 tags: ["Head teachers", "Timetable officers", "School offices", "Timetabling", "Labs"]
 shots:

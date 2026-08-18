@@ -276,3 +276,15 @@ other = "This section has no published apps yet: the ones that belong here are b
 
 [sectionEmptyBack]
 other = "Back to the catalogue"
+
+[termSeoTitle]
+other = "Apps and articles about {{ . }}"
+
+[termSeoDesc]
+other = "Every ReactiveNET page about {{ . }}: the app catalogue cards and the blog articles that cover it."
+
+[taxonomySeoTitle]
+other = "Index by {{ . }}"
+
+[taxonomySeoDesc]
+other = "The {{ . }} index of ReactiveNET: the topics running through the app catalogue and the blog, each with its pages."

@@ -1,6 +1,7 @@
 ---
 title: "Scrivi la tua app come un documento: arriva l'editor a blocchi"
-description: "La nuova modalità di modifica predefinita di Reactive: il documento si costruisce come su Notion, blocco dopo blocco. Ogni widget è una scheda con i suoi campi da compilare, il menu / suggerisce tutto quello che puoi inserire nella tua lingua, e un blocco AI genera i widget al posto giusto da una frase. Il codice resta lì, a un click — ma non serve più cominciare da lì."
+seotitle: "L'editor a blocchi: l'app come un documento"
+description: "Il documento si costruisce come su Notion: ogni widget è una scheda da compilare, il menu / suggerisce tutto nella tua lingua, un blocco AI genera il resto."
 date: 2026-08-04
 author: "Cosimo Luigi Manes"
 translationKey: "editor-a-blocchi"

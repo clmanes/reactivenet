@@ -1,6 +1,7 @@
 ---
 title: "Parliament and the courts, in open data: four new sources"
-description: "Reactive's open data warehouse grows to 228 datasets: Chamber of Deputies bills and votes, Senate bills, Constitutional Court rulings since 1956, and rulings from Italy's Regional Administrative Courts and Council of State. Two new apps to explore them — Parliament by the numbers and Constitutional and administrative justice."
+seotitle: "Parliament and the courts, in open data"
+description: "Chamber and Senate bills, Constitutional Court rulings since 1956, administrative justice: 228 datasets and two new apps to explore them."
 date: 2026-07-20
 author: "Cosimo Luigi Manes"
 translationKey: "parliament-and-justice"

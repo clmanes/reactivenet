@@ -1,10 +1,10 @@
 ---
 title: "Inclusione"
 translationKey: "app-inclusione"
-seotitle: "PEI e PDP: software per l'inclusione scolastica che non archivia diagnosi"
+seotitle: "PEI e PDP: software per l'inclusione scolastica"
 appid: "inclusione"
 weight: 40
-description: "Redazione collaborativa di PEI e PDP: modelli modificabili per ordine di scuola, contributo per disciplina, obiettivi e verifiche, incontri del GLO, firme, estratto operativo per il consiglio di classe e riepiloghi d'istituto senza nominativi."
+description: "Redazione collaborativa di PEI e PDP: modelli modificabili per ordine di scuola, obiettivi e verifiche, incontri del GLO, firme e riepiloghi senza nominativi."
 lead: "Tratta dati sulla salute di minori, e questo ha deciso la forma del programma: niente esce dal dispositivo, non c'è nessun campo in cui scrivere una diagnosi, e l'unica AI che c'è dentro riformula un testo che hai già scritto tu."
 shots:
   - src: inclusione-modelli.jpg

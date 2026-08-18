@@ -50,6 +50,30 @@ reactivenet.ai {
 
 	encode zstd gzip
 
+	# Header di sicurezza del SITO. La politica-di-sicurezza in legal/ dichiara
+	# HSTS e queste intestazioni per tutto il traffico: prima valevano solo per
+	# app.reactivenet.ai, e la dichiarazione era vera a metà. Questa CSP è
+	# DIVERSA da quella dell'app e ha UNA sola copia — è questa: il sito non ha
+	# un vite.config.js che faccia da fonte di verità, quindi la fonte è qui.
+	# SecurityPolicy_test legge TUTTE le CSP del file e verifica che quella
+	# dell'app sia tra loro — aggiungere questa non lo tocca.
+	#
+	# 'unsafe-inline' su script-src copre il solo script inline del tema in
+	# head.html: un hash sarebbe più stretto ma andrebbe ricalcolato a ogni
+	# modifica (e Hugo --minify riscrive lo script), cioè una copia a mano che
+	# deriva — il fallimento che questo repo continua a documentare. Il sito è
+	# statico e non riflette input: l'esposizione residua è accettata.
+	# Gli host esterni sono ESATTAMENTE i tre che il sito usa: Pirsch
+	# (script + hit), il servizio dati (fetch dell'esploratore in /dati).
+	header {
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://api.pirsch.io; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.pirsch.io https://data.reactivenet.ai; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()"
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+	}
+
 	# Sito statico con URL "puliti" (Hugo genera cartelle con index.html):
 	# prova il file, poi la cartella. NIENTE fallback a /404.html qui: la
 	# pagina 404 va servita con STATUS 404 (handle_errors sotto), altrimenti

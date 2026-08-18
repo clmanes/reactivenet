@@ -276,3 +276,15 @@ other = "Questa sezione non ha ancora schede pubblicate: le app che la riguardan
 
 [sectionEmptyBack]
 other = "Torna al catalogo"
+
+[termSeoTitle]
+other = "App e articoli su {{ . }}"
+
+[termSeoDesc]
+other = "Tutte le pagine di ReactiveNET che riguardano {{ . }}: le schede del catalogo di app e gli articoli del blog che ne parlano."
+
+[taxonomySeoTitle]
+other = "Indice per {{ . }}"
+
+[taxonomySeoDesc]
+other = "L'indice {{ . }} di ReactiveNET: gli argomenti che attraversano il catalogo di app e il blog, ciascuno con le sue pagine."

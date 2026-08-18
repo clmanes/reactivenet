@@ -1,6 +1,6 @@
 ---
 title: "Guida per sviluppatori"
-description: "Il riferimento completo del linguaggio: la sintassi, le direttive dei dati, i grafici, le mappe, gli open data, l'assistente, l'apprendimento automatico, i 92 componenti Spectrum, l'editor a blocchi e il server MCP."
+description: "Il riferimento completo del linguaggio ReactiveNET: sintassi, direttive dei dati, grafici, mappe, open data, assistente, componenti, editor a blocchi."
 translationKey: "guida-index"
 ---
 

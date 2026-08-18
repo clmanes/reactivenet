@@ -1,6 +1,6 @@
 ---
 title: "Developer guide"
-description: "The complete language reference: the syntax, the data directives, charts, maps, open data, the assistant, machine learning, the 92 Spectrum components, the block editor and the MCP server."
+description: "The complete ReactiveNET language reference: syntax, data directives, charts, maps, open data, the assistant, components and the block editor."
 translationKey: "guida-index"
 ---
 

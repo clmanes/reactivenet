@@ -1,10 +1,10 @@
 ---
 title: "What it is like to live here"
 translationKey: "app-come-si-vive"
-seotitle: "What it is like to live here: your municipality in official data"
+seotitle: "Your municipality in official open data"
 appid: "come-si-vive"
 weight: 5
-description: "Your municipality's portrait in one place: how many of us there are and what people earn, how safe the roads are and who commutes, what health care is around — hospitals, care outcomes, clinics, doctors and scanners — how much soil has been built on and how much is recycled. Eleven official sources, always next to the province and national figure."
+description: "Your municipality's portrait in official data: population, incomes, road safety, health care and environment, always compared with province and Italy."
 lead: "A figure on its own says nothing. This app puts your municipality next to its neighbours across seven indicators, projects the time series forward and looks for the ones out of line — computing all of it inside your browser."
 shots:
   - src: come-si-vive-ritratto.jpg

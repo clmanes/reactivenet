@@ -1,10 +1,10 @@
 ---
 title: "Graduatorie Interne"
 translationKey: "app-graduatorie-interne"
-seotitle: "Graduatorie interne d'istituto: software per i punteggi e i soprannumerari"
+seotitle: "Graduatorie interne d'istituto e soprannumerari"
 appid: "graduatorie-interne"
 weight: 30
-description: "Graduatorie interne d'istituto per l'individuazione dei soprannumerari: tabella di valutazione modificabile dall'interfaccia, dichiarazioni del personale, istruttoria, punteggi giustificati riga per riga, graduatoria in ordine crescente, reclami e stampe. Con un istituto di esempio già dentro."
+description: "Graduatorie interne d'istituto per individuare i soprannumerari: tabella di valutazione modificabile, punteggi giustificati riga per riga, reclami e stampe."
 lead: "La tabella cambia a ogni rinnovo del CCNI: qui non c'è un solo punteggio scritto nel programma. Voci, massimali e riferimenti normativi sono righe che si correggono dall'app — e ogni punto attribuito ha un prospetto che lo giustifica."
 shots:
   - src: graduatorie-interne-tabella.jpg

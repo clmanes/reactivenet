@@ -1,6 +1,7 @@
 ---
 title: "The assistant moves inside the app, and the school catalogue reaches five"
-description: "Fifteen ai-* directives: reactive summaries, chat over your own data, semantic search across attachments, rules written in words and compiled once, an agent with two tools and a confirm button. Plus three new school apps — seniority lists, individual education plans, the back office — that use them where they help and leave them out where they do not."
+seotitle: "ai-* directives: the assistant inside the app"
+description: "Fifteen ai-* directives put the assistant inside the app — summaries, semantic search, rules in plain words — plus three new school apps."
 date: 2026-08-13
 author: "Cosimo Luigi Manes"
 translationKey: "assistente-dentro-app-catalogo-scuola"

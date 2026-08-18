@@ -1,5 +1,6 @@
 ---
 title: "Il server MCP"
+seotitle: "Server MCP: scrivere app con un modello"
 description: "Collegare un modello a ReactiveNET: otto strumenti per scrivere un'app, verificarla e consegnarla, con la garanzia che a rispondere è la grammatica vera."
 weight: 50
 translationKey: "mcp"

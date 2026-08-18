@@ -1,6 +1,7 @@
 ---
 title: "Your app becomes a BI tool: dashboards, SQL in the browser and natural-language questions"
-description: "Eight new features turn every Reactive app into a small business-intelligence tool: cross-filtering between charts and tables, a full SQL engine (DuckDB) running in the browser, AI that translates questions into queries, connectors for worldwide public APIs, address geocoding, time-series forecasts and benchmarking with rank and percentile. All client-side, all in Markdown."
+seotitle: "BI in the browser: dashboards, SQL, AI queries"
+description: "Cross-filtering dashboards, DuckDB SQL in the browser, AI questions over your data, public API connectors and forecasts — every app becomes a small BI tool."
 date: 2026-07-21
 author: "Cosimo Luigi Manes"
 translationKey: "bi-in-the-browser"

@@ -1,6 +1,6 @@
 ---
 title: "I dati pubblici italiani, dentro le tue app"
-description: "Arriva l'integrazione open data: le app Reactive interrogano i dataset ufficiali — comuni, ATECO, professioni, e tutta la legislazione statale dal 1861 — con una riga di testo o descrivendo a parole quello che cercano. E la query la scrive l'AI."
+description: "Le app Reactive interrogano i dataset ufficiali — comuni, ATECO, professioni, la legislazione dal 1861 — con una riga di testo, e la query la scrive l'AI."
 date: 2026-07-15
 author: "Cosimo Luigi Manes"
 translationKey: "dati-open-nelle-app"

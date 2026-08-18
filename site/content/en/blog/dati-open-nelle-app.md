@@ -1,6 +1,6 @@
 ---
 title: "Italian public data, inside your apps"
-description: "Open data integration is here: Reactive apps query official datasets — municipalities, ATECO codes, professions, and all Italian state legislation since 1861 — with one line of text or a plain-words description. And the AI writes the query."
+description: "Reactive apps now query Italian open data — municipalities, ATECO codes, professions, all state legislation since 1861 — with one line of text."
 date: 2026-07-15
 author: "Cosimo Luigi Manes"
 translationKey: "dati-open-nelle-app"

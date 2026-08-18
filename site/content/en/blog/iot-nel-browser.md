@@ -1,6 +1,6 @@
 ---
 title: "Apps meet the physical world: sensors, actuators and IoT"
-description: "Eleven new directives connect Reactive documents to real devices: MQTT for sensors and actuators, Bluetooth LE, a serial port for Arduino and ESP32, NFC tags and the phone's own sensors — still no server, still nothing to install."
+description: "Eleven directives connect documents to real devices: MQTT, Bluetooth LE, serial for Arduino and ESP32, NFC tags and the phone's sensors — still no server."
 date: 2026-07-16
 author: "Cosimo Luigi Manes"
 translationKey: "iot-nel-browser"

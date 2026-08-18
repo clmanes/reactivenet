@@ -69,18 +69,29 @@ let headerPolicy = () => {
 // Caddy states the same policy in its own language: `Content-Security-Policy "…"`,
 // one quoted value on one line. Read from the quotes rather than by position, so
 // reindenting the block does not fail the test for no reason.
-let caddyPolicy = () => {
+//
+// The file now carries TWO policies — the showcase site's own (its single copy
+// lives in the Caddyfile, there is no build config behind it) and the app's,
+// which is the replica this test exists to pin. So every CSP line is collected,
+// and the app's is the one carrying `require-trusted-types-for`: that token is
+// what the app's whole Trusted Types design hangs on, so it identifies the copy
+// no matter where the site's block sits in the file.
+let caddyPolicies = () => {
   let file = readFile("Caddyfile")
   file
   ->String.split("\n")
-  ->Array.find(line => line->String.trim->String.startsWith("Content-Security-Policy "))
-  ->Option.flatMap(line =>
+  ->Array.filter(line => line->String.trim->String.startsWith("Content-Security-Policy "))
+  ->Array.filterMap(line =>
     RegExp.exec(RegExp.fromString("\"([^\"]+)\""), line)
     ->Option.flatMap(result => result->RegExp.Result.matches->Array.at(0))
     ->Option.flatMap(value => value)
   )
-  ->Option.getOr("")
 }
+
+let caddyPolicy = () =>
+  caddyPolicies()
+  ->Array.find(policy => policy->String.includes("require-trusted-types-for"))
+  ->Option.getOr("")
 
 describe("the three copies of the security policy", () => {
   test("public/_headers carries exactly the policy vite.config.js defines", () => {
@@ -91,6 +102,22 @@ describe("the three copies of the security policy", () => {
   // was invisible to every local check: preview reads the config, not this file.
   test("the Caddyfile carries exactly the policy vite.config.js defines", () => {
     expect(caddyPolicy())->toBe(configDirectives()->Array.join("; "))
+  })
+
+  // The showcase site's policy: its only copy is the Caddyfile's, so the pin
+  // here is not against drift between copies but against losing the line — a
+  // header block edited away would fail no local check at all, like the app's
+  // stale CSP before the deploy probe existed.
+  test("the Caddyfile also carries the site's own policy, with its two grants", () => {
+    let site =
+      caddyPolicies()
+      ->Array.find(policy => !(policy->String.includes("require-trusted-types-for")))
+      ->Option.getOr("")
+    // Pirsch loads and reports from its own origin on the site (no /pa proxy
+    // there), and the /dati explorer fetches the open-data service directly.
+    expect(site->String.includes("script-src 'self' 'unsafe-inline' https://api.pirsch.io"))->toBe(true)
+    expect(site->String.includes("https://data.reactivenet.ai"))->toBe(true)
+    expect(site->String.includes("frame-ancestors 'none'"))->toBe(true)
   })
 
   test("the analytics script has an origin to load from in every copy", () => {

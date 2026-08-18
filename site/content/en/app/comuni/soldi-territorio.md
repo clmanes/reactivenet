@@ -1,10 +1,10 @@
 ---
 title: "Local public accounts"
 translationKey: "app-soldi-territorio"
-seotitle: "Local public accounts: municipal budgets, EU funds, tenders"
+seotitle: "Municipal budgets, EU funds and tenders"
 appid: "soldi-territorio"
 weight: 10
-description: "Where your municipality's public money goes and where it comes from: cash spending and revenue, balance and financial autonomy, cohesion and recovery-fund projects, procurement and who wins it. Eight pages over official MEF-RGS, ANAC, DIPE and Cohesion Agency data."
+description: "Where your municipality's money goes: cash spending and revenue, recovery-fund projects, tenders and winners, over official MEF, ANAC and OpenCoesione data."
 lead: "A municipality is understood through its cash flows. Eight dashboards over official sources — spending, revenue, funded projects, procurement — with the regional ranking, the forecast and the anomalies computed in your browser."
 shots:
   - src: soldi-territorio-comune.jpg

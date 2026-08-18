@@ -1,6 +1,7 @@
 ---
 title: "La scuola in cifre: cinque nuove fonti e una dashboard per dirigenti e docenti"
-description: "Il warehouse open data di Reactive sale a 237 dataset con una sezione scuola completa: iscrizioni con dieci anni di storia, dispersione scolastica estratta dai PDF ministeriali, edilizia e rischio sismico, personale di ruolo, risultati INVALSI regionali. E una nuova app-dashboard con previsione delle iscrizioni, filtro incrociato e mappe coropletiche."
+seotitle: "La scuola in cifre: cinque nuove fonti open data"
+description: "Iscrizioni, dispersione, edilizia, personale e INVALSI portano il warehouse a 237 dataset; una dashboard con previsioni serve dirigenti e docenti."
 date: 2026-07-21
 author: "Cosimo Luigi Manes"
 translationKey: "five-school-datasets"

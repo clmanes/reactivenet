@@ -1,10 +1,10 @@
 ---
 title: "Orario Scolastico"
 translationKey: "app-orario-scolastico"
-seotitle: "Orario scolastico: software per costruire l'orario delle lezioni"
+seotitle: "Software per costruire l'orario scolastico"
 appid: "orario-scolastico"
 weight: 20
-description: "Costruire e gestire l'orario delle lezioni di un istituto di II grado: anagrafiche, cattedre, scelta automatica dell'aula, blocchi di ore consecutive, compresenze, regole fra materie, griglia trascinabile giorno per ora, controllo dei vincoli in chiaro, monitor che dice se l'orario può esistere prima di generarlo e generazione assistita che gira nel browser. Le anagrafiche e le cattedre si importano da un CSV o da un foglio Excel, e ogni tabella si riesporta nello stesso modo. E le sostituzioni giornaliere: le ore scoperte, i candidati in ordine e il conto di chi ne ha fatte quante. Con un istituto di esempio già dentro."
+description: "Costruire l'orario delle lezioni di un istituto superiore: griglia trascinabile, vincoli in chiaro, generazione nel browser e sostituzioni giornaliere."
 lead: "Il solver propone, la scuola decide. Sceglie anche l'aula, tiene interi i blocchi di laboratorio, rispetta le compresenze, non lascia ore buche alle classi e non fa cambiare plesso a nessuno da un'ora alla successiva — e si può fermare tenendo il risultato migliore trovato finora."
 tags: ["Dirigenti scolastici", "Collaboratori del dirigente", "Segreterie", "Timetabling", "Laboratori"]
 shots:

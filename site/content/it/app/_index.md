@@ -1,5 +1,6 @@
 ---
 title: "Catalogo"
+seotitle: "Catalogo di app per scuola, comuni e PMI"
 description: "Le soluzioni verticali pronte all'uso: suite di micro app componibili che condividono uno spazio dati."
 translationKey: "app-index"
 ---

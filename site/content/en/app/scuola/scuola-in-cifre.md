@@ -1,10 +1,10 @@
 ---
 title: "Italian schools in numbers"
 translationKey: "app-scuola-in-cifre"
-seotitle: "Italian schools in numbers: MIUR and INVALSI data by area"
+seotitle: "Italian school data: MIUR and INVALSI"
 appid: "scuola-in-cifre"
 weight: 10
-description: "Six dashboards on the Italian school system built on official MIUR, INVALSI and ISTAT data: enrolments with a forecast, dropout with cross-filtering, test results, buildings, staffing with a projection, maps and a pivot view."
+description: "Six dashboards on Italian schools from official MIUR, INVALSI and ISTAT data: enrolments with a forecast, dropout, test results, buildings, staffing and maps."
 lead: "How many pupils you will have, not just how many you have. Six dashboards over five official sources that join up by municipality, province and region — and run entirely in your browser."
 tags: ["Head teachers", "Teachers", "Open data", "MIUR", "INVALSI", "Forecasting"]
 shots:

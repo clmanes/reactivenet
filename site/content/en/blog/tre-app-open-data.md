@@ -1,6 +1,6 @@
 ---
 title: "Three apps that put public data to work"
-description: "Reactive's open data grows up: alongside the official vocabularies come the living facts — fuel prices refreshed every morning, over 2.6 million public tenders, population and the registry of public bodies. And three ready-to-use apps prove it: the cheapest fuel station near you, your town's tenders, the right law described in your own words."
+description: "Fuel prices refreshed every morning, 2.6 million public tenders, population, public bodies — and three ready-to-use apps that put them to work."
 date: 2026-07-18
 author: "Cosimo Luigi Manes"
 translationKey: "tre-app-open-data"

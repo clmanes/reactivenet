@@ -1,6 +1,7 @@
 ---
 title: "L'assistente entra nelle app, e il catalogo scuola arriva a cinque"
-description: "Quindici direttive ai-*: riassunti reattivi, chat sui propri dati, ricerca semantica sugli allegati, regole scritte a parole e compilate una volta sola, un agente con due strumenti e un bottone di conferma. E tre nuove app per la scuola — graduatorie interne, PEI e PDP, segreteria — che le usano dove servono e le lasciano stare dove non servono."
+seotitle: "L'assistente nelle app e il catalogo scuola"
+description: "Quindici direttive ai-* portano il modello dentro le app — riassunti, chat sui dati, regole compilate — e tre nuove app scuola le mettono al lavoro."
 date: 2026-08-13
 author: "Cosimo Luigi Manes"
 translationKey: "assistente-dentro-app-catalogo-scuola"

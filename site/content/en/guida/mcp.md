@@ -1,4 +1,5 @@
 ---
+seotitle: "MCP server: write apps with a model"
 title: "The MCP server"
 description: "Connecting a model to ReactiveNET: eight tools to write an app, check it and deliver it, with the guarantee that the real grammar is what answers."
 weight: 50

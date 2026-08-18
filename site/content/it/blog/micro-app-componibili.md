@@ -1,6 +1,7 @@
 ---
 title: "Micro app componibili: costruire cose grandi con pezzi piccoli"
-description: "Il concetto al centro di Reactive: app minuscole con un compito solo, che condividono uno spazio dati e si compongono in soluzioni complete — con il tuo consenso, e multi-utente con un invito."
+seotitle: "Micro app componibili: costruire cose grandi"
+description: "App minuscole con un compito solo che condividono uno spazio dati e si compongono in soluzioni complete, con consenso esplicito e multi-utente su invito."
 date: 2026-07-14
 author: "Cosimo Luigi Manes"
 translationKey: "micro-app-componibili"

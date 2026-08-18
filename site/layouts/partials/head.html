@@ -23,6 +23,18 @@
 {{ $title := printf "%s · %s" (.Params.seotitle | default .Title) site.Title }}
 {{ if .IsHome }}{{ $title = printf "%s — %s" site.Title (i18n "siteTagline") }}{{ end }}
 {{ $desc := .Description | default site.Params.description }}
+{{/* Le pagine dei tag e i loro indici non hanno frontmatter da cui prendere
+     titolo e descrizione: senza questi due rami ereditano tutte la descrizione
+     del sito (che per i motori è un duplicato, quindi ignorata) e un titolo di
+     una parola. Generarli dal nome del termine li rende unici senza chiedere a
+     nessuno di scrivere frontmatter per ogni tag. */}}
+{{ if eq .Kind "term" }}
+  {{ $title = printf "%s · %s" (i18n "termSeoTitle" .Title) site.Title }}
+  {{ if not .Description }}{{ $desc = i18n "termSeoDesc" .Title }}{{ end }}
+{{ else if eq .Kind "taxonomy" }}
+  {{ $title = printf "%s · %s" (i18n "taxonomySeoTitle" .Title) site.Title }}
+  {{ if not .Description }}{{ $desc = i18n "taxonomySeoDesc" .Title }}{{ end }}
+{{ end }}
 
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $desc }}">

@@ -1,4 +1,5 @@
 ---
+seotitle: "Open data, APIs and SQL in your apps"
 title: "Data from outside"
 description: "Open data, public APIs and a SQL engine in the browser: three ways to bring in rows nobody typed — and the workflow that puts them in order."
 weight: 23

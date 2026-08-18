@@ -1,6 +1,7 @@
 ---
 title: "L'app diventa uno strumento BI: dashboard, SQL nel browser e domande in linguaggio naturale"
-description: "Otto novità trasformano ogni app Reactive in un piccolo strumento di business intelligence: filtro incrociato tra grafici e tabelle, un motore SQL completo (DuckDB) che gira nel browser, l'AI che traduce le domande in query, connettori per le API pubbliche mondiali, geocoding degli indirizzi, previsioni su serie temporali e il benchmarking con rank e percentile. Tutto client-side, tutto in Markdown."
+seotitle: "BI nel browser: dashboard, SQL e AI"
+description: "Filtro incrociato tra grafici, DuckDB in WebAssembly, domande in linguaggio naturale tradotte in query: otto novità fanno di ogni app uno strumento BI."
 date: 2026-07-21
 author: "Cosimo Luigi Manes"
 translationKey: "bi-in-the-browser"

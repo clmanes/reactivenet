@@ -1,10 +1,10 @@
 ---
 title: "Internal seniority lists"
 translationKey: "app-graduatorie-interne"
-seotitle: "Internal school seniority lists: scoring and redundancy identification"
+seotitle: "Internal school seniority lists and scoring"
 appid: "graduatorie-interne"
 weight: 30
-description: "The internal seniority lists an Italian school forms each year to identify surplus staff: a scoring table editable from the interface, staff declarations, review, scores justified line by line, the list in ascending order, appeals and printing. With a sample school already inside."
+description: "The internal seniority lists an Italian school forms each year: editable scoring table, staff declarations, justified scores, appeals and printing."
 lead: "The scoring table changes with every national contract: so not one score is written into the program. Items, caps and legal references are rows you correct from the app — and every point awarded comes with a statement that justifies it."
 shots:
   - src: graduatorie-interne-tabella.jpg

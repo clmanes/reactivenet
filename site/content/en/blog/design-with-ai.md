@@ -1,6 +1,7 @@
 ---
 title: "Describe the part, the AI draws it: Reactive's CAD becomes a configurator"
-description: "The ::cad directive levels up: automatic sliders from customizer annotations, print dimensions and weight, SVG/DXF export for laser cutting, and an AI design bar — describe the change in plain language and the AI rewrites the OpenSCAD code."
+seotitle: "Reactive's CAD becomes a configurator"
+description: "The ::cad directive gains automatic sliders, print dimensions and weight, SVG/DXF export for laser cutting, and an AI bar that rewrites the OpenSCAD code."
 date: 2026-07-20
 author: "Cosimo Luigi Manes"
 translationKey: "design-with-ai"

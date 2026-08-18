@@ -1,6 +1,7 @@
 ---
 title: "Six new datasets: from elections to waste, from tourism to schools"
-description: "Reactive's open data warehouse grows to 223 datasets: municipal recycling rates, general election results, businesses and employees, INVALSI test scores, and province-level crime and tourism. Three new or enriched apps to explore them, all joined on their own via the ISTAT code."
+seotitle: "Six new datasets, from elections to waste"
+description: "The warehouse grows to 223 datasets — recycling rates, election results, businesses, INVALSI scores, crime, tourism — joined on their own via the ISTAT code."
 date: 2026-07-19
 author: "Cosimo Luigi Manes"
 translationKey: "six-new-datasets"

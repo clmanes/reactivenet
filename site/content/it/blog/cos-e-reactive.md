@@ -1,5 +1,6 @@
 ---
 title: "Cos'è Reactive: la tua app in una frase, privata by design"
+seotitle: "Cos'è Reactive: la tua app in una frase"
 description: "Il post inaugurale: cos'è Reactive, come un semplice documento di testo diventa un'app funzionante nel browser, e perché i tuoi dati non lasciano mai il tuo dispositivo."
 date: 2026-07-13
 author: "Cosimo Luigi Manes"

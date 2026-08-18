@@ -1,0 +1,26 @@
+# ReactiveNET
+
+> ReactiveNET runs a Markdown document as an application, in the browser, with no cloud and no account: forms, lists, charts, maps, SQL, Python and AI directives over data that never leaves the device. An assistant (or any LLM, through the MCP server) writes the document from one sentence; the reader opens it as an app.
+
+The site is bilingual: Italian at the root (canonical), English under /en/.
+
+## Docs
+
+- [Guide (IT)](https://reactivenet.ai/guida/): the directive language — syntax, directives, charts, maps, external data, assistant, block editor
+- [Guide (EN)](https://reactivenet.ai/en/guida/)
+- [MCP server](https://reactivenet.ai/guida/mcp/): how an LLM writes and validates ReactiveNET apps (endpoint: https://mcp.reactivenet.ai/mcp)
+
+## Apps
+
+- [App catalogue (IT)](https://reactivenet.ai/app/): ready-made apps for schools, municipalities, SMEs and professionals; each card links the Markdown source
+- [App catalogue (EN)](https://reactivenet.ai/en/app/)
+- [Open data](https://reactivenet.ai/dati/): 240 Italian public datasets queryable from any app
+
+## Blog
+
+- [Blog (IT)](https://reactivenet.ai/blog/): how the platform works, what a document-as-app can and cannot do
+- [Blog (EN)](https://reactivenet.ai/en/blog/)
+
+## Try it
+
+- [The app](https://app.reactivenet.ai/): the platform itself — open, no registration

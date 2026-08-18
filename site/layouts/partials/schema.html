@@ -4,12 +4,19 @@
 {{ $schemas := slice }}
 
 {{ if .IsHome }}
+  {{/* `publisher` è la Person, non una Organization: gli audit SEO chiedono un
+       blocco Organization sulla home, ma dichiararne una direbbe il falso —
+       schema.org ammette una Person come publisher, ed è la risposta vera. */}}
   {{ $schemas = $schemas | append (dict
     "@type" "WebSite"
     "name" site.Title
     "url" site.Home.Permalink
     "description" site.Params.description
-    "inLanguage" site.Language.LanguageCode) }}
+    "inLanguage" site.Language.LanguageCode
+    "publisher" (dict
+      "@type" "Person"
+      "name" "Cosimo Luigi Manes"
+      "url" site.Home.Permalink)) }}
   {{ $schemas = $schemas | append (dict
     "@type" "Person"
     "name" "Cosimo Luigi Manes"

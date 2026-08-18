@@ -1,10 +1,10 @@
 ---
 title: "Segreteria"
 translationKey: "app-segreteria"
-seotitle: "Cruscotto di segreteria scolastica: pratiche, scadenze, contatori"
+seotitle: "Segreteria scolastica: pratiche e scadenze"
 appid: "segreteria"
 weight: 50
-description: "Il cruscotto operativo della segreteria scolastica: pratiche con tipi e termini configurabili, vista kanban, scadenzario degli adempimenti, contatori contrattuali del personale, contratti a termine, acquisti e inventario, report e stampe."
+description: "Il cruscotto operativo della segreteria scolastica: pratiche con vista kanban, scadenzario degli adempimenti, contatori contrattuali, acquisti e stampe."
 lead: "Non sostituisce il SIDI né il protocollo: copre quello che oggi vive in fogli condivisi, cartelle di rete e post-it — dove sta una pratica, chi la lavora, che cosa scade quando, quali contatori sono a saldo."
 shots:
   - src: segreteria-scadenzario.jpg

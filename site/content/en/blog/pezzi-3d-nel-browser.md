@@ -1,6 +1,7 @@
 ---
 title: "3D comes to your apps: models, augmented reality and printable parts"
-description: "Two new directives bring the third dimension to Reactive: ::model displays 3D models with an augmented-reality view, ::cad generates parametric parts with OpenSCAD — a form becomes the parameter panel and the STL is ready for your printer."
+seotitle: "3D in your apps: models, AR, printable parts"
+description: "::model displays 3D models with an augmented-reality view; ::cad generates parametric parts with OpenSCAD, the STL ready for your printer."
 date: 2026-07-15
 author: "Cosimo Luigi Manes"
 translationKey: "pezzi-3d-nel-browser"

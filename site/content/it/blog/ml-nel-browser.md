@@ -1,6 +1,7 @@
 ---
 title: "Il machine learning entra nelle app: quattro direttive, zero server"
-description: "Nuova famiglia di direttive ml-*: clustering, anomalie, regressioni e correlazioni con scikit-learn direttamente nel browser, reattive come tutto il resto — muovi uno slider e il modello si ricalcola. Insieme: il warehouse open data sale a 15 tabelle di fatti, si descrive da solo con un layer semantico e si esplora dal vivo con mappa e grafo delle relazioni."
+seotitle: "Machine learning nel browser, zero server"
+description: "Le direttive ml-* portano scikit-learn nel browser: clustering, anomalie, regressioni e correlazioni reattive; il warehouse open data sale a 15 tabelle."
 date: 2026-07-18
 author: "Cosimo Luigi Manes"
 translationKey: "ml-nel-browser"

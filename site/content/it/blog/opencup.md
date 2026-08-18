@@ -1,6 +1,6 @@
 ---
 title: "Un codice per ogni opera pubblica: arriva OpenCUP"
-description: "Il warehouse open data di Reactive sale a 238 dataset: OpenCUP porta l'intero universo degli investimenti pubblici italiani dal 2003, 11,8 milioni di progetti — non solo quelli a fondi europei, già in catalogo. L'app Appalti trasparenti si arricchisce di una scheda che mostra l'intero portafoglio di spesa pubblica del tuo comune."
+description: "OpenCUP porta nel warehouse 11,8 milioni di progetti: gli investimenti pubblici italiani dal 2003. Appalti trasparenti mostra la spesa del tuo comune."
 date: 2026-07-22
 author: "Cosimo Luigi Manes"
 translationKey: "opencup"

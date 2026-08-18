@@ -1,5 +1,6 @@
 ---
 title: "What is Reactive: your app in one sentence, private by design"
+seotitle: "What is Reactive: your app in one sentence"
 description: "The inaugural post: what Reactive is, how a plain text document becomes a working app in your browser, and why your data never leaves your device."
 date: 2026-07-13
 author: "Cosimo Luigi Manes"

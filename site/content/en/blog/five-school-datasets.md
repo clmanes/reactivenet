@@ -1,6 +1,7 @@
 ---
 title: "School in numbers: five new sources and a dashboard for principals and teachers"
-description: "Reactive's open data warehouse grows to 237 datasets with a complete school section: enrollment with ten years of history, school drop-out extracted from ministry PDFs, buildings and seismic risk, tenured staff, regional INVALSI results. Plus a new dashboard app with enrollment forecasting, cross-filtering and choropleth maps."
+seotitle: "School in numbers: five new open data sources"
+description: "The open data warehouse reaches 237 datasets with a full school section — enrollment, drop-out, buildings, staff, INVALSI — plus a dashboard app for principals."
 date: 2026-07-21
 author: "Cosimo Luigi Manes"
 translationKey: "five-school-datasets"

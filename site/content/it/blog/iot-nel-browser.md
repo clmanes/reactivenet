@@ -1,6 +1,7 @@
 ---
 title: "Le app incontrano il mondo fisico: sensori, attuatori e IoT"
-description: "Undici nuove direttive collegano i documenti Reactive ai dispositivi reali: MQTT per sensori e attuatori, Bluetooth LE, porta seriale per Arduino ed ESP32, tag NFC e i sensori del telefono — sempre senza server e senza installare nulla."
+seotitle: "Sensori, attuatori e IoT nel browser"
+description: "Undici direttive collegano le app ai dispositivi reali: MQTT, Bluetooth LE, porta seriale per Arduino ed ESP32, NFC e i sensori del telefono. Senza server."
 date: 2026-07-16
 author: "Cosimo Luigi Manes"
 translationKey: "iot-nel-browser"

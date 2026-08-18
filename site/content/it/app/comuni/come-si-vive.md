@@ -1,10 +1,10 @@
 ---
 title: "Come si vive qui"
 translationKey: "app-come-si-vive"
-seotitle: "Come si vive qui: il ritratto del tuo comune con dati ufficiali"
+seotitle: "Il ritratto del tuo comune con dati ufficiali"
 appid: "come-si-vive"
 weight: 5
-description: "Il ritratto del tuo comune in un posto solo: quanti siamo e quanto si guadagna, quanto è sicura la strada e chi si muove, che sanità c'è intorno — ospedali, esiti delle cure, consultori, medici e macchine — quanto suolo è stato costruito e quanto si differenzia. Undici fonti ufficiali, sempre accanto al numero della provincia e dell'Italia."
+description: "Il ritratto del tuo comune su undici fonti ufficiali: popolazione, redditi, incidenti, sanità, suolo e rifiuti, sempre accanto a provincia e Italia."
 lead: "Una cifra da sola non dice niente. Questa app mette il tuo comune accanto ai suoi vicini su sette indicatori, tira avanti le serie storiche e cerca chi è fuori dal coro — e fa tutti i conti dentro il tuo browser."
 shots:
   - src: come-si-vive-ritratto.jpg

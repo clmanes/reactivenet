@@ -1,5 +1,6 @@
 ---
 title: "Dati da fuori"
+seotitle: "Open data, API e SQL nelle app"
 description: "Gli open data, le API pubbliche e un motore SQL nel browser: tre modi di far arrivare righe che nessuno ha digitato — e il workflow che li mette in fila."
 weight: 23
 translationKey: "dati-esterni"

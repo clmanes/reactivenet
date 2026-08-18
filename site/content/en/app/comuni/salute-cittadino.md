@@ -1,10 +1,10 @@
 ---
 title: "Health where you live"
 translationKey: "app-salute-cittadino"
-seotitle: "Health where you live: hospitals, care outcomes and services in your area"
+seotitle: "Hospitals and care outcomes where you live"
 appid: "salute-cittadino"
 weight: 7
-description: "Pick your municipality and nine pages fill up: which health authority serves you and what is inside it, who gets admitted, how care actually ends, mental-health and addiction services, doctors and scanners, spending, and the hundred provinces side by side. Twenty-four tables from the Ministry of Health, ISTAT, AGENAS and the Treasury."
+description: "Pick your municipality and see your health authority, hospitals, admissions, care outcomes, doctors and spending — twenty-four official tables."
 lead: "Anyone looking for “the health data for my town” finds numbers hanging off an entity whose name they do not even know: the health service publishes per authority, and there are 110 of those against 7,896 municipalities. This app starts there and goes all the way to the only question that really counts — whether people get better."
 shots:
   - src: salute-cittadino-territorio.jpg

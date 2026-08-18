@@ -1,6 +1,7 @@
 ---
 title: "Un documento che diventa un'app: vibecoding con un vincolo"
-description: "ReactiveNET esegue un documento Markdown come se fosse un'applicazione. Come funziona, che cosa un'app può e non può fare, e perché un formato che si legge tutto in una schermata rende controllabile quello che scrive un modello."
+seotitle: "Un documento che diventa un'app: vibecoding"
+description: "ReactiveNET esegue un documento Markdown come un'applicazione: come funziona, cosa un'app può fare e perché un formato leggibile rende controllabile l'AI."
 date: 2026-08-13
 author: "Cosimo Luigi Manes"
 translationKey: "un-documento-che-diventa-app"

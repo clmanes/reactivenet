@@ -1,10 +1,10 @@
 ---
 title: "La scuola in cifre"
 translationKey: "app-scuola-in-cifre"
-seotitle: "La scuola in cifre: dati MIUR e INVALSI per comune e regione"
+seotitle: "La scuola in cifre: dati MIUR e INVALSI"
 appid: "scuola-in-cifre"
 weight: 10
-description: "Sei cruscotti sulla scuola italiana costruiti su dati ufficiali MIUR, INVALSI e ISTAT: iscrizioni con previsione, dispersione con filtro incrociato, risultati delle prove, edilizia, organico con proiezione, mappe e una vista pivot."
+description: "Sei cruscotti su dati MIUR, INVALSI e ISTAT: iscrizioni con previsione, dispersione, prove, edilizia scolastica, organico, mappe e una vista pivot."
 lead: "Quanti alunni avrai, non solo quanti ne hai. Sei cruscotti su cinque fonti ufficiali, che si incrociano da soli per comune, provincia e regione — e girano interamente nel tuo browser."
 tags: ["Dirigenti scolastici", "Docenti", "Open data", "MIUR", "INVALSI", "Previsioni"]
 shots:

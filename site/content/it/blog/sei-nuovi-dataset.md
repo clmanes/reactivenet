@@ -1,6 +1,7 @@
 ---
 title: "Sei nuovi dataset: dal voto ai rifiuti, dal turismo alla scuola"
-description: "Il warehouse open data di Reactive sale a 223 dataset: raccolta differenziata comunale, risultati delle elezioni politiche, imprese e addetti, punteggi INVALSI, criminalità e turismo provinciali. Tre app nuove o arricchite per esplorarli, tutte incrociate da sole col codice ISTAT."
+seotitle: "Sei nuovi dataset: voto, rifiuti, turismo"
+description: "Differenziata comunale, elezioni politiche, imprese, INVALSI, criminalità e turismo portano il warehouse a 223 dataset, con tre app per esplorarli."
 date: 2026-07-19
 author: "Cosimo Luigi Manes"
 translationKey: "six-new-datasets"

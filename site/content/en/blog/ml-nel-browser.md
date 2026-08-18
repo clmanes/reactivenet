@@ -1,6 +1,7 @@
 ---
 title: "Machine learning lands in your apps: four directives, zero servers"
-description: "New ml-* directive family: clustering, anomalies, regressions and correlations with scikit-learn right in the browser, reactive like everything else — move a slider and the model recomputes. Alongside it: the open data warehouse grows to 15 fact tables, describes itself with a semantic layer, and can be explored live with a map and a relationship graph."
+seotitle: "Machine learning in your apps, zero servers"
+description: "Clustering, anomalies, regressions and correlations with scikit-learn in the browser — reactive: move a slider and the model recomputes. No servers."
 date: 2026-07-18
 author: "Cosimo Luigi Manes"
 translationKey: "ml-nel-browser"

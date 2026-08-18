@@ -1,10 +1,10 @@
 ---
 title: "Mobilità del comune"
 translationKey: "app-mobilita-comune"
-seotitle: "Mobilità del comune: incidenti stradali, parco veicolare e pendolari"
+seotitle: "Mobilità del comune: incidenti e pendolari"
 appid: "mobilita-comune"
 weight: 20
-description: "Come ci si muove in ogni comune italiano e come va a finire: incidenti stradali dal 2001, parco veicolare per classe Euro, chi entra e chi esce per lavoro e con quale mezzo, e — dove esiste — i mezzi in condivisione in tempo reale. Cinque pagine su dati ufficiali ISTAT, ACI e GBFS."
+description: "Come ci si muove in ogni comune italiano: incidenti stradali dal 2001, parco veicolare per classe Euro, pendolari e mezzi in condivisione in tempo reale."
 lead: "Quante auto ci sono e dove passano le strade dicono com'è fatto un territorio. Gli incidenti dicono come va a finire — e questa è l'unica misura che esiste per tutti i 7.896 comuni, ventiquattro anni di fila."
 shots:
   - src: mobilita-comune-sicurezza.jpg

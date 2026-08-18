@@ -1,5 +1,6 @@
 ---
 title: "Catalogue"
+seotitle: "App catalogue for schools, towns and SMEs"
 description: "The ready-made vertical solutions: suites of composable micro apps sharing one data space."
 translationKey: "app-index"
 ---

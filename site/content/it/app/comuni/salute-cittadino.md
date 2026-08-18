@@ -1,10 +1,10 @@
 ---
 title: "La salute dove vivi"
 translationKey: "app-salute-cittadino"
-seotitle: "La salute dove vivi: ospedali, esiti delle cure e servizi del tuo territorio"
+seotitle: "Ospedali ed esiti delle cure del tuo territorio"
 appid: "salute-cittadino"
 weight: 7
-description: "Scegli il tuo comune e nove pagine si riempiono: qual è la tua azienda sanitaria e cosa c'è dentro, chi finisce ricoverato, come vanno a finire le cure, i servizi per la salute mentale e le dipendenze, medici e macchine, la spesa, e le cento province una accanto all'altra. Ventiquattro tabelle dal Ministero della Salute, ISTAT, AGENAS e MEF."
+description: "Scegli il comune e nove pagine si riempiono: azienda sanitaria, ricoveri, esiti delle cure, medici e spesa. Dati Ministero della Salute, ISTAT e AGENAS."
 lead: "Chi cerca «i dati sanitari del mio paese» trova numeri appesi a un'entità di cui non conosce nemmeno il nome: il Servizio Sanitario pubblica per azienda, e le aziende sono centodieci contro settemilaottocento comuni. Questa app comincia da lì e arriva fino all'unica domanda che conta davvero — se le persone guariscono."
 shots:
   - src: salute-cittadino-territorio.jpg

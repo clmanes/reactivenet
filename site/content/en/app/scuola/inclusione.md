@@ -1,10 +1,10 @@
 ---
 title: "Inclusion"
 translationKey: "app-inclusione"
-seotitle: "Individual education plans: inclusion software that stores no diagnosis"
+seotitle: "Individual education plan (IEP) software"
 appid: "inclusione"
 weight: 40
-description: "Collaborative drafting of individual education plans: templates editable per school stage, a per-subject contribution, objectives and reviews, team meetings, signatures, an operational extract for the class council, and school-wide summaries with no names in them."
+description: "Collaborative drafting of individual education plans: editable templates, per-subject contributions, reviews and school-wide summaries with no names in them."
 lead: "It handles health data about minors, and that decided the shape of the program: nothing leaves the device, there is no field anywhere to write a diagnosis, and the only AI inside rewrites text a teacher has already written."
 shots:
   - src: inclusione-modelli.jpg

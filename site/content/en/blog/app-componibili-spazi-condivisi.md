@@ -1,5 +1,6 @@
 ---
 title: "Composable apps, shared data spaces, and sync with no secrets in the file"
+seotitle: "Composable apps and shared data spaces"
 description: "July's news: catalog solutions become suites of micro apps, apps share data with your consent, and multi-user sync no longer writes anything into the document."
 date: 2026-07-14
 author: "Cosimo Luigi Manes"

@@ -1,6 +1,7 @@
 ---
 title: "A code for every public project: OpenCUP joins the warehouse"
-description: "Reactive's open data warehouse grows to 238 datasets: OpenCUP brings the entire universe of Italian public investment since 2003, 11.8 million projects — not just the EU-funded ones already in the catalogue. The Public tenders app gains a tab showing your town's whole public spending portfolio."
+seotitle: "OpenCUP joins the open data warehouse"
+description: "OpenCUP brings all Italian public investment since 2003 — 11.8 million projects — and the Public tenders app now shows your town's whole portfolio."
 date: 2026-07-22
 author: "Cosimo Luigi Manes"
 translationKey: "opencup"

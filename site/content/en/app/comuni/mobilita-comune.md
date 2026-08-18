@@ -1,10 +1,10 @@
 ---
 title: "Mobility of a place"
 translationKey: "app-mobilita-comune"
-seotitle: "Mobility of a place: road accidents, vehicle fleet and commuters"
+seotitle: "Road accidents and commuting by municipality"
 appid: "mobilita-comune"
 weight: 20
-description: "How people move in every Italian municipality and how it ends: road accidents since 2001, the vehicle fleet by Euro class, who comes in and who goes out for work and by what means, and — where it exists — shared vehicles in real time. Five pages over official ISTAT, ACI and GBFS data."
+description: "Road accidents since 2001, the vehicle fleet by Euro class, daily commuters and live shared vehicles for every Italian municipality, from official data."
 lead: "How many cars there are and where the roads run tell you how a place is built. Accidents tell you how it ends — and that is the only measure that exists for all 7,896 municipalities, twenty-four years running."
 shots:
   - src: mobilita-comune-sicurezza.jpg

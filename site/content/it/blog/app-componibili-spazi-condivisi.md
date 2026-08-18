@@ -1,6 +1,7 @@
 ---
 title: "App componibili, spazi dati condivisi e sync senza segreti nel file"
-description: "Le novità di luglio: le soluzioni del catalogo diventano suite di micro app, le app condividono i dati con il tuo consenso, e la sincronizzazione multi-utente non scrive più nulla nel documento."
+seotitle: "App componibili e spazi dati condivisi"
+description: "Le soluzioni del catalogo diventano suite di micro app, gli spazi dati condivisi chiedono il consenso e la chiave di sync esce dal documento."
 date: 2026-07-14
 author: "Cosimo Luigi Manes"
 translationKey: "app-componibili-spazi-condivisi"

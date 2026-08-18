@@ -1,10 +1,10 @@
 ---
 title: "Conti pubblici del territorio"
 translationKey: "app-soldi-territorio"
-seotitle: "Conti pubblici del territorio: bilanci comunali, PNRR e appalti"
+seotitle: "Bilanci comunali, PNRR e appalti"
 appid: "soldi-territorio"
 weight: 10
-description: "Dove vanno e da dove arrivano i soldi pubblici del tuo comune: spesa ed entrate per cassa, saldo e autonomia finanziaria, i progetti di coesione e PNRR, le gare d'appalto e chi le vince. Otto pagine su dati ufficiali MEF-RGS, ANAC, DIPE e Agenzia per la Coesione."
+description: "Dove vanno i soldi pubblici del tuo comune: spesa ed entrate per cassa, progetti PNRR e di coesione, gare d'appalto e vincitori. Dati MEF-RGS, ANAC e DIPE."
 lead: "Un comune si capisce dai suoi flussi di cassa. Otto cruscotti su fonti ufficiali — spesa, entrate, progetti finanziati, appalti — con la classifica regionale, la previsione e le anomalie calcolate nel tuo browser."
 shots:
   - src: soldi-territorio-comune.jpg

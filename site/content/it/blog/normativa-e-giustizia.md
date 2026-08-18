@@ -1,6 +1,7 @@
 ---
 title: "Il Parlamento e la giustizia, in dati aperti: quattro nuove fonti"
-description: "Il warehouse open data di Reactive sale a 228 dataset: atti e votazioni della Camera, disegni di legge del Senato, le pronunce della Corte Costituzionale dal 1956, le sentenze di TAR e Consiglio di Stato. Due app nuove per esplorarli — Parlamento in numeri e Giustizia costituzionale e amministrativa."
+seotitle: "Parlamento e giustizia in dati aperti"
+description: "Atti e votazioni della Camera, ddl del Senato, pronunce della Consulta dal 1956, sentenze di TAR e Consiglio di Stato: il warehouse sale a 228 dataset."
 date: 2026-07-20
 author: "Cosimo Luigi Manes"
 translationKey: "parliament-and-justice"

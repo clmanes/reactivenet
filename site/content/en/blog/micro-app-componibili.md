@@ -1,6 +1,7 @@
 ---
 title: "Composable micro apps: building big things out of small pieces"
-description: "The concept at the heart of Reactive: tiny apps with a single job, sharing one data space and composing into complete solutions — with your consent, and multi-user with one invite."
+seotitle: "Composable micro apps, one shared data space"
+description: "Tiny apps with a single job, sharing one data space and composing into complete solutions — with your consent, and multi-user with one invite."
 date: 2026-07-14
 author: "Cosimo Luigi Manes"
 translationKey: "micro-app-componibili"

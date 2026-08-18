@@ -1,10 +1,10 @@
 ---
 title: "School office"
 translationKey: "app-segreteria"
-seotitle: "School back-office dashboard: cases, deadlines, staff counters"
+seotitle: "School office dashboard: cases and deadlines"
 appid: "segreteria"
 weight: 50
-description: "The operational dashboard of a school's administrative office: cases with configurable types and deadlines, a kanban view, a calendar of statutory obligations, contractual leave counters, fixed-term contracts, purchasing and inventory, reports and printing."
+description: "The operational dashboard of a school's administrative office: cases with deadlines, a kanban view, an obligations calendar, leave counters and reports."
 lead: "It replaces neither the ministry's systems nor the official register: it covers what today lives in shared spreadsheets, network folders and sticky notes — where a case is, who is working it, what falls due when, which counters are spent."
 shots:
   - src: segreteria-scadenzario.jpg

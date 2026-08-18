@@ -173,6 +173,23 @@ if [ "$DO_APP" -eq 1 ]; then
   # --cleanDestinationDir: site/public è mirrorato con --delete più sotto,
   # quindi anche il build locale parte pulito (niente residui di build vecchie).
   hugo --minify --cleanDestinationDir -s site
+
+  # La build che sta per partire verso il server DEVE essere quella di
+  # produzione. È già successo che site/public contenesse l'output del server
+  # di sviluppo (canonical, hreflang e sitemap tutti su localhost:1313, più
+  # livereload.js) e che finisse online tale e quale: da fuori niente sembrava
+  # rotto, e per i motori di ricerca la pagina dichiarava di vivere altrove.
+  # Il controllo sta QUI e non a monte perché è l'ultimo punto in cui il file
+  # esiste prima di rsync — qualunque strada l'abbia prodotto, da qui non passa.
+  if ! grep -q 'rel=canonical href=https://reactivenet.ai/' site/public/index.html \
+     && ! grep -q 'rel="canonical" href="https://reactivenet.ai/"' site/public/index.html; then
+    echo "ERRORE: site/public/index.html non ha il canonical di produzione (build dev?)" >&2
+    exit 1
+  fi
+  if grep -q 'livereload' site/public/index.html; then
+    echo "ERRORE: site/public/index.html contiene livereload — è una build del server di sviluppo" >&2
+    exit 1
+  fi
 fi
 
 # Bundle del server MCP: un file unico con dentro le dipendenze (SDK MCP, zod,

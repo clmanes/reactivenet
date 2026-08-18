@@ -1,6 +1,6 @@
 ---
 title: "Write your app like a document: the block editor is here"
-description: "Reactive's new default editing mode: build your document like on Notion, block by block. Every widget is a card with fields to fill in, the / menu suggests everything you can insert in your language, and an AI block generates widgets in place from a sentence. The code is still there, one click away — you just don't have to start from it anymore."
+description: "The new default editing mode: build your document like on Notion, block by block. Widgets are cards with fields to fill in; the code stays one click away."
 date: 2026-08-04
 author: "Cosimo Luigi Manes"
 translationKey: "editor-a-blocchi"
