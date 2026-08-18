@@ -1,0 +1,278 @@
+[skipToContent]
+other = "Skip to content"
+
+[mainNav]
+other = "Main"
+
+[languageLabel]
+other = "Language"
+
+[heroTitle1]
+other = "Your app in one sentence."
+
+[heroTitle2]
+other = "Private by design."
+
+[heroTagline]
+other = "Say what you need — a register, a form, a dashboard — and the assistant builds it in your browser while you watch. No account, no cloud: what you write stays on your device."
+
+[heroCtaMain]
+other = "Create your app"
+
+[heroCtaGhost]
+other = "Browse the documentation"
+
+[heroCtaSub]
+other = "Free, opens in your browser, and never asks you to sign up."
+
+[heroMcpMsg]
+other = "You can now create them straight from Claude, ChatGPT or Gemini"
+
+[heroMcpCopy]
+other = "Copy the address"
+
+[heroMcpCopied]
+other = "Copied!"
+
+[heroMcpHow]
+other = "how it works"
+
+[animPause]
+other = "Pause the animation"
+
+[animPlay]
+other = "Resume the animation"
+
+[pagination]
+other = "Pagination"
+
+[prevPage]
+other = "Previous"
+
+[nextPage]
+other = "Next"
+
+[page]
+other = "Page"
+
+[home]
+other = "Home"
+
+[breadcrumbLabel]
+other = "Breadcrumb"
+
+[footerNav]
+other = "Site map"
+
+[rss]
+other = "Blog RSS feed"
+
+[siteTagline]
+other = "Your app in one sentence, private by design"
+
+[notFoundTitle]
+other = "Page not found"
+
+[notFoundText]
+other = "The address may have changed, or the page no longer exists. The rest of the site is right where it should be."
+
+[backHome]
+other = "Back to the home page"
+
+[tableLabel]
+other = "Table"
+
+[adjacentLabel]
+other = "Adjacent pages"
+
+[statDirectives]
+other = "reactive directives"
+
+[statTables]
+other = "open data tables"
+
+[statLanguages]
+other = "app languages"
+
+[homeWhyTitle]
+other = "Why it might matter to you"
+
+[whyPrivateTitle]
+other = "Private by design"
+
+[whyPrivateText]
+other = "Apps and data live in the browser: no cloud, no account, nothing to install. They stay where you left them."
+
+[whyAiTitle]
+other = "The assistant writes it for you"
+
+[whyAiText]
+other = "Describe the app you need and the assistant builds it in front of you. If it is not right, Undo is always one click away."
+
+[whyOpenTitle]
+other = "An open file"
+
+[whyOpenText]
+other = "An app is a Markdown document: open it in any editor, put it under version control, take it with you whenever you like."
+
+[whyDataTitle]
+other = "Open data built in"
+
+[whyDataText]
+other = "Vocabularies, tenders, population, boundaries: you ask the public warehouse with a single directive."
+
+[homeCatalogTitle]
+other = "The catalogue"
+
+[homeCatalogLead]
+other = "Micro apps that combine and pass each other the same data, written for people with real work to finish."
+
+[homeCatalogAll]
+other = "Browse the catalogue"
+
+[homeDataTitle]
+other = "Open data in your apps"
+
+[homeDataLead]
+other = "A map of the boundaries, the relations between tables, a live catalogue and a read-only SQL playground: you can look inside the data service before you use it."
+
+[homeDataLink]
+other = "Explore the data"
+
+[homeBlogTitle]
+other = "From the blog"
+
+[homeBlogAll]
+other = "All articles"
+
+[ctaTitle]
+other = "Your next app is one sentence away"
+
+[footerRights]
+other = "No account, no server — your data stays on your device."
+
+[openApp]
+other = "Open the app"
+
+[linkedinLabel]
+other = "Contact me on LinkedIn"
+
+[legalNav]
+other = "Legal notices"
+
+[legalA11y]
+other = "Accessibility"
+
+[legalAll]
+other = "All legal notices"
+
+[legalVersion]
+other = "Version"
+
+[legalUpdated]
+other = "updated"
+
+[authorSectionTitle]
+other = "Who is behind ReactiveNET"
+
+[authorEyebrow]
+other = "The author"
+
+[authorRole]
+other = "Software engineer and educator · educational-projects coordinator at IISS «E. Majorana», Brindisi"
+
+[authorBio]
+other = "Cosimo has spent his career between software and teaching, bringing AI into classrooms and real projects — safely and privacy-first. ReactiveNET comes from a simple belief: everyone should be able to build the tools they need and truly own them, data included. No server, no account, nothing to surrender."
+
+[homeShowTitle]
+other = "See how it actually works"
+
+[homeShowLead]
+other = "Four things this system really does, filmed from the real apps. No mockups and no clever cuts."
+
+[clipPause]
+other = "Pause the clips"
+
+[clipPlay]
+other = "Play the clips"
+
+[showEditorTitle]
+other = "Write it, see it"
+
+[showEditorText]
+other = "Text on the left, a working app on the right. Add one line and the total appears by itself, as you type."
+
+[showEditorCap]
+other = "One line of text becomes a total that keeps itself up to date."
+
+[showDataTitle]
+other = "Open data, already working"
+
+[showDataText]
+other = "Pick a municipality and the dashboard fills with official figures: spending per resident, regional ranking, trend over the years. Click a bar and everything filters."
+
+[showDataCap]
+other = "Real municipal budgets (SIOPE/MEF), queried from the browser."
+
+[showSolveTitle]
+other = "Maths that solves real problems"
+
+[showSolveText]
+other = "Teaching posts, constraints and priorities go in; a complete school timetable comes out, with no violations, ready to print."
+
+[showSolveCap]
+other = "120 lesson hours placed in under a second, in the browser."
+
+[appCardEyebrow]
+other = "Catalogue app"
+
+[appOpen]
+other = "Open in the platform"
+
+[appOpenNote]
+other = "The app travels inside the link: it opens in your browser and stays there. No account, nothing to install, and none of your data passes through a server."
+
+[appSource]
+other = "See the source"
+
+[appCtaTitle]
+other = "Yours to change"
+
+[appCtaSub]
+other = "An app is a Markdown document: open it, edit it by hand, or ask the assistant to change it for you. Whatever you add stays on your device."
+
+[homeLocalTitle]
+other = "You do not need a huge model"
+
+[homeLocalLead]
+other = "A ReactiveNET app is a short document, not a program: a small model — the kind that runs on your own computer — is enough to write it. No key to buy, nothing leaving the machine, no metered bill."
+
+[localSmallTitle]
+other = "Small models, not enormous ones"
+
+[localSmallText]
+other = "The language is made of directives, and the assistant learns them from the MCP server instead of inventing them: a model of a few billion parameters builds a working app. Large models are for the harder apps, not for starting out."
+
+[localDeviceTitle]
+other = "On your computer, not in the cloud"
+
+[localDeviceText]
+other = "With Ollama the model runs locally: the request, the conversation and the app's document stay on your machine. It is the only setup where there is no key to keep safe and nothing to defend against."
+
+[localFreeTitle]
+other = "At no cost"
+
+[localFreeText]
+other = "The platform is free and local models are free: no subscription, no per-token billing, no monthly cap. You can use a remote provider if you prefer one, but that is a choice, not a requirement."
+
+[appDownload]
+other = "Download the document"
+
+[appImportNote]
+other = "This app is larger than an address can carry: download it as a Markdown document and import it from the gallery. It is the same app, with one step more."
+
+[sectionEmpty]
+other = "This section has no published apps yet: the ones that belong here are being prepared. In the meantime, an app you need is one sentence away — the assistant writes it, which is how these come about too."
+
+[sectionEmptyBack]
+other = "Back to the catalogue"

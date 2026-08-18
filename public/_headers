@@ -1,0 +1,17 @@
+# Security headers for static hosts that read this format (Netlify, Cloudflare Pages).
+# Keep in sync with CSP_DIRECTIVES / SECURITY_HEADERS in vite.config.js — that file is
+# the source of truth, this one exists because a <meta> CSP cannot express
+# frame-ancestors and cannot apply before the document starts parsing.
+#
+# On other hosts (nginx, Caddy, S3+CloudFront) translate these into the platform's own
+# header configuration; this file is inert there.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://api.pirsch.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; manifest-src 'self'; worker-src 'self' blob:; base-uri 'none'; object-src 'none'; form-action 'none'; frame-ancestors 'none'; require-trusted-types-for 'script'; trusted-types lit-html default dompurify; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload

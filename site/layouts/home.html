@@ -1,0 +1,188 @@
+{{ define "mainclass" }}layout-home{{ end }}
+
+{{ define "main" }}
+<section class="hero-full">
+  <div class="hero-bg">
+    <div id="hero-three" class="hero-three" aria-hidden="true"></div>
+  </div>
+  <button type="button" class="anim-toggle" hidden aria-pressed="false"
+          data-label-pause="{{ i18n "animPause" }}" data-label-play="{{ i18n "animPlay" }}"
+          aria-label="{{ i18n "animPause" }}">
+    <svg class="icon-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+    <svg class="icon-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+  </button>
+  <div class="hero-stack">
+    <p class="hero-brand"><img src="/logo.svg" alt="" width="44" height="44">{{ site.Title }}</p>
+    <h1>{{ i18n "heroTitle1" }}<br>{{ i18n "heroTitle2" }}</h1>
+    <p class="tagline">{{ i18n "heroTagline" }}</p>
+    <div class="hero-cta">
+      <div class="hero-btns">
+        <a class="hero-btn" href="https://app.reactivenet.ai">{{ i18n "heroCtaMain" }}</a>
+        <a class="hero-btn-ghost" href="{{ (site.GetPage "/guida").RelPermalink }}">{{ i18n "heroCtaGhost" }}</a>
+      </div>
+      <p class="hero-cta-sub">{{ i18n "heroCtaSub" }}</p>
+    </div>
+    <div class="hero-mcp">
+      <p class="hero-mcp-msg">{{ i18n "heroMcpMsg" }}</p>
+      <div class="hero-mcp-row">
+        <button class="hero-mcp-copy" type="button" data-url="https://mcp.reactivenet.ai/mcp"
+                data-copied="{{ i18n "heroMcpCopied" }}" aria-label="{{ i18n "heroMcpCopy" }}" title="{{ i18n "heroMcpCopy" }}">
+          <code>mcp.reactivenet.ai/mcp</code>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <span class="visually-hidden" role="status"></span>
+        </button>
+        <a class="hero-mcp-how" href="{{ (site.GetPage "/guida").RelPermalink }}">{{ i18n "heroMcpHow" }} <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="numbers" aria-label="ReactiveNET">
+  <div class="number"><span class="number-big">110</span> {{ i18n "statDirectives" }}</div>
+  <div class="number"><span class="number-big">240</span> {{ i18n "statTables" }}</div>
+  <div class="number"><span class="number-big">7</span> {{ i18n "statLanguages" }}</div>
+</section>
+
+<section class="home-sec prose">
+  {{ .Content }}
+</section>
+
+{{/* Le clip delle app VERE, riprese dal prodotto e non da un mockup: è la parte
+     che convince, e va prima di qualunque spiegazione. Si rifanno con
+     `bun run clips`, che pilota l'app vera in Chrome — una ripresa a mano
+     invecchia e nessuno la rifà. Righe alternate (media da un lato, testo
+     dall'altro) che diventano una colonna sotto i 52rem. Non scaricano niente
+     finché non entrano in campo (preload="none" + poster) e un solo bottone le
+     mette in pausa tutte (§2.2.2): tre serie di controls sarebbero rumore.
+
+     Erano quattro: la quarta prometteva un'anagrafica sola condivisa fra più
+     app, che questa versione non fa — le collezioni sono sotto
+     `app/<appId>/<path>` e due app non si leggono a vicenda. Tolta invece che
+     lasciata a dire una cosa falsa. */}}
+<section class="home-sec">
+  <h2>{{ i18n "homeShowTitle" }}</h2>
+  <p class="home-lead">{{ i18n "homeShowLead" }}</p>
+  {{/* Il bottone nasce hidden e lo mostra nav.js: senza JS le clip non
+       partono da sole e non c'è niente da mettere in pausa. L'etichetta dice
+       l'azione, non lo stato — come ogni altro comando di questo sito. */}}
+  <button type="button" class="clip-toggle" hidden
+          data-label-pause="{{ i18n "clipPause" }}" data-label-play="{{ i18n "clipPlay" }}">
+    {{ i18n "clipPause" }}
+  </button>
+  <ul class="show-rows">
+    {{ range slice "Editor" "Data" "Solve" }}
+    {{ $clip := index (dict "Editor" "editor" "Data" "soldi" "Solve" "orario") . }}
+    <li class="show-row">
+      <div class="show-text">
+        <h3>{{ i18n (printf "show%sTitle" .) }}</h3>
+        <p>{{ i18n (printf "show%sText" .) }}</p>
+      </div>
+      <figure class="show-media">
+        <video class="clip" src="/clip/{{ $clip }}.mp4" poster="/clip/{{ $clip }}-poster.jpg"
+               muted loop playsinline preload="none"
+               aria-label="{{ i18n (printf "show%sCap" .) }}"></video>
+        <figcaption>{{ i18n (printf "show%sCap" .) }}</figcaption>
+      </figure>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+
+{{/* La domanda che arriva subito dopo le clip: «e quanto mi costa il modello?».
+     La risposta è il punto di forza del progetto e va detta qui, non in una
+     pagina interna. */}}
+<section class="home-sec">
+  <h2>{{ i18n "homeLocalTitle" }}</h2>
+  <p class="home-lead">{{ i18n "homeLocalLead" }}</p>
+  <ul class="why-grid">
+    {{ range slice "Small" "Device" "Free" }}
+    <li class="why-card">
+      <h3>{{ i18n (printf "local%sTitle" .) }}</h3>
+      <p>{{ i18n (printf "local%sText" .) }}</p>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+
+<section class="home-sec">
+  <h2>{{ i18n "homeWhyTitle" }}</h2>
+  <ul class="why-grid">
+    {{ range slice "Private" "Ai" "Open" "Data" }}
+    <li class="why-card">
+      <h3>{{ i18n (printf "why%sTitle" .) }}</h3>
+      <p>{{ i18n (printf "why%sText" .) }}</p>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+
+{{ with site.GetPage "/app" }}
+<section class="home-sec">
+  <h2>{{ i18n "homeCatalogTitle" }}</h2>
+  <p class="home-lead">{{ i18n "homeCatalogLead" }}</p>
+  <ul class="card-grid">
+    {{ range .Sections }}
+    <li>
+      <a class="doc-card" href="{{ .RelPermalink }}">
+        <span class="doc-card-title">{{ .Title }} <span class="arrow" aria-hidden="true">→</span></span>
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+  <p class="home-more"><a href="{{ .RelPermalink }}">{{ i18n "homeCatalogAll" }} <span class="arrow" aria-hidden="true">→</span></a></p>
+</section>
+{{ end }}
+
+{{/* Senza tint: la banda che stava qui separava i dati dalla formazione, e con
+     quella sezione tolta due bande tinte finivano attaccate e si leggevano come
+     una sola. L'unica tinta rimasta è quella dell'autore, che è quello che la
+     tinta serve a fare — dire che lì cambia il genere di cosa. */}}
+{{ with site.GetPage "/dati" }}
+<section class="home-sec">
+  <h2>{{ i18n "homeDataTitle" }}</h2>
+  <p class="home-lead">{{ i18n "homeDataLead" }}</p>
+  <p class="home-more"><a href="{{ .RelPermalink }}">{{ i18n "homeDataLink" }} <span class="arrow" aria-hidden="true">→</span></a></p>
+</section>
+{{ end }}
+
+{{/* Come sul vecchio sito, l'autore sta fra i contenuti e la CTA finale: chi
+     è arrivato fin qui si sta chiedendo di chi fidarsi. */}}
+<section class="home-sec tint">
+  <h2>{{ i18n "authorSectionTitle" }}</h2>
+  {{ partial "author.html" . }}
+</section>
+
+{{ $posts := first 3 (where site.RegularPages "Section" "blog").ByDate.Reverse }}
+{{ with $posts }}
+<section class="home-sec">
+  <h2>{{ i18n "homeBlogTitle" }}</h2>
+  <ul class="home-posts">
+    {{ range . }}
+    <li>
+      <a class="home-post" href="{{ .RelPermalink }}">
+        {{ partial "pattern.html" (dict "page" . "class" "home-post-img") }}
+        <span class="post-card-title">{{ .Title }}</span>
+        {{ with .Date }}<time class="meta" datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_long" }}</time>{{ end }}
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+  {{ with site.GetPage "/blog" }}
+  <p class="home-more"><a href="{{ .RelPermalink }}">{{ i18n "homeBlogAll" }} <span class="arrow" aria-hidden="true">→</span></a></p>
+  {{ end }}
+</section>
+{{ end }}
+
+<section class="cta-band">
+  <h2>{{ i18n "ctaTitle" }}</h2>
+  <p><a class="hero-btn" href="https://app.reactivenet.ai">{{ i18n "heroCtaMain" }}</a></p>
+  <p class="hero-cta-sub">{{ i18n "heroCtaSub" }}</p>
+</section>
+{{ end }}
+
+{{ define "scripts" }}
+{{ $hero := resources.Get "js/hero.js" | minify | fingerprint }}
+<script src="{{ $hero.RelPermalink }}" defer></script>
+{{ $three := resources.Get "js/vendor/hero-three.js" | fingerprint }}
+<script type="module" src="{{ $three.RelPermalink }}"></script>
+{{ end }}

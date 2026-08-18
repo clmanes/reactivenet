@@ -1,0 +1,81 @@
+{{/* La scheda di un'app del catalogo. Il bottone che conta è «apri nella
+     piattaforma»: porta l'intera applicazione nel frammento dell'indirizzo,
+     quindi chi lo preme se la ritrova nella propria galleria senza account e
+     senza che nulla passi da un server. Il link è generato da
+     site/scripts/app-links.mjs e sta in site/data/applinks.json, indicizzato
+     con lo stesso `appid` della frontmatter. */}}
+{{ define "main" }}
+{{ partial "breadcrumbs.html" . }}
+
+{{ $link := index site.Data.applinks (.Params.appid | default "") }}
+
+<article class="app-page">
+  <header class="app-head">
+    <p class="eyebrow">{{ i18n "appCardEyebrow" }}</p>
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.lead }}<p class="lead">{{ . }}</p>{{ end }}
+    {{ with .Params.tags }}
+    <ul class="app-tags">
+      {{ range . }}<li>{{ . }}</li>{{ end }}
+    </ul>
+    {{ end }}
+    {{/* Un'app entra in un link finché il documento ci sta dentro. Oltre il
+         tetto del frammento resta il documento stesso: si scarica e si importa
+         dalla galleria, che è la stessa strada per qualunque app di qualunque
+         taglia — solo con un passaggio in più. */}}
+    {{/* Il bottone porta all'indirizzo del catalogo, `/c/<id>`: è l'app stessa
+         che va a prendersi il documento da qui. Vale a qualunque taglia, mentre
+         un link di condivisione porta il documento dentro l'indirizzo e si
+         ferma dove si ferma un indirizzo. Il documento resta scaricabile: è la
+         via che non dipende da nessun servizio. */}}
+    {{ $file := printf "/app/%s.md" (.Params.appid | default "") }}
+    <div class="app-actions">
+      <a class="hero-btn" href="https://app.reactivenet.ai/c/{{ .Params.appid }}">{{ i18n "appOpen" }}</a>
+      <a class="hero-btn-ghost" href="{{ $file }}" download>{{ i18n "appDownload" }}</a>
+    </div>
+    <p class="app-note">{{ i18n "appOpenNote" }}</p>
+  </header>
+
+  {{/* Le schermate sono dell'app vera, prese dall'applicazione in funzione:
+       ognuna con la sua didascalia, perché una figura senza didascalia
+       obbliga il lettore a indovinare cosa sta guardando. */}}
+  {{ with .Params.shots }}
+  <section class="app-shots">
+    {{ range . }}
+    {{/* La schermata va tenuta in una variabile: dentro `with resources.Get`
+         il contesto diventa l'immagine, e `.alt` non esisterebbe più. */}}
+    {{ $shot := . }}
+    <figure>
+      {{ with resources.Get (printf "img/app/%s" $shot.src) }}
+      {{ $small := .Resize "760x webp q82" }}
+      {{ $large := .Resize "1520x webp q82" }}
+      <a href="{{ .RelPermalink }}">
+        <img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} 760w, {{ $large.RelPermalink }} 1520w"
+             sizes="(min-width: 60rem) 56rem, 100vw"
+             width="{{ $small.Width }}" height="{{ $small.Height }}" loading="lazy" alt="{{ $shot.alt }}">
+      </a>
+      {{ else }}
+      {{/* Immagine dichiarata ma non ancora prodotta: meglio dirlo in fase di
+           build che pubblicare una figura rotta. */}}
+      {{ warnf "scheda %s: manca assets/img/app/%s" $.File.Path $shot.src }}
+      {{ end }}
+      <figcaption>{{ $shot.caption }}</figcaption>
+    </figure>
+    {{ end }}
+  </section>
+  {{ end }}
+
+  <div class="app-body prose">
+    {{ .Content }}
+  </div>
+
+  <section class="cta-band">
+    <h2>{{ i18n "appCtaTitle" }}</h2>
+    <p class="cta-sub">{{ i18n "appCtaSub" }}</p>
+    {{ if $link }}
+    <p><a class="hero-btn" href="{{ $link }}">{{ i18n "appOpen" }}</a></p>
+    {{ end }}
+  </section>
+</article>
+{{ partial "prevnext.html" . }}
+{{ end }}

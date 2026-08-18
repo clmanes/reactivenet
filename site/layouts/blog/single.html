@@ -1,0 +1,13 @@
+{{ define "main" }}
+{{ partial "breadcrumbs.html" . }}
+<article class="prose post">
+  <h1>{{ .Title }}</h1>
+  <p class="meta">
+    {{ with .Date }}<time datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_long" }}</time>{{ end }}
+    {{ with .Params.author }} · {{ . }}{{ end }}
+  </p>
+  {{ partial "pattern.html" (dict "page" . "class" "cover-img") }}
+  {{ .Content }}
+</article>
+{{ partial "prevnext.html" . }}
+{{ end }}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon-180.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#16161d" />
+  <title>ReactiveNET Platform</title>
+  <!-- Pirsch (cookieless), con il data-code dell'APP, distinto da quello del
+       sito. Niente da archiviare sul dispositivo, quindi niente banner — vedi
+       la cookie policy; su localhost pa.js non conta nulla per proprio conto.
+
+       Lo script arriva da api.pirsch.io, e per questo `script-src` concede
+       https://api.pirsch.io — in vite.config.js e in public/_headers, che un
+       test tiene allineati. È l'unica origine di terze parti che script-src
+       concede: cambiare host qui senza cambiare la CSP significa un browser che
+       in produzione blocca lo script e non conta niente, mentre in dev, dove
+       CSP non c'è, sembra funzionare. La via del ritorno è la forma via proxy:
+       src="/pa/pa.js" più data-hit-endpoint="/pa/hit",
+       data-event-endpoint="/pa/event", data-session-endpoint="/pa/session" —
+       il proxy /pa esiste già in vite.config.js, public/_redirects e Caddyfile.
+       Il browser però contatta Pirsch direttamente: l'informativa privacy lo
+       dice, ed è una frase da tenere vera. -->
+  <script defer src="https://api.pirsch.io/pa.js"
+    id="pianjs"
+    data-code="ZSCLYt54IQ7ay90SOJoqsaBfvX5KL0FI"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/Main.res.mjs"></script>
+</body>
+
+</html>

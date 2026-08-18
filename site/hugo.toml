@@ -1,0 +1,74 @@
+baseURL = "https://reactivenet.ai/"
+title = "ReactiveNET"
+defaultContentLanguage = "it"
+enableRobotsTXT = true
+
+[params]
+  # Il repository pubblico del progetto: lo leggono header e footer per il
+  # link con il logo GitHub. Un solo posto, così cambiarlo è un'edit sola.
+  github = "https://github.com/clmanes/reactivenet"
+
+# Gli URL ricalcano quelli del sito attuale, anche in inglese: /guida/ e
+# /app/ restano tali sotto /en/ perché sono indirizzi già pubblicati e un
+# link che cambia è un link che si rompe. L'eccezione è la pagina che il
+# vecchio sito pubblicava con slug inglese (/en/data/): lì la frontmatter
+# porta un override `url:` esplicito, prefisso lingua compreso.
+
+[languages]
+  [languages.it]
+    languageCode = "it-IT"
+    languageName = "Italiano"
+    contentDir = "content/it"
+    weight = 1
+    [languages.it.params]
+      description = "App generate dall'AI, private by design: descrivi quello che ti serve e l'assistente lo costruisce nel tuo browser. Niente cloud, niente account."
+    [[languages.it.menus.main]]
+      name = "Guida"
+      pageRef = "/guida"
+      weight = 10
+    [[languages.it.menus.main]]
+      name = "Catalogo"
+      pageRef = "/app"
+      weight = 20
+    [[languages.it.menus.main]]
+      name = "Dati"
+      pageRef = "/dati"
+      weight = 25
+    [[languages.it.menus.main]]
+      name = "Blog"
+      pageRef = "/blog"
+      weight = 30
+
+  [languages.en]
+    languageCode = "en"
+    languageName = "English"
+    contentDir = "content/en"
+    weight = 2
+    [languages.en.params]
+      description = "AI-generated apps, private by design: describe what you need and the assistant builds it in your browser. No cloud, no account."
+    [[languages.en.menus.main]]
+      name = "Guide"
+      pageRef = "/guida"
+      weight = 10
+    [[languages.en.menus.main]]
+      name = "Catalogue"
+      pageRef = "/app"
+      weight = 20
+    [[languages.en.menus.main]]
+      name = "Data"
+      pageRef = "/dati"
+      weight = 25
+    [[languages.en.menus.main]]
+      name = "Blog"
+      pageRef = "/blog"
+      weight = 30
+
+[pagination]
+  # Il blog è l'unica sezione abbastanza lunga da meritarla: la guida è una
+  # manciata di pagine, e paginarla nasconderebbe un indice che sta
+  # comodamente in uno schermo.
+  pagerSize = 8
+
+[markup.goldmark.renderer]
+  # I contenuti sono nostri, non input utente: consente HTML nei .md
+  unsafe = true

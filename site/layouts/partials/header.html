@@ -1,0 +1,38 @@
+{{/* In home la barra è in modalità hero-nav (come sul vecchio sito): fissa
+     sopra l'hero a schermo pieno, invisibile all'inizio, si materializza
+     gradualmente con lo scroll — nav.js pilota opacità e discesa. */}}
+<header class="site-header{{ if .IsHome }} hero-nav{{ end }}">
+  <a class="brand" href="{{ site.Home.RelPermalink }}">
+    <img src="/logo.svg" alt="" width="28" height="28">
+    <span>{{ site.Title }}</span>
+  </a>
+  {{/* Il bottone nasce hidden e lo mostra nav.js: senza JS la navigazione
+       resta visibile e il burger non promette niente che non può fare. */}}
+  <button type="button" class="nav-toggle" hidden aria-expanded="false"
+          aria-controls="site-nav" aria-label="Menu">
+    <svg class="icon-burger" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="site-nav" id="site-nav">
+    <nav aria-label="{{ i18n "mainNav" }}">
+      {{ range site.Menus.main }}
+      {{/* La voce resta accesa anche nelle sottopagine della sua sezione */}}
+      <a href="{{ .URL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ else if $.HasMenuCurrent "main" . }} aria-current="true"{{ end }}>{{ .Name }}</a>
+      {{ end }}
+    </nav>
+    {{ if hugo.IsMultilingual }}
+    <nav class="lang-switch" aria-label="{{ i18n "languageLabel" }}">
+      {{ range .AllTranslations }}
+      <a href="{{ .RelPermalink }}" lang="{{ .Language.LanguageCode }}" hreflang="{{ .Language.LanguageCode }}"{{ if eq .Language.Lang $.Language.Lang }} aria-current="true"{{ end }}>{{ .Language.LanguageName }}</a>
+      {{ end }}
+    </nav>
+    {{ end }}
+    {{/* Il repository pubblico. Icona sola: "GitHub" come testo la duplica il
+         footer; qui il nome lo porta l'aria-label, che è anche il tooltip. */}}
+    {{ with site.Params.github }}
+    <a class="gh-link" href="{{ . }}" aria-label="GitHub" title="GitHub" rel="noopener">
+      {{ partial "github-mark.svg" (dict "size" 20) }}
+    </a>
+    {{ end }}
+  </div>
+</header>

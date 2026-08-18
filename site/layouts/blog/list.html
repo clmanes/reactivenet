@@ -1,0 +1,23 @@
+{{ define "main" }}
+{{ $paginator := .Paginate (.Pages.ByDate.Reverse) }}
+{{ partial "breadcrumbs.html" . }}
+<section class="prose">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+</section>
+<ul class="post-list">
+  {{ range $paginator.Pages }}
+  <li>
+    <a class="post-card" href="{{ .RelPermalink }}">
+      {{ partial "pattern.html" (dict "page" . "class" "post-card-img") }}
+      <span class="post-card-text">
+        <span class="post-card-title">{{ .Title }}</span>
+        {{ with .Date }}<time class="meta" datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_long" }}</time>{{ end }}
+        {{ with .Description }}<span class="post-card-desc">{{ . }}</span>{{ end }}
+      </span>
+    </a>
+  </li>
+  {{ end }}
+</ul>
+{{ partial "paginator.html" . }}
+{{ end }}

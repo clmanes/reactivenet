@@ -1,0 +1,32 @@
+let markdown: Jsx.element
+let blocks: Jsx.element
+let panelShown: Jsx.element
+let panelHidden: Jsx.element
+let phone: Jsx.element
+let desktop: Jsx.element
+let info: Jsx.element
+let directive: Jsx.element
+let language: Jsx.element
+let palette: Jsx.element
+let data: Jsx.element
+let link: Jsx.element
+let share: Jsx.element
+
+let copy: Jsx.element
+
+let trash: Jsx.element
+let gallery: Jsx.element
+let eye: Jsx.element
+let pencil: Jsx.element
+let add: Jsx.element
+let download: Jsx.element
+let upload: Jsx.element
+let sun: Jsx.element
+let moon: Jsx.element
+let person: Jsx.element
+let chat: Jsx.element
+let paperclip: Jsx.element
+let sync: Jsx.element
+let sparkle: Jsx.element
+let settings: Jsx.element
+let close: Jsx.element

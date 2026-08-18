@@ -1,0 +1,17 @@
+{{/* Un documento normativo: come il single di default, ma la riga sotto il
+     titolo dice versione e data di aggiornamento dalla frontmatter (questi
+     documenti non hanno una .Date: hanno una versione, che è ciò che conta
+     per chi deve citarli). I .md qui sono GENERATI da scripts/sync-legal.mjs
+     a partire da legal/ — si modifica là, mai qui. */}}
+{{ define "main" }}
+{{ partial "breadcrumbs.html" . }}
+<article class="prose">
+  <h1>{{ .Title }}</h1>
+  <p class="meta">
+    {{ i18n "legalVersion" }} {{ .Params.version }}
+    {{ with .Params.updated }} — {{ i18n "legalUpdated" }} {{ . }}{{ end }}
+  </p>
+  {{ .Content }}
+</article>
+{{ partial "prevnext.html" . }}
+{{ end }}

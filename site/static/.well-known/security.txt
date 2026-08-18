@@ -1,0 +1,5 @@
+Contact: mailto:security@reactivenet.ai
+Expires: 2027-08-13T00:00:00.000Z
+Preferred-Languages: it, en
+Canonical: https://reactivenet.ai/.well-known/security.txt
+Policy: https://reactivenet.ai/note-legali/sicurezza/

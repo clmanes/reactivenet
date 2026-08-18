@@ -1,0 +1,31 @@
+{{/* Immagini dentro il contenuto Markdown.
+
+     Le schermate stanno in `assets/`, non in `static/`: così Hugo le
+     ridimensiona e le converte in WebP a build time, come già fa per le
+     copertine e per le schede delle app. Una schermata a piena larghezza
+     pesa altrimenti centinaia di kB su uno smartphone che non li usa.
+
+     Il *title* del Markdown — `![alt](/img/... "didascalia")` — diventa la
+     didascalia. È testo vero, visibile a tutti; l'`alt` resta la descrizione
+     per chi non vede l'immagine, e i due non dicono la stessa cosa.
+
+     Un'immagine dichiarata e non presente è un errore in fase di build, non
+     una figura rotta in pagina. */}}
+{{ $src := .Destination }}
+{{ $res := resources.Get (strings.TrimPrefix "/" $src) }}
+{{ with $res }}
+{{ $small := .Resize "800x webp q82" }}
+{{ $large := .Resize "1600x webp q82" }}
+<figure class="post-shot">
+  <a href="{{ .RelPermalink }}">
+    <img src="{{ $small.RelPermalink }}"
+         srcset="{{ $small.RelPermalink }} 800w, {{ $large.RelPermalink }} 1600w"
+         sizes="(min-width: 60rem) 46rem, 100vw"
+         width="{{ $small.Width }}" height="{{ $small.Height }}"
+         loading="lazy" decoding="async" alt="{{ $.PlainText }}">
+  </a>
+  {{ with $.Title }}<figcaption>{{ . }}</figcaption>{{ end }}
+</figure>
+{{ else }}
+{{ errorf "%s: l'immagine %s non esiste sotto assets/" $.Page.File.Path $src }}
+{{ end }}

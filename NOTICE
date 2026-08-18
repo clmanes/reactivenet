@@ -1,0 +1,20 @@
+ReactiveNET
+Copyright 2026 Cosimo Luigi Manes
+https://reactivenet.ai
+
+The ReactiveNET source code is licensed under the Apache License,
+Version 2.0 (see the LICENSE file).
+
+The editorial content of the project — the guide (doc/, site/content),
+the example apps (mcp/examples/), the blog articles and the site's
+documentation pages — is licensed under the Creative Commons
+Attribution 4.0 International licence (CC BY 4.0).
+
+The names "ReactiveNET" and "Reactive", the logo and the identifying
+graphic elements are not covered by either licence: see the
+"Licences and attributions" document (legal/) for the trademark policy.
+
+This product bundles or downloads third-party components, each under its
+own licence (MIT, Apache-2.0, BSD, MPL-2.0, LGPL, SIL OFL): the full
+inventory is in legal/it/licenze-e-attribuzioni.md and
+legal/en/licences-and-attributions.md, and in package.json.

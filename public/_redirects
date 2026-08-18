@@ -1,0 +1,42 @@
+# The routes are in the path (/a/<id>, /a/<id>/edit), so every URL that names an app
+# has to answer with index.html — there is no file at that address. This is the whole
+# cost of not putting a # in the link, and it is one line.
+#
+# Read by Netlify and Cloudflare Pages. Elsewhere say the same thing in the platform's
+# own words: `try_files $uri /index.html;` on nginx, a 200-rewrite rule on S3 +
+# CloudFront, `try_files {path} /index.html` on Caddy. `vite dev` and `vite preview`
+# already do it, and the service worker's navigateFallback does it offline.
+#
+# Short share links need PocketBase reachable as /pb/* on THIS origin, so the CSP's
+# connect-src 'self' keeps holding. Uncomment and point at your instance; the ! makes
+# it win over the SPA catch-all below. Without it the app still works — sharing simply
+# offers only the full, serverless link.
+# /pb/*  https://pb.example.com/:splat  200!
+#
+# The od-* directives reach the open-data service the same way, as /od/* on this
+# origin. Without it they report the service as unreachable and show the last rows
+# received — nothing else in the app is affected.
+# /od/*  https://data.example.com/:splat  200!
+#
+# The assistant reads the directive language out of the MCP server, reached as /mcp
+# on this origin — deliberately not configurable in the app, so no document and no
+# setting can point the tools elsewhere. Without it the assistant says so in a
+# banner and cannot look up or validate what it writes. Note the path has no
+# wildcard: /mcp is the endpoint itself.
+# /mcp  https://mcp.example.com/mcp  200!
+#
+# Pirsch analytics rides the same arrangement: index.html loads /pa/pa.js and
+# sends the counts to /pa/hit — same-origin, so the CSP stays exactly as it is
+# and the browser never talks to api.pirsch.io itself. Without this rule the
+# script simply never loads and nothing is counted; the app is unaffected.
+# /pa/*  https://api.pirsch.io/:splat  200!
+
+# The catalogue of published apps rides the same arrangement, and the order
+# matters: it has to come BEFORE the SPA catch-all below, which would otherwise
+# answer /catalog/* with index.html. Opening /c/<id> makes the app fetch
+# /catalog/app/<id>.md from this origin; without the rule the app says the
+# catalogue did not answer, and nothing else changes.
+# /catalog/*  https://reactivenet.ai/:splat  200!
+
+# 200, not 301: the URL the reader typed is the URL that must stay in the address bar.
+/*  /index.html  200

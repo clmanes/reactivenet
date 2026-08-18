@@ -1,0 +1,11 @@
+{{/* Pulsante flottante LinkedIn (come sul vecchio sito): contatto diretto con
+     l'autore, basso a destra su ogni pagina. Il monogramma "in" è testo, non
+     un logo ricalcato — nessun asset di brand ridistribuito. In home parte
+     invisibile sopra l'hero e si materializza con lo scroll (classe
+     hero-reveal, gestita da nav.js). */}}
+<a class="linkedin-float{{ if .IsHome }} hero-reveal{{ end }}"
+   href="https://www.linkedin.com/in/cosimo-luigi-manes/"
+   target="_blank" rel="noopener noreferrer"
+   aria-label="{{ i18n "linkedinLabel" }}" title="{{ i18n "linkedinLabel" }}">
+  <span aria-hidden="true">in</span>
+</a>

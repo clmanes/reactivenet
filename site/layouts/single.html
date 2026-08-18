@@ -1,0 +1,9 @@
+{{ define "main" }}
+{{ partial "breadcrumbs.html" . }}
+<article class="prose">
+  <h1>{{ .Title }}</h1>
+  {{ with .Date }}<p class="meta"><time datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_long" }}</time></p>{{ end }}
+  {{ .Content }}
+</article>
+{{ partial "prevnext.html" . }}
+{{ end }}

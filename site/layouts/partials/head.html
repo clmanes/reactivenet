@@ -1,0 +1,100 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  // hero-three.js regola il blending su data-theme: derivarlo dal sistema.
+  (function () {
+    var mq = matchMedia("(prefers-color-scheme: light)");
+    var apply = function () {
+      document.documentElement.dataset.theme = mq.matches ? "light" : "dark";
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    // il CSS del menu burger collassa la nav solo quando il JS c'è davvero
+    document.documentElement.classList.add("js");
+  })();
+</script>
+
+{{ $isPost := and (eq .Section "blog") (not .IsNode) }}
+{{/* Il titolo della scheda del browser e dei risultati di ricerca può essere
+     più esplicito di quello stampato in pagina: chi cerca scrive «bilanci
+     comunali», non il nome dell'app. `seotitle` in frontmatter serve a questo,
+     e dove manca vale il titolo della pagina — che resta il nome breve nell'h1,
+     nelle briciole e nelle schede. */}}
+{{ $title := printf "%s · %s" (.Params.seotitle | default .Title) site.Title }}
+{{ if .IsHome }}{{ $title = printf "%s — %s" site.Title (i18n "siteTagline") }}{{ end }}
+{{ $desc := .Description | default site.Params.description }}
+
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<link rel="canonical" href="{{ .Permalink }}">
+{{/* Le note legali non vanno nell'indice: servono a chi usa il servizio e le
+     cerca dal footer, non a chi cerca «privacy policy» su un motore, e nei
+     risultati diluiscono le pagine che contano. `follow` resta, perché i link
+     che portano fuori da lì valgono comunque.
+     Deliberatamente NON c'è un Disallow in robots.txt: vietare la scansione
+     impedirebbe al crawler di leggere proprio questo meta, e la pagina
+     finirebbe in indice lo stesso, senza descrizione. */}}
+{{ $noindex := or .Params.noindex (eq .Section "note-legali") }}
+{{ if $noindex }}<meta name="robots" content="noindex, follow">{{ end }}
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#eceff4">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2a303c">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/space-grotesk-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+
+{{/* hreflang: tutte le lingue più x-default sull'italiano, la lingua principale */}}
+{{ range .AllTranslations }}
+<link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}">
+{{ end }}
+{{ range .AllTranslations }}{{ if eq .Language.Lang "it" }}
+<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+{{ end }}{{ end }}
+
+{{/* Open Graph / Twitter */}}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:type" content="{{ if $isPost }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="{{ if eq site.Language.Lang "it" }}it_IT{{ else }}en_US{{ end }}">
+{{ range .Translations }}
+<meta property="og:locale:alternate" content="{{ if eq .Language.Lang "it" }}it_IT{{ else }}en_US{{ end }}">
+{{ end }}
+{{ $og := "" }}
+{{ with .Params.cover }}{{ with resources.Get (strings.TrimPrefix "/" .) }}{{ $og = .Fill "1200x630 q80" }}{{ end }}{{ end }}
+{{ if $og }}
+<meta property="og:image" content="{{ $og.Permalink }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+{{ else }}
+<meta property="og:image" content="{{ "img/og-default.png" | absURL }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+{{ end }}
+<meta name="twitter:card" content="summary_large_image">
+{{ if $isPost }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02" }}">
+{{ with .Params.author }}<meta property="article:author" content="{{ . }}">{{ end }}
+{{ end }}
+
+{{/* Feed RSS del blog, dichiarato ovunque: è l'unico feed che conti */}}
+{{ with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" title="{{ site.Title }} · Blog" href="{{ .RelPermalink }}">
+{{ end }}{{ end }}
+
+{{/* Statistiche Pirsch (cookieless, IP non conservato, UE): niente banner
+     perché niente viene archiviato né letto sul dispositivo — la cookie
+     policy lo spiega. Solo in produzione: pa.js comunque non conta le
+     visite da localhost, ma in dev non c'è motivo di caricarlo. Il sito e
+     l'app hanno due data-code distinti: sono due proprietà diverse e vanno
+     contate separatamente. */}}
+{{ if hugo.IsProduction }}
+<script defer src="https://api.pirsch.io/pa.js"
+    id="pianjs"
+    data-code="4cAZYUgFX6AuqZCKpkezs0I81vJurSuB"></script>
+{{ end }}
+
+{{ partial "schema.html" . }}
+
+{{ with resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+{{ end }}

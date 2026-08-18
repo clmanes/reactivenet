@@ -1,0 +1,26 @@
+{{ define "mainclass" }}layout-wide{{ end }}
+
+{{ define "main" }}
+{{ partial "breadcrumbs.html" . }}
+{{/* Il markup è l'output compilato del vecchio sito (Astro), vendorizzato:
+     contiene già h1, lead e l'intero esploratore. Gli stili scoped arrivano
+     da assets/css/vendor/data-explorer.css, i colori dal ponte di variabili
+     --sl-* definito in main.css. */}}
+{{ if eq .Language.Lang "en" }}
+{{ partial "data-explorer-en.html" . }}
+{{ else }}
+{{ partial "data-explorer-it.html" . }}
+{{ end }}
+{{ end }}
+
+{{ define "styles" }}
+{{ with resources.Get "css/vendor/data-explorer.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+{{ end }}
+{{ end }}
+
+{{ define "scripts" }}
+{{ with resources.Get "js/vendor/data-explorer.js" | fingerprint }}
+<script type="module" src="{{ .RelPermalink }}"></script>
+{{ end }}
+{{ end }}

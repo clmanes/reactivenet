@@ -1,0 +1,18 @@
+{{/* La scheda dell'autore, portata dal vecchio sito (Author.astro): chi c'è
+     dietro il progetto, con ruolo, bio e il link LinkedIn. Il nome non passa
+     dall'i18n — è un nome proprio — mentre eyebrow, ruolo e bio sì.
+     L'avatar è testo decorativo (aria-hidden) su fondo primario: la coppia
+     primario/contrasto è la stessa già verificata di .hero-btn. */}}
+<div class="author-card">
+  <div class="author-avatar" aria-hidden="true">CLM</div>
+  <div class="author-body">
+    <p class="author-eyebrow">{{ i18n "authorEyebrow" }}</p>
+    <h3>Cosimo Luigi Manes</h3>
+    <p class="author-role">{{ i18n "authorRole" }}</p>
+    <p class="author-bio">{{ i18n "authorBio" }}</p>
+    <p class="author-links">
+      <a class="author-link" href="https://www.linkedin.com/in/cosimo-luigi-manes/"
+         target="_blank" rel="noopener noreferrer me">LinkedIn</a>
+    </p>
+  </div>
+</div>

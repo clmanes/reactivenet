@@ -1,0 +1,26 @@
+{{/* Navigazione tra pagine sorelle: per la guida l'ordine è il weight, per
+     il blog la data (più recente prima), lo stesso ordine delle rispettive
+     liste. */}}
+{{ $pages := .CurrentSection.RegularPages }}
+{{ if eq .Section "blog" }}{{ $pages = $pages.ByDate.Reverse }}{{ end }}
+{{/* Nota: Pages.Next/Prev di Hugo sono rovesciati rispetto all'ordine della
+     lista — .Next restituisce l'elemento PRECEDENTE. Verificato sull'output:
+     con i weight 10-20-30, da 20 "prev" deve puntare a 10. */}}
+{{ $prev := $pages.Next . }}
+{{ $next := $pages.Prev . }}
+{{ if or $prev $next }}
+<nav class="adjacent" aria-label="{{ i18n "adjacentLabel" }}">
+  {{ with $prev }}
+  <a class="adjacent-card" rel="prev" href="{{ .RelPermalink }}">
+    <span class="adjacent-label"><span aria-hidden="true">←</span> {{ i18n "prevPage" }}</span>
+    <span class="adjacent-title">{{ .Title }}</span>
+  </a>
+  {{ else }}<span></span>{{ end }}
+  {{ with $next }}
+  <a class="adjacent-card is-next" rel="next" href="{{ .RelPermalink }}">
+    <span class="adjacent-label">{{ i18n "nextPage" }} <span aria-hidden="true">→</span></span>
+    <span class="adjacent-title">{{ .Title }}</span>
+  </a>
+  {{ end }}
+</nav>
+{{ end }}

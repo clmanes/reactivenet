@@ -1,0 +1,237 @@
+# ============================================================================
+# Caddy — gira sul SERVER APP (VPN 10.10.10.1).
+#
+#   reactivenet.ai        → sito vetrina + documentazione (build statico HUGO)
+#   www.reactivenet.ai    → redirect a reactivenet.ai
+#   app.reactivenet.ai    → file statici del build (PWA) + i proxy same-origin
+#                           che la CSP dell'app richiede:
+#                             /pb/*  → PocketBase LOCALE (127.0.0.1:8090)
+#                             /od/*  → servizio dati open (VPN 10.10.10.2:8788)
+#                             /mcp   → server MCP LOCALE (127.0.0.1:8789)
+#                             /pa/*  → Pirsch (api.pirsch.io, analytics cookieless)
+#                             /catalog/* → il catalogo del sito (reactivenet.ai)
+#   mcp.reactivenet.ai    → reverse proxy al server MCP Bun (localhost:8789, LOCALE)
+#   data.reactivenet.ai   → reverse proxy al SERVIZIO DATI su un'ALTRA macchina
+#                           (server dati, VPN 10.10.10.2:8788)
+#
+# Architettura a due macchine, collegate da una VPN (rete 10.10.10.0/24):
+#   - server app  = questa macchina: Caddy + sito + app + PocketBase + server MCP
+#                   (VPN 10.10.10.1, l'unica delle due con IP pubblico)
+#   - server dati = DuckDB read-only :8788 (VPN 10.10.10.2), SENZA IP pubblico:
+#                   il TLS e l'esposizione a Internet li mette QUESTO Caddy,
+#                   che raggiunge il servizio SOLO attraverso la VPN.
+#
+# Non c'è più il relay: la sincronizzazione (short link + spazi condivisi) è
+# PocketBase, raggiunto dall'app come /pb/* sul SUO stesso dominio — così la
+# `connect-src 'self'` della CSP continua a valere, esattamente come in dev
+# (proxy di Vite) e preview.
+#
+# TLS automatico (Let's Encrypt) per tutti i domini.
+#
+# Prerequisiti:
+#   - DNS: record A per  reactivenet.ai · www · app · mcp · data → IP del server app
+#   - Porte 80 e 443 aperte sul firewall (la 80 serve a Caddy per ACME)
+#   - PocketBase attivo LOCALE:  pm2 → bun scripts/pocketbase.mjs  (:8090)
+#   - Server MCP attivo LOCALE:  pm2 → bun mcp/server.mjs          (:8789)
+#   - Servizio dati attivo sul server dati (data/start-pm2.sh su 10.10.10.2)
+#   - La VPN instrada 10.10.10.1 → 10.10.10.2 (Caddy deve poterlo raggiungere)
+#   - Build dell'app copiato in dist/   (bun run res:build && bun run build)
+#   - Build del sito copiato in site/   (hugo --minify -s site → site/public)
+#
+# Avvio Caddy:  caddy run --config ./Caddyfile   (o `caddy start`; systemd se
+# installato da pacchetto). Ricarica a caldo:  caddy reload --config ./Caddyfile
+# ============================================================================
+
+# --- Sito vetrina + documentazione (Hugo) ------------------------------------
+reactivenet.ai {
+	# Percorso dei file del build del sito (il CONTENUTO di site/public),
+	# popolato da deploy.sh.
+	root * /home/debian/reactive/site
+
+	encode zstd gzip
+
+	# Sito statico con URL "puliti" (Hugo genera cartelle con index.html):
+	# prova il file, poi la cartella. NIENTE fallback a /404.html qui: la
+	# pagina 404 va servita con STATUS 404 (handle_errors sotto), altrimenti
+	# ogni URL inesistente risponde 200 ("soft 404") e Google smette di
+	# fidarsi del sito in indicizzazione.
+	try_files {path} {path}/
+	file_server
+
+	# Pagina 404 di Hugo (public/404.html) servita con il codice di stato reale.
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+
+	# Asset con hash nel nome → cache lunga. Hugo Pipes fingerprinta CSS e JS
+	# (main.min.<sha256>.css, nav.min.<sha256>.js, anche sotto css/vendor e
+	# js/vendor), quindi tutto ciò che sta sotto /css/ e /js/ è immutabile.
+	# NB: /fonts/ e /img/ NON hanno hash nel nome — non vanno marcati immutable,
+	# o un file sostituito a parità di nome resterebbe vecchio per un anno.
+	@assets path /css/* /js/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+
+	# NIENTE regola /en/* qui: l'italiano è la lingua di default alla radice
+	# (defaultContentLanguage = "it" in hugo.toml) e /en/* è la posizione
+	# CORRENTE e legittima dell'inglese. Nel progetto precedente una regola
+	# del genere, rimasta da una fase intermedia, intercettava ogni pagina
+	# inglese PRIMA di file_server e la ributtava su se stessa — redirect
+	# loop in produzione (ERR_TOO_MANY_REDIRECTS su /en/ e figli, visto sul
+	# campo). Lezione mantenuta: le lingue le serve file_server e basta.
+}
+
+# Redirect www → apex.
+www.reactivenet.ai {
+	redir https://reactivenet.ai{uri} permanent
+}
+
+# --- App statica (PWA) + proxy same-origin -----------------------------------
+app.reactivenet.ai {
+	# Percorso dei file del build (il CONTENUTO di dist/), popolato da deploy.sh.
+	root * /home/debian/reactive/dist
+
+	encode zstd gzip
+
+	# Header di sicurezza dell'app. In dist/ c'è public/_headers, ma quel
+	# formato lo leggono solo Netlify/Cloudflare Pages: qui va detto nel
+	# linguaggio di Caddy. La CSP è la COPIA ESATTA di public/_headers —
+	# vite.config.js è la fonte di verità, _headers la replica per gli host
+	# statici, questa la replica per QUESTO server.
+	#
+	# È la copia che conta davvero: in produzione l'header lo scrive Caddy, e
+	# insieme al <meta> del build vince l'INTERSEZIONE. Una riga vecchia qui
+	# non allarga niente — restringe, e blocca ciò che il build ha appena
+	# concesso, con l'errore che punta al <meta> giusto. Restata indietro una
+	# volta (il token di Pirsch), ed è per questo che ora la legge
+	# SecurityPolicy_test come le altre due: era l'unica tenuta "a mano".
+	header {
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://api.pirsch.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; manifest-src 'self'; worker-src 'self' blob:; base-uri 'none'; object-src 'none'; form-action 'none'; frame-ancestors 'none'; require-trusted-types-for 'script'; trusted-types lit-html default dompurify; upgrade-insecure-requests"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Cross-Origin-Opener-Policy "same-origin"
+		Cross-Origin-Resource-Policy "same-origin"
+		Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()"
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+	}
+
+	# I proxy same-origin PRIMA dei file statici: sono i percorsi che la CSP
+	# dell'app (`connect-src 'self'`) obbliga a servire da QUESTO dominio.
+	# handle_path toglie il prefisso, come il rewrite del proxy di Vite in dev.
+
+	# PocketBase (short link cifrati + spazi condivisi), LOCALE su :8090.
+	handle_path /pb/* {
+		reverse_proxy 127.0.0.1:8090
+	}
+
+	# Servizio dati open (direttive od-*), sul SERVER DATI via VPN.
+	handle_path /od/* {
+		reverse_proxy 10.10.10.2:8788
+	}
+
+	# Server MCP (l'assistente in-app legge da qui il linguaggio delle
+	# direttive). /mcp è l'ENDPOINT ESATTO, non un prefisso da spogliare: il
+	# server ascolta proprio su /mcp (vedi mcp/server.mjs), quindi handle e
+	# non handle_path. flush_interval -1 DISATTIVA il buffering: il trasporto
+	# Streamable HTTP può rispondere in SSE (text/event-stream) e col
+	# buffering di default il client resterebbe appeso ad aspettare eventi
+	# già prodotti dal server.
+	handle /mcp {
+		reverse_proxy 127.0.0.1:8789 {
+			flush_interval -1
+		}
+	}
+
+	# Il catalogo delle app pubblicate: l'app apre /c/<id> e va a prendersi il
+	# documento da qui. Same-origin come tutto il resto, quindi nessun CORS da
+	# concedere sul sito e `connect-src 'self'` che continua a valere. Il sito è
+	# servito da QUESTO stesso Caddy, ma il proxy passa comunque dal dominio
+	# pubblico: così vale la stessa configurazione anche se un giorno il sito si
+	# sposta altrove.
+	handle_path /catalog/* {
+		# Queste due risposte — l'indice e i documenti — sono quelle che DEVONO
+		# poter cambiare da un minuto all'altro: l'indice dice quale versione di
+		# ogni app è pubblicata, e il documento È quella versione. Il sito le
+		# serve con ETag e Last-Modified e NESSUN Cache-Control, e un browser
+		# senza direttiva applica la sua euristica e riusa quello che ha senza
+		# chiedere: un'app pubblicata cinque minuti fa resta invisibile per ore,
+		# la galleria non offre l'aggiornamento perché l'indice che ha letto porta
+		# ancora la versione vecchia, e /c/<id> installa la copia che la cache si
+		# è tenuta. Da nessuna delle due parti sembra rotto niente.
+		#
+		# `no-cache` non è `no-store`: la copia si conserva e i validatori
+		# viaggiano, quindi un documento immutato costa un 304 invece di 166 kB.
+		# Quello che compra è che la domanda venga fatta sempre.
+		header Cache-Control "no-cache"
+		reverse_proxy https://reactivenet.ai {
+			header_up Host reactivenet.ai
+		}
+	}
+
+	# Pirsch (analytics cookieless): proxy same-origin, così misurare l'app
+	# non richiede di allargare `script-src`. Serve riscrivere Host verso
+	# l'upstream; l'IP del client DEVE arrivare a Pirsch per la
+	# geolocalizzazione — Caddy aggiunge X-Forwarded-For da solo su ogni
+	# reverse_proxy, quindi qui non c'è niente da scrivere, ma è un requisito:
+	# se mai venisse soppresso, la geolocalizzazione muore in silenzio.
+	handle_path /pa/* {
+		reverse_proxy https://api.pirsch.io {
+			header_up Host api.pirsch.io
+		}
+	}
+
+	# Asset con hash nel nome (immutabili) → cache lunga. Gestiti FUORI dal
+	# fallback SPA: un asset mancante deve dare 404, non l'index.html
+	# (che verrebbe pure cachato come immutabile).
+	handle /assets/* {
+		header Cache-Control "public, max-age=31536000, immutable"
+		file_server
+	}
+
+	# SPA/PWA: ogni altra richiesta senza file corrispondente cade su
+	# index.html — le route sono nel PATH (/a/<id>, /a/<id>/edit), quindi
+	# ogni URL che nomina un'app DEVE rispondere con la shell (è la regola
+	# che public/_redirects dice a Netlify e il service worker dice offline).
+	# NB per la SEO: robots.txt DEVE esistere nel build — senza, il fallback
+	# risponderebbe ai crawler con la shell HTML al posto del robots.txt.
+	handle {
+		try_files {path} /index.html
+		file_server
+
+		# Shell dell'app e service worker → sempre rivalidati, così gli
+		# aggiornamenti della PWA arrivano subito.
+		@shell path /index.html /sw.js /manifest.webmanifest
+		header @shell Cache-Control "no-cache"
+	}
+}
+
+# --- Server MCP (Claude scrive app ReactiveNET) ------------------------------
+# Bun su :8789, LOCALE a questa macchina. È il connettore che un utente incolla
+# in Claude: descrive l'app, il modello la scrive, la valida con la pipeline
+# vera e restituisce uno short link da aprire. Il server non custodisce nulla
+# (nessun dato utente, nessuna sessione), per questo non c'è autenticazione:
+# un rate limit per indirizzo (MCP_RATE) protegge la sola disponibilità.
+mcp.reactivenet.ai {
+	encode zstd gzip
+
+	# flush_interval -1 DISATTIVA il buffering della risposta: il trasporto
+	# Streamable HTTP può rispondere in SSE (text/event-stream) e con il
+	# buffering di default il client resterebbe appeso ad aspettare eventi
+	# già prodotti dal server.
+	reverse_proxy localhost:8789 {
+		flush_interval -1
+	}
+}
+
+# --- Servizio dati open (direttive od-*) -------------------------------------
+# Bun + DuckDB read-only su :8788, ma su un'ALTRA macchina: il SERVER DATI,
+# raggiunto SOLO via VPN (10.10.10.2). Il servizio manda già CORS aperto (dati
+# pubblici, sola lettura) e ascolta in chiaro: il TLS lo mette questo Caddy.
+# NB: l'indirizzo del server dati è cablato qui perché è la mappa fisica della
+# rete VPN; se cambia, aggiornalo anche in deploy.sh (DATA_HOST) e nel proxy
+# /od/* di app.reactivenet.ai qui sopra.
+data.reactivenet.ai {
+	encode zstd gzip
+	reverse_proxy 10.10.10.2:8788
+}

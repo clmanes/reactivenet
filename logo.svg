@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ReactiveNET">
+  <title>ReactiveNET</title>
+  <rect width="512" height="512" rx="112" fill="#16161d" />
+  <g fill="none" stroke-width="20">
+    <ellipse
+      cx="256"
+      cy="256"
+      rx="186"
+      ry="72"
+      transform="rotate(-45 256 256)"
+      stroke="#3f8f95"
+    />
+    <ellipse
+      cx="256"
+      cy="256"
+      rx="186"
+      ry="72"
+      transform="rotate(45 256 256)"
+      stroke="#65c3c8"
+    />
+  </g>
+  <circle cx="256" cy="256" r="60" fill="#65c3c8" />
+</svg>

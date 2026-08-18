@@ -1,0 +1,9 @@
+node_modules/
+raw/
+warehouse.duckdb
+warehouse.duckdb.wal
+model-cache/
+*.log
+*-emb.duckdb
+*-emb.duckdb.wal
+etl-state.json

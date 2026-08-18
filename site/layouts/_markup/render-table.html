@@ -1,0 +1,27 @@
+{{- /* Una tabella non deve rompere il reflow a 320px (§1.4.10): scorre nella
+     propria regione, raggiungibile da tastiera e con un nome — un role="region"
+     senza nome è peggio di nessun role. Avvolgerla invece di darle
+     display:block conserva la semantica di righe e colonne per gli screen
+     reader. */ -}}
+<div class="table-wrap" tabindex="0" role="region" aria-label="{{ i18n "tableLabel" }}">
+  <table>
+    <thead>
+      {{- range .THead }}
+      <tr>
+        {{- range . }}
+        <th{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</th>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </thead>
+    <tbody>
+      {{- range .TBody }}
+      <tr>
+        {{- range . }}
+        <td{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</td>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </tbody>
+  </table>
+</div>

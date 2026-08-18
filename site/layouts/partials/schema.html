@@ -1,0 +1,50 @@
+{{/* JSON-LD: WebSite+Person sulla home (il progetto è gestito da un privato,
+     non da un'azienda: dichiarare una Organization direbbe il falso),
+     BlogPosting sugli articoli, BreadcrumbList su ogni pagina interna. */}}
+{{ $schemas := slice }}
+
+{{ if .IsHome }}
+  {{ $schemas = $schemas | append (dict
+    "@type" "WebSite"
+    "name" site.Title
+    "url" site.Home.Permalink
+    "description" site.Params.description
+    "inLanguage" site.Language.LanguageCode) }}
+  {{ $schemas = $schemas | append (dict
+    "@type" "Person"
+    "name" "Cosimo Luigi Manes"
+    "url" site.Home.Permalink
+    "sameAs" (slice "https://www.linkedin.com/in/cosimo-luigi-manes/")) }}
+{{ else }}
+  {{ $items := slice }}
+  {{ $pos := 1 }}
+  {{ range .Ancestors.Reverse }}
+    {{ $items = $items | append (dict "@type" "ListItem" "position" $pos
+      "name" (cond .IsHome site.Title .Title) "item" .Permalink) }}
+    {{ $pos = add $pos 1 }}
+  {{ end }}
+  {{ $items = $items | append (dict "@type" "ListItem" "position" $pos "name" .Title "item" .Permalink) }}
+  {{ $schemas = $schemas | append (dict "@type" "BreadcrumbList" "itemListElement" $items) }}
+{{ end }}
+
+{{ if and (eq .Section "blog") (not .IsNode) }}
+  {{ $post := dict
+    "@type" "BlogPosting"
+    "headline" .Title
+    "description" .Description
+    "datePublished" (.Date.Format "2006-01-02")
+    "dateModified" (.Lastmod.Format "2006-01-02")
+    "author" (dict "@type" "Person" "name" (.Params.author | default site.Title))
+    "mainEntityOfPage" .Permalink
+    "inLanguage" site.Language.LanguageCode }}
+  {{ with .Params.cover }}
+    {{ with resources.Get (strings.TrimPrefix "/" .) }}
+      {{ $post = merge $post (dict "image" (.Fill "1200x630 q80").Permalink) }}
+    {{ end }}
+  {{ end }}
+  {{ $schemas = $schemas | append $post }}
+{{ end }}
+
+{{ range $schemas }}
+<script type="application/ld+json">{{ merge (dict "@context" "https://schema.org") . | jsonify | safeJS }}</script>
+{{ end }}

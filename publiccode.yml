@@ -1,0 +1,136 @@
+# publiccode.yml — metadati per Developers Italia (catalogo del software a
+# riuso per la PA). Specifica: https://yml.publiccode.tools/
+#
+# La versione del software NON si aggiorna a mano: è la stessa di
+# package.json, che scripts/version.mjs avanza a ogni build. Se le due
+# divergono, fa fede package.json.
+publiccodeYmlVersion: "0.4"
+
+name: ReactiveNET
+url: "https://github.com/clmanes/reactivenet"
+landingURL: "https://reactivenet.ai"
+softwareVersion: "1.1.37"
+releaseDate: "2026-08-18"
+logo: logo.svg
+
+platforms:
+  - web
+
+categories:
+  - application-development
+  - data-visualization
+  - data-analytics
+  - data-collection
+
+developmentStatus: stable
+softwareType: "standalone/web"
+
+intendedAudience:
+  countries:
+    - it
+  scope:
+    - government
+    - local-authorities
+    - education
+
+description:
+  it:
+    shortDescription: >-
+      App descritte in Markdown ed eseguite nel browser: moduli, elenchi,
+      grafici, mappe, open data e AI, senza cloud e senza account.
+    longDescription: >
+      ReactiveNET è una piattaforma per costruire micro-applicazioni
+      descrivendole in un documento Markdown esteso da direttive reattive:
+      moduli che salvano righe, elenchi, tabelle, bacheche e calendari che le
+      mostrano, grafici, mappe, aggregazioni, fogli di calcolo, esecuzione di
+      Python e SQL nel browser, interrogazione di open data italiani (ISTAT,
+      Ministeri, ANAC e altri) e direttive di intelligenza artificiale che
+      usano il modello scelto dall'utente — anche un modello locale, senza che
+      alcun dato lasci la macchina.
+
+
+      È pensata prevalentemente per le pubbliche amministrazioni e per la
+      scuola: i dati vivono nel browser di chi li scrive (IndexedDB), non
+      esiste un cloud del fornitore, non servono account, e la condivisione —
+      link brevi e spazi condivisi multi-utente — è cifrata lato client, così
+      il server custodisce solo contenuti che non è in grado di leggere.
+      L'interfaccia è disponibile in sette lingue e l'applicazione punta alla
+      conformità WCAG 2.2 livello AA, verificata da test automatici.
+
+
+      Un documento è un file di testo: si versiona, si condivide, si porta
+      via. Un assistente integrato scrive e corregge le app su richiesta,
+      validandole con la stessa grammatica che l'applicazione esegue.
+    features:
+      - App definite in Markdown con direttive reattive (110 direttive)
+      - Moduli, elenchi, tabelle, bacheche, calendari e mappe sui propri dati
+      - Grafici e viste esplorative (Chart.js, Perspective)
+      - Open data italiani interrogabili con SQL (DuckDB)
+      - Python e machine learning nel browser (Pyodide, scikit-learn)
+      - Assistente AI con modello a scelta dell'utente, anche locale
+      - Dati nel browser, condivisione cifrata end-to-end, nessun account
+      - Interfaccia in sette lingue, obiettivo WCAG 2.2 AA
+    documentation: "https://reactivenet.ai/guida/"
+  en:
+    shortDescription: >-
+      Apps written in Markdown and run in the browser: forms, lists, charts,
+      maps, open data and AI — no cloud, no account.
+    longDescription: >
+      ReactiveNET is a platform for building micro-applications by describing
+      them in a Markdown document extended with reactive directives: forms
+      that save rows, lists, tables, boards and calendars that display them,
+      charts, maps, aggregations, spreadsheets, Python and SQL executed in the
+      browser, queries over Italian open data (ISTAT, ministries, ANAC and
+      more) and AI directives that use the model the user chooses — including
+      a local model, with no data leaving the machine.
+
+
+      It is aimed primarily at public administrations and schools: data lives
+      in the writer's browser (IndexedDB), there is no vendor cloud, no
+      account is needed, and sharing — short links and multi-user shared
+      spaces — is encrypted client-side, so the server only holds content it
+      cannot read. The interface is available in seven languages and the
+      application targets WCAG 2.2 level AA conformance, enforced by
+      automated tests.
+
+
+      A document is a plain text file: it can be versioned, shared and taken
+      elsewhere. A built-in assistant writes and fixes apps on request,
+      validating them with the same grammar the application executes.
+    features:
+      - Apps defined in Markdown with reactive directives (110 directives)
+      - Forms, lists, tables, boards, calendars and maps over one's own data
+      - Charts and exploratory views (Chart.js, Perspective)
+      - Italian open data queryable with SQL (DuckDB)
+      - Python and machine learning in the browser (Pyodide, scikit-learn)
+      - AI assistant with a user-chosen model, local models included
+      - Data in the browser, end-to-end encrypted sharing, no accounts
+      - Interface in seven languages, WCAG 2.2 AA target
+    documentation: "https://reactivenet.ai/en/guida/"
+
+legal:
+  license: Apache-2.0
+  mainCopyrightOwner: Cosimo Luigi Manes
+  repoOwner: Cosimo Luigi Manes
+
+maintenance:
+  type: internal
+  contacts:
+    - name: Cosimo Luigi Manes
+      email: info@reactivenet.ai
+
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - it
+    - en
+    - fr
+    - de
+    - es
+    - pt
+    - zh
+
+it:
+  countryExtensionVersion: "1.0"
+  conforme:
+    gdpr: true

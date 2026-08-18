@@ -1,0 +1,65 @@
+[
+  {
+    "id": "scuola-in-cifre",
+    "title": "La scuola in cifre",
+    "description": "Dashboard sulla scuola italiana per dirigenti e docenti: iscrizioni con previsione, dispersione, risultati INVALSI, edifici, organico, dove abitano i bambini e dove sono le scuole, il PNRR del comune e i ragazzi che escono per studiare. Dati ufficiali MIUR, INVALSI, ISTAT, ANNCSU e ReGiS.",
+    "icon": "education",
+    "version": "4.1"
+  },
+  {
+    "id": "soldi-territorio",
+    "title": "Conti pubblici del territorio",
+    "description": "Dove vanno e da dove arrivano i soldi pubblici del tuo comune: spesa ed entrate per cassa anno per anno e pro capite (SIOPE/OpenBDAP), saldo, autonomia finanziaria e incasso da multe, i progetti finanziati da fondi di coesione e PNRR (OpenCoesione, OpenCUP), le gare d'appalto e chi le vince (ANAC). Con coropletica regionale, previsione, anomalie e comuni dal profilo simile calcolati nel browser. Dati ufficiali MEF-RGS, ANAC, DIPE e Agenzia per la Coesione.",
+    "icon": "money",
+    "version": "3.0"
+  },
+  {
+    "id": "orario-scolastico",
+    "title": "Orario Scolastico",
+    "description": "Anagrafiche importabili da foglio di calcolo, cattedre, laboratori, griglia oraria trascinabile, controllo dei vincoli, generazione assistita con blocchi, compresenze e compattazione delle giornate, monitor di fattibilità, qualità, tabellone, stampe, esportazione in Excel e sostituzioni giornaliere per un istituto di II grado.",
+    "icon": "education",
+    "version": "3.2"
+  },
+  {
+    "id": "graduatorie-interne",
+    "title": "Graduatorie Interne",
+    "description": "Graduatorie interne d'istituto per l'individuazione dei soprannumerari: tabella di valutazione modificabile, dichiarazioni del personale, istruttoria, punteggi spiegati riga per riga, graduatoria in ordine crescente, reclami e stampe.",
+    "icon": "list-numbered",
+    "version": "1.0"
+  },
+  {
+    "id": "inclusione",
+    "title": "Inclusione",
+    "description": "PEI e PDP redatti in collaborazione: modelli modificabili per ordine di scuola, contributo per disciplina, obiettivi e verifiche, incontri del GLO, firme, estratto operativo per il consiglio di classe e riepiloghi d'istituto senza nominativi.",
+    "icon": "accessibility",
+    "version": "1.0"
+  },
+  {
+    "id": "segreteria",
+    "title": "Segreteria",
+    "description": "Il cruscotto operativo della segreteria scolastica: pratiche con flusso configurabile, scadenzario degli adempimenti, contatori contrattuali del personale, contratti, acquisti e inventario, report e stampe.",
+    "icon": "folder-user",
+    "version": "1.0"
+  },
+  {
+    "id": "mobilita-comune",
+    "title": "Mobilità del comune",
+    "description": "Come ci si muove in ogni comune italiano e come va a finire: incidenti stradali dal 2001, parco veicolare per classe Euro, chi entra e chi esce per lavoro e con quale mezzo, e — dove esiste — i monopattini in condivisione in tempo reale. Dati ufficiali ISTAT, ACI e GBFS.",
+    "icon": "car",
+    "version": "1.0"
+  },
+  {
+    "id": "come-si-vive",
+    "title": "Come si vive qui",
+    "description": "Il ritratto del tuo comune in un posto solo: quanti siamo e quanto si guadagna, quanto è sicura la strada e chi si muove, che sanità c'è intorno — ospedali, esiti delle cure, consultori, medici — quanto suolo è stato costruito e quanto si differenzia. Sempre accanto al numero della provincia e dell'Italia, con previsioni e correlazioni calcolate nel tuo browser.",
+    "icon": "home",
+    "version": "2.0"
+  },
+  {
+    "id": "salute-cittadino",
+    "title": "La salute dove vivi",
+    "description": "I dati sanitari pubblici non sono per comune: sono per azienda, e le aziende sono centodieci contro settemilaottocento comuni. Scegli il tuo comune e nove pagine si riempiono da sole — qual è la tua azienda e cosa c'è dentro, chi finisce ricoverato, come vanno a finire le cure, consultori, salute mentale e dipendenze, medici e macchine, quanto si spende, e le cento province una accanto all'altra su mappa. Ventiquattro tabelle da Ministero della Salute, ISTAT, AGENAS e MEF; le analisi girano nel tuo browser.",
+    "icon": "user",
+    "version": "3.1"
+  }
+]

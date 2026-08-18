@@ -1,0 +1,54 @@
+{{/* Copertina generata: un pattern SVG deterministico per post.
+     Il seme è la translationKey (stessa grafica nelle due lingue), l'hash
+     sceglie tipo di pattern, coppia di colori e rotazione — stabile tra le
+     build, nessun asset da mantenere. Decorativa: aria-hidden, come le foto
+     che sostituisce (alt vuoto). Parametri: page, class. */}}
+{{ $page := .page }}
+{{ $class := .class | default "cover-img" }}
+{{ $key := $page.Params.translationKey | default $page.File.BaseFileName }}
+{{ $seed := hash.FNV32a $key }}
+{{ $type := mod $seed 5 }}
+{{ $palettes := slice
+  (dict "bg" "#232836" "bg2" "#2d3344" "a" "#5b3df5" "b" "#2dd4bf")
+  (dict "bg" "#1f2430" "bg2" "#2a303c" "a" "#a78bfa" "b" "#2dd4bf")
+  (dict "bg" "#41309e" "bg2" "#5b3df5" "a" "#a78bfa" "b" "#eceff4")
+  (dict "bg" "#0d5f59" "bg2" "#0f766e" "a" "#2dd4bf" "b" "#eceff4")
+}}
+{{ $p := index $palettes (mod (div $seed 5) (len $palettes)) }}
+{{ $angle := mul (mod (div $seed 20) 4) 15 }}
+<svg class="{{ $class }} pattern-cover" viewBox="0 0 480 270" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g-{{ $key }}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="{{ $p.bg }}"/>
+      <stop offset="1" stop-color="{{ $p.bg2 }}"/>
+    </linearGradient>
+    {{ if eq $type 0 }}
+    <pattern id="p-{{ $key }}" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate({{ $angle }})">
+      <circle cx="7" cy="7" r="2.4" fill="{{ $p.a }}" opacity="0.9"/>
+      <circle cx="21" cy="21" r="2.4" fill="{{ $p.b }}" opacity="0.55"/>
+    </pattern>
+    {{ else if eq $type 1 }}
+    <pattern id="p-{{ $key }}" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate({{ add $angle 45 }})">
+      <rect x="0" y="0" width="4" height="26" fill="{{ $p.a }}" opacity="0.75"/>
+      <rect x="13" y="0" width="2" height="26" fill="{{ $p.b }}" opacity="0.45"/>
+    </pattern>
+    {{ else if eq $type 2 }}
+    <pattern id="p-{{ $key }}" width="48" height="48" patternUnits="userSpaceOnUse" patternTransform="rotate({{ $angle }})">
+      <circle cx="24" cy="24" r="18" fill="none" stroke="{{ $p.a }}" stroke-width="2" opacity="0.7"/>
+      <circle cx="24" cy="24" r="9" fill="none" stroke="{{ $p.b }}" stroke-width="2" opacity="0.5"/>
+    </pattern>
+    {{ else if eq $type 3 }}
+    <pattern id="p-{{ $key }}" width="36" height="36" patternUnits="userSpaceOnUse" patternTransform="rotate({{ $angle }})">
+      <path d="M18 6 L30 28 L6 28 Z" fill="none" stroke="{{ $p.a }}" stroke-width="2" opacity="0.7"/>
+      <circle cx="18" cy="20" r="2" fill="{{ $p.b }}" opacity="0.6"/>
+    </pattern>
+    {{ else }}
+    <pattern id="p-{{ $key }}" width="40" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate({{ $angle }})">
+      <path d="M0 10 Q10 0 20 10 T40 10" fill="none" stroke="{{ $p.a }}" stroke-width="2" opacity="0.7"/>
+      <path d="M0 18 Q10 8 20 18 T40 18" fill="none" stroke="{{ $p.b }}" stroke-width="1.5" opacity="0.4"/>
+    </pattern>
+    {{ end }}
+  </defs>
+  <rect width="480" height="270" fill="url(#g-{{ $key }})"/>
+  <rect width="480" height="270" fill="url(#p-{{ $key }})"/>
+</svg>

@@ -1,0 +1,1191 @@
+/* Design tokens — presi dal sito live (reactivenet.ai): violetto primario,
+   accento teal, basi oklch convertite in hex. Ogni coppia testo/superficie
+   è verificata AA da scripts/check-contrast.mjs: se cambi un colore qui,
+   aggiornalo anche lì. */
+:root {
+  --bg: #eceff4;
+  --bg-raised: #ffffff;
+  --fg: #2e3440;
+  --muted: #585d68;
+  --rule: #d5dae2;
+  --code-bg: #e2e6ed;
+  --primary: #5b3df5;        /* testo/link e superfici primarie, AA su --bg */
+  --primary-contrast: #ffffff;
+  --accent-grad: linear-gradient(100deg, #5b3df5, #0f766e); /* bianco AA su entrambi i capi */
+  --shadow-primary: rgb(91 61 245 / 0.35);
+  --error: #b3261e; /* AA su --bg, verificato in check-contrast */
+  --font-logo: "Space Grotesk", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #2a303c;
+    --bg-raised: #333a49;
+    --fg: #b2ccd6;
+    --muted: #94aab4;
+    --rule: #414957;
+    --code-bg: #232833;
+    --primary: #a78bfa;
+    --primary-contrast: #2a303c;
+    --accent-grad: linear-gradient(100deg, #5b3df5, #0f766e);
+    --shadow-primary: rgb(0 0 0 / 0.45);
+    --error: #f2857c;
+  }
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-latin-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  /* l'header è sticky: ancore e focus non devono finirci sotto (§2.4.11) */
+  scroll-padding-top: 5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+::selection { background: var(--primary); color: var(--primary-contrast); }
+
+h1, h2, h3 {
+  font-family: var(--font-logo);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* §2.4.7 — anello di focus a specificità zero, come nell'app */
+:where(:focus-visible) {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+/* §2.4.1 — visibile solo quando riceve il focus */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--fg);
+  border-radius: 0.3rem;
+  transform: translateY(-200%);
+  z-index: 10;
+}
+.skip-link:focus {
+  transform: none;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  /* 100vw include la scrollbar: senza clip la hero full-bleed
+     produrrebbe ~15px di scroll orizzontale (§1.4.10) */
+  overflow-x: clip;
+}
+
+.site-header {
+  position: sticky; /* fondo pieno, non traslucido: il contrasto resta misurabile */
+  top: 0;
+  z-index: 30;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* §1.4.10 — a 320px la nav va a capo, niente scroll orizzontale */
+  gap: 0.5rem 2rem;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+/* Modalità hero (home): barra FISSA sopra l'hero, fondo semitrasparente con
+   blur, come sul vecchio sito. Tutto gated su html.js: senza script la barra
+   resterebbe invisibile per sempre, quindi senza JS resta sticky e piena. */
+html.js .site-header.hero-nav {
+  position: fixed;
+  inset-inline: 0;
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+/* Stato iniziale nascosto: vale solo finché nav.js non marca `on` (reveal
+   completo). visibility toglie i link invisibili dal giro di Tab. */
+html.js .site-header.hero-nav:not(.on) {
+  opacity: 0;
+  transform: translateY(-40%);
+  pointer-events: none;
+  visibility: hidden;
+  will-change: opacity, transform;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-logo);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  text-decoration: none;
+}
+.brand img { border-radius: 8px; }
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 2rem;
+  flex: 1;
+}
+.site-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.nav-toggle {
+  display: none; /* esiste solo sotto il breakpoint mobile */
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: auto;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  background: var(--bg-raised);
+  color: var(--fg);
+  cursor: pointer;
+}
+.nav-toggle .icon-close { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-burger { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+
+/* Burger mobile: il collasso vale solo con JS attivo (html.js), altrimenti
+   la nav resta un elenco visibile che va a capo. Il pannello aperto è
+   SOVRAPPOSTO (position: absolute sotto la barra): la navbar non cambia
+   altezza e il contenuto sotto non si sposta. */
+@media (width <= 48rem) {
+  .nav-toggle:not([hidden]) { display: inline-flex; }
+  html.js .site-nav { display: none; }
+  html.js .site-header.is-open .site-nav {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+    padding: 0.6rem 0.75rem 0.85rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 16px 32px -12px rgb(0 0 0 / 0.35);
+    max-height: calc(100dvh - 4rem);
+    overflow-y: auto;
+  }
+  html.js .site-header.is-open .site-nav nav {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  html.js .site-header.is-open .site-nav nav a {
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 1.05rem;
+  }
+  html.js .site-header.is-open .site-nav nav a:hover {
+    background: var(--bg-raised);
+  }
+  html.js .site-header.is-open .site-nav nav a[aria-current] {
+    background: var(--bg-raised);
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  html.js .site-header.is-open .lang-switch {
+    margin-inline-start: 0;
+    margin-top: 0.35rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--rule);
+  }
+}
+@media (width <= 48rem) and (prefers-reduced-motion: no-preference) {
+  html.js .site-header.is-open .site-nav {
+    animation: rn-nav-drop 0.18s ease;
+  }
+}
+@keyframes rn-nav-drop {
+  from { opacity: 0; transform: translateY(-8px); }
+}
+.site-header nav a {
+  color: var(--muted);
+  text-decoration: none;
+  /* §2.5.8 — il padding porta il target sopra i 24×24 CSS px */
+  padding: 0.5rem 0.6rem;
+  min-height: 24px;
+  min-width: 24px;
+  border-radius: 0.5rem;
+  transition: background 0.15s, color 0.15s;
+}
+.site-header nav a:hover { background: var(--bg-raised); }
+.site-header nav a:hover,
+.site-header nav a[aria-current="page"],
+.site-header nav a[aria-current="true"] {
+  color: var(--fg);
+}
+.site-header nav a[aria-current] {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.lang-switch {
+  margin-inline-start: auto;
+}
+
+/* Il link al repository: icona sola nell'header (il nome lo porta
+   l'aria-label), icona + testo nel footer. Il marchio è in currentColor,
+   così segue il colore dei link del posto che lo ospita. */
+.gh-link svg { flex: none; }
+.site-nav > .gh-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  /* §2.5.8 — il padding porta il target sopra i 24×24 CSS px */
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.5rem;
+  transition: background 0.15s, color 0.15s;
+}
+.site-nav > .gh-link:hover { background: var(--bg-raised); color: var(--fg); }
+.sf-nav .gh-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.gh-stars { font-size: 0.85em; opacity: 0.85; }
+
+main {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+main.layout-wide { max-width: 76rem; }
+
+/* ---------- Hero (dal sito live, animazione Zdog al posto di three.js) ---------- */
+
+.hero-full {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100svh - 8rem);
+  padding-block: 3rem;
+  /* full-bleed: esce dal main (46rem) e copre l'intera larghezza viewport */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-three {
+  width: 100%;
+  height: 100%;
+  background: none;
+}
+.hero-three canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.hero-stack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.1rem;
+  width: 100%;
+  max-width: 54rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+.hero-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.2rem;
+  font-family: var(--font-logo);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+}
+.hero-brand img { border-radius: 10px; display: block; }
+.hero-stack h1 {
+  margin: 0;
+  font-family: var(--font-logo);
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+.hero-pill {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.55rem;
+  max-width: 100%;
+  padding: 0.3rem 0.95rem 0.3rem 0.3rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--fg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.hero-pill:hover { border-color: var(--primary); transform: translateY(-1px); }
+.hero-pill .arrow { display: inline-block; transition: transform 0.15s; }
+.hero-pill:hover .arrow { transform: translateX(3px); }
+.hero-tag {
+  padding: 0.12rem 0.65rem;
+  border-radius: 999px;
+  background: var(--accent-grad);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.tagline {
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+}
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+.hero-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+}
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 2.2rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 30px var(--shadow-primary);
+  transition: transform 0.15s, filter 0.15s;
+}
+.hero-btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.hero-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg);
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+}
+.hero-btn-ghost:hover { transform: translateY(-1px); background: var(--bg-raised); }
+.hero-cta-sub { margin: 0; font-size: 0.875rem; color: var(--muted); }
+
+.hero-mcp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.hero-mcp-msg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--fg);
+  font-weight: 600;
+}
+.hero-mcp-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  max-width: 100%;
+}
+.hero-mcp-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  padding: 0.28rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+  min-height: 24px; /* §2.5.8 */
+  transition: border-color 0.15s;
+}
+.hero-mcp-copy:hover { border-color: var(--primary); }
+.hero-mcp-copy code {
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-size: 0.82em;
+  white-space: nowrap;
+}
+.hero-mcp-copy svg { flex: none; opacity: 0.7; }
+.hero-mcp-how { color: var(--primary); font-weight: 600; text-decoration: none; }
+.hero-mcp-how:hover { text-decoration: underline; }
+.hero-mcp-how .arrow { display: inline-block; transition: transform 0.15s; }
+.hero-mcp-how:hover .arrow { transform: translateX(3px); }
+@media (width <= 30rem) {
+  .hero-mcp-row { flex-direction: column; gap: 0.4rem; }
+}
+
+/* Smartphone: CTA a tutta larghezza, spaziature compatte */
+@media (width <= 30rem) {
+  .site-header { padding: 0.4rem 1rem; }
+  main { padding-inline: 1rem; }
+  .hero-full { min-height: calc(100svh - 10rem); padding-block: 2rem; }
+  .hero-btns { width: 100%; flex-direction: column; }
+  .hero-btn, .hero-btn-ghost { width: 100%; justify-content: center; }
+}
+
+/* §2.2.2 — l'animazione che parte da sola deve potersi fermare */
+.anim-toggle {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--fg);
+  cursor: pointer;
+}
+.anim-toggle:hover { border-color: var(--primary); }
+.anim-toggle svg { display: block; }
+.anim-toggle .icon-play { display: none; }
+.anim-toggle[aria-pressed="true"] .icon-pause { display: none; }
+.anim-toggle[aria-pressed="true"] .icon-play { display: block; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Contenuti ---------- */
+
+.prose a { color: var(--primary); }
+.prose code, .prose pre {
+  background: var(--code-bg);
+  border-radius: 0.3rem;
+}
+.prose code { padding: 0.1em 0.35em; }
+.prose pre { padding: 1rem; overflow-x: auto; }
+.prose pre code { padding: 0; background: none; }
+.prose p { text-wrap: pretty; }
+.prose h2 { margin-top: 2.5rem; }
+.prose h3 { margin-top: 2rem; }
+.prose img { max-width: 100%; height: auto; border-radius: 0.6rem; }
+.prose blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--primary);
+  color: var(--muted);
+}
+.prose blockquote p { margin: 0.5rem 0; }
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+.meta { color: var(--muted); }
+
+/* Tabelle: scorrono nella propria regione (render hook), il reflow non si rompe */
+.table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+.table-wrap table { border-collapse: collapse; width: 100%; }
+.table-wrap th, .table-wrap td {
+  border: 1px solid var(--rule);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.table-wrap th { background: var(--code-bg); }
+
+/* ---------- Briciole di pane ---------- */
+
+.crumbs { margin-top: 1.5rem; font-size: 0.875rem; }
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--muted);
+}
+.crumbs li + li::before { content: "›"; margin-right: 0.25rem; }
+.crumbs a {
+  color: var(--muted);
+  display: inline-block;
+  padding: 0.25rem 0.15rem; /* §2.5.8 */
+}
+.crumbs a:hover { color: var(--fg); }
+.crumbs [aria-current] { color: var(--fg); padding: 0.25rem 0.15rem; }
+
+/* ---------- Griglia di card delle sezioni ---------- */
+
+.card-grid {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.doc-card {
+  display: grid;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  background: var(--bg-raised);
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.doc-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+.doc-card-title { font-weight: 700; font-family: var(--font-logo); letter-spacing: -0.01em; }
+.doc-card .arrow { display: inline-block; transition: transform 0.15s; }
+.doc-card:hover .arrow { transform: translateX(3px); }
+.doc-card-desc { color: var(--muted); font-size: 0.9375rem; }
+
+/* Una sezione del catalogo che non ha ancora schede: il posto dove sarebbero le
+   card, occupato da una frase invece che dal nulla. */
+.section-empty {
+  max-width: 46rem;
+  margin: 1.5rem auto 0;
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--rule);
+  border-radius: 0.75rem;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.section-empty a { color: inherit; }
+
+/* ---------- Precedente / successiva ---------- */
+
+.adjacent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+.adjacent-card {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  background: var(--bg-raised);
+  color: var(--fg);
+  text-decoration: none;
+}
+.adjacent-card:hover { border-color: var(--primary); }
+.adjacent-card.is-next { text-align: right; }
+.adjacent-label { font-size: 0.8125rem; color: var(--muted); }
+.adjacent-title { font-weight: 600; }
+.adjacent-card:hover .adjacent-title { text-decoration: underline; }
+@media (width <= 34rem) {
+  .adjacent { grid-template-columns: 1fr; }
+  .adjacent-card.is-next { text-align: left; }
+}
+
+/* ---------- 404 ---------- */
+
+.not-found { text-align: center; padding-block: 4rem; }
+.not-found-code {
+  font-family: var(--font-logo);
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+  color: var(--rule);
+}
+
+/* ---------- Pagina dati: ponte verso il CSS vendorizzato (Starlight) ---------- */
+
+:root {
+  --sl-color-bg: var(--bg);
+  --sl-color-bg-sidebar: var(--code-bg);
+  --sl-color-hairline: var(--rule);
+  --sl-color-text: var(--fg);
+  --sl-color-text-accent: var(--primary);
+  --sl-color-gray-2: var(--muted);
+  --sl-color-gray-3: var(--muted);
+  --sl-color-gray-4: var(--rule);
+  --sl-color-gray-5: var(--code-bg);
+  --sl-color-red: var(--error);
+  --sl-text-xs: 0.75rem;
+  --sl-text-sm: 0.875rem;
+  --sl-text-2xl: 1.5rem;
+}
+.od-page { width: 100%; margin: 0 auto; padding: 1.5rem 0 2rem; }
+.od-page h1 { font-size: 2rem; margin: 0 0 0.75rem; }
+.od-page .lead { font-size: 1.125rem; color: var(--muted); max-width: 54rem; }
+.od-example {
+  padding: 0.9rem 1.1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  overflow-x: auto;
+}
+
+/* ---------- Paginazione ---------- */
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 2.5rem 0 0;
+}
+.pager-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pager a,
+.pager-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;   /* §2.5.8 — ben oltre il minimo di 24px */
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.4rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+.pager a:hover { border-color: var(--primary); }
+.pager a[aria-current="page"] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-contrast);
+  font-weight: 700;
+}
+.pager-step.is-disabled {
+  border-color: transparent;
+  color: var(--muted);
+}
+
+/* ---------- Blog ---------- */
+
+.cover { margin: 0 0 2rem; }
+.pattern-cover { display: block; margin-bottom: 1.5rem; }
+.cover-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 0.6rem;
+  background: var(--code-bg);
+}
+.cover figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.cover figcaption a { color: inherit; }
+
+/* Le schermate dentro un post. A differenza della copertina non sono
+   decorative: si allargano oltre la colonna di testo perché quello che
+   mostrano — un editor accanto all'app che produce — a 46rem non si legge. */
+.post-shot { margin: 2rem 0; }
+.post-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  border: 1px solid var(--rule);
+  background: var(--code-bg);
+}
+.post-shot figcaption {
+  margin: 0.7rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+@media (width >= 64rem) {
+  .post .post-shot { width: min(56rem, 100vw - 3rem); margin-inline: calc((100% - min(56rem, 100vw - 3rem)) / 2); }
+}
+
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.post-card {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  background: var(--bg-raised);
+  color: var(--fg);
+  text-decoration: none;
+}
+.post-card:hover { border-color: var(--primary); }
+.post-card-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  background: var(--code-bg);
+}
+.post-card-text { display: grid; gap: 0.2rem; }
+.post-card-title { font-weight: 700; font-size: 1.05rem; }
+.post-card:hover .post-card-title { text-decoration: underline; }
+.post-card-desc { color: var(--muted); font-size: 0.9375rem; }
+
+/* Sullo smartphone la copertina va sopra: due colonne da 10rem non ci stanno */
+@media (width <= 34rem) {
+  .post-card { grid-template-columns: 1fr; }
+}
+
+.page-list { list-style: none; padding: 0; }
+.page-list li { padding: 0.75rem 0; border-bottom: 1px solid var(--rule); }
+.page-list a { font-weight: 600; color: var(--primary); }
+.page-list a:hover { text-decoration: underline; }
+.page-list p { margin: 0.25rem 0 0; color: var(--muted); }
+
+.prose { padding-top: 2rem; }
+
+/* ---------- Home ---------- */
+
+main.layout-home { max-width: 64rem; }
+
+.numbers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 3.5rem;
+  padding: 1.5rem 0 0.5rem;
+  color: var(--muted);
+}
+.number { display: flex; align-items: baseline; gap: 0.5rem; }
+.number-big {
+  font-family: var(--font-logo);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+.home-sec { margin-top: 4rem; }
+.home-sec > h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 0.75rem; }
+.home-sec.prose { max-width: 46rem; margin-inline: auto; padding-top: 0; }
+.home-lead { color: var(--muted); max-width: 42rem; margin: 0 0 1.5rem; }
+.home-more { margin-top: 1.5rem; }
+.home-more a { color: var(--primary); font-weight: 600; text-decoration: none; }
+.home-more a:hover { text-decoration: underline; }
+.home-more .arrow { display: inline-block; transition: transform 0.15s; }
+.home-more a:hover .arrow { transform: translateX(3px); }
+
+.home-sec.tint {
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.why-grid {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.why-card {
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  background: var(--bg-raised);
+}
+.why-card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.why-card p { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+
+.home-posts {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.home-post {
+  display: grid;
+  gap: 0.4rem;
+  height: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  background: var(--bg-raised);
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.home-post:hover { border-color: var(--primary); transform: translateY(-2px); }
+.home-post:hover .post-card-title { text-decoration: underline; }
+.home-post-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  background: var(--code-bg);
+}
+.home-post .meta { font-size: 0.8125rem; }
+
+.cta-band {
+  margin-top: 4rem;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  text-align: center;
+}
+.cta-band h2 { margin: 0 0 1.25rem; font-size: clamp(1.5rem, 3vw, 2rem); }
+.cta-band p { margin: 0.75rem 0 0; }
+.cta-band .cta-sub { max-width: 42rem; margin: 0 auto 1.5rem; color: var(--muted); }
+
+/* ---------- Eyebrow e schede di fatti ---------- */
+/* Restano dal blocco Formazione, che non c'è più: `.eyebrow` la usano la scheda
+   di un'app e il riquadro dell'autore, `.facts` due articoli del blog. Tutto il
+   resto di quella sezione — la card del corso, le edizioni, il programma, la
+   cornice del video — è stato tolto con lei. */
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.facts { margin: 1.5rem 0 0; display: grid; gap: 0.9rem; }
+.facts > div { margin: 0; }
+.facts dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.facts dd { margin: 0.15rem 0 0; line-height: 1.55; }
+
+/* ---------- FAB LinkedIn ---------- */
+
+.linkedin-float {
+  /* Base in variabili così lo script (che alza il bottone sopra il footer
+     via --li-lift) e i media query non si pestano; le safe-area tengono il
+     bottone sopra la barra gesture e lontano dai bordi curvi. */
+  --li-bottom: 1.25rem;
+  --li-right: 1.25rem;
+  position: fixed;
+  right: calc(var(--li-right) + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--li-bottom) + env(safe-area-inset-bottom, 0px) + var(--li-lift, 0px));
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: #0a66c2; /* blu LinkedIn: bianco sopra = 4.71:1, nel check */
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  font-style: italic;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(10, 102, 194, 0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.linkedin-float:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 26px rgba(10, 102, 194, 0.5);
+}
+.linkedin-float:active { transform: translateY(0) scale(0.98); }
+/* Stato iniziale in home: invisibile PRIMA che lo script parta (niente
+   flash), risale dal basso allo scroll. Vale solo finché lo script non
+   marca `on`: da lì il bottone è nello stato normale, hover compreso. */
+.linkedin-float.hero-reveal:not(.on) {
+  opacity: 0;
+  transform: translateY(40%);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+@media (max-width: 30rem) {
+  .linkedin-float {
+    --li-right: 1rem;
+    --li-bottom: 1rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  margin-top: 4rem;
+  padding: 2rem 1.5rem 1.5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.sf-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+.sf-brand { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.sf-tag { color: var(--muted); }
+.sf-nav { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; }
+.sf-legal { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; }
+.sf-nav a,
+.sf-legal a,
+.sf-langs a {
+  display: inline-block;
+  padding: 0.4rem 0.5rem; /* §2.5.8 */
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 0.4rem;
+}
+.sf-nav a:hover,
+.sf-legal a:hover,
+.sf-langs a:hover { color: var(--fg); background: var(--bg-raised); }
+.sf-meta {
+  max-width: 64rem;
+  margin: 1.5rem auto 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+}
+.sf-rights { margin: 0; }
+.sf-copy { margin: 0; font-size: 0.875rem; }
+@media (width <= 40rem) {
+  .sf-inner, .sf-meta { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------- Scheda autore (home) ---------- */
+/* Dentro la banda tint (--code-bg): l'eyebrow primario su tint e l'attenuato
+   su tint sono coppie verificate in scripts/check-contrast.mjs. L'avatar usa
+   primario/contrasto, la stessa coppia di .hero-btn. */
+.author-card {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  max-width: 46rem;
+  margin-top: 1.5rem;
+}
+.author-avatar {
+  flex: none;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  background: var(--primary);
+  color: var(--primary-contrast);
+}
+.author-body { min-width: 0; }
+.author-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+.author-body h3 { margin: 0.15rem 0 0.2rem; font-size: 1.25rem; }
+.author-role { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+.author-bio { margin: 0.85rem 0 0; color: var(--muted); }
+.author-links { margin: 1.1rem 0 0; }
+.author-link {
+  display: inline-block;
+  padding: 0.4rem 0.95rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.author-link:hover { border-color: var(--primary); color: var(--primary); }
+@media (width <= 34rem) {
+  .author-card { flex-direction: column; gap: 1rem; }
+}
+
+/* ---------- Le clip delle app vere (home) ---------- */
+/* Righe alternate: il media cambia lato a righe pari. Sotto i 52rem diventa
+   una colonna sola e l'ordine torna quello del documento — testo, poi clip. */
+.clip-toggle {
+  margin: 0 0 1.5rem;
+  padding: 0.5rem 1rem; /* §2.5.8 */
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.clip-toggle:hover { border-color: var(--primary); color: var(--primary); }
+.show-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
+.show-row {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+}
+.show-row:nth-child(even) .show-text { order: 2; }
+.show-text h3 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+.show-text p { margin: 0; color: var(--muted); }
+.show-media { margin: 0; }
+.show-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  border: 1px solid var(--rule);
+  background: var(--code-bg);
+}
+.show-media figcaption {
+  margin: 0.6rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+@media (width <= 52rem) {
+  .show-row { grid-template-columns: 1fr; gap: 1rem; }
+  .show-row:nth-child(even) .show-text { order: 0; }
+}
+
+/* ---------- Scheda di un'app del catalogo ---------- */
+.app-head { max-width: 46rem; margin: 0 auto 2.5rem; text-align: center; }
+.app-head h1 { margin: 0.25rem 0 0; font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.15; }
+.app-head .lead { margin: 1rem auto 0; color: var(--muted); font-size: 1.125rem; line-height: 1.6; }
+.app-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+.app-tags li {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.app-note { margin: 1rem auto 0; max-width: 34rem; font-size: 0.875rem; color: var(--muted); }
+/* Le schermate: una colonna larga, ciascuna con la sua didascalia. Il bordo è
+   decorativo — quello che deve leggersi è la didascalia, che è testo. */
+.app-shots { max-width: 56rem; margin: 0 auto 3rem; display: grid; gap: 2.5rem; }
+.app-shots figure { margin: 0; }
+.app-shots img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  border: 1px solid var(--rule);
+  background: var(--code-bg);
+}
+.app-shots figcaption { margin: 0.7rem 0 0; font-size: 0.9375rem; color: var(--muted); }
+.app-body { max-width: 46rem; margin-inline: auto; }
+@media (width <= 40rem) {
+  .app-actions .hero-btn, .app-actions .hero-btn-ghost { width: 100%; justify-content: center; }
+}

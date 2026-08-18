@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}">
+<head>
+  {{ partial "head.html" . }}
+  {{ block "styles" . }}{{ end }}
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">{{ i18n "skipToContent" }}</a>
+  {{ partial "header.html" . }}
+  <main id="contenuto" class="{{ block "mainclass" . }}{{ end }}">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ partial "footer.html" . }}
+  {{ partial "linkedin-float.html" . }}
+  {{ with resources.Get "js/nav.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" defer></script>
+  {{ end }}
+  {{ block "scripts" . }}{{ end }}
+</body>
+</html>

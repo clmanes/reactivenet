@@ -1,0 +1,3451 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rescript-50: oklch(97% 0.02 27);
+  --color-rescript-100: oklch(93% 0.04 27);
+  --color-rescript-200: oklch(87% 0.07 27);
+  --color-rescript-300: oklch(79% 0.12 27);
+  --color-rescript-400: oklch(71% 0.16 27);
+  --color-rescript-500: oklch(63% 0.19 27);
+  --color-rescript-600: oklch(55% 0.17 27);
+  --color-rescript-700: oklch(47% 0.15 27);
+  --color-rescript-800: oklch(39% 0.12 27);
+  --color-rescript-900: oklch(31% 0.09 27);
+  --color-rescript-950: oklch(23% 0.06 27);
+  --font-inter: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  /* the logo's nucleus colour, reused for the "NET" in the wordmark */
+  --color-brand: #65c3c8;
+}
+
+/* Spectrum tokens exposed as classes rather than inline `style` props: inline styles
+   would force `style-src 'unsafe-inline'` into the CSP, and the whole point of the
+   policy is to not need that escape hatch. Tokens invert with sp-theme's palette,
+   so one class works in both light and dark. */
+.rn-surface {
+  background: var(--spectrum-gray-100);
+  border-color: var(--spectrum-gray-300);
+  color: var(--spectrum-gray-900);
+}
+
+/* The shell must paint a background, not just a colour: anything it leaves unpainted
+   shows the document's own white through, which is what made the preview pane stay
+   light while everything around it went dark. */
+.rn-page {
+  background: var(--spectrum-gray-100);
+  color: var(--spectrum-gray-900);
+  /* How much room the sticky footer takes at the bottom of the window. Declared here
+     rather than on the footer itself because a custom property inherits *down* the
+     tree: the thing that needs it is the gallery's floating button, which is nowhere
+     near the footer in the markup and only near it on screen. */
+  --rn-footer-height: 1.75rem;
+}
+
+.rn-muted {
+  color: var(--spectrum-gray-700);
+}
+
+.rn-error {
+  color: var(--spectrum-red-900);
+}
+
+.rn-divider {
+  border-color: var(--spectrum-gray-300);
+}
+
+/* The preview sits one step above the page so the two panes read as separate
+   surfaces. In dark mode especially, an unpainted preview is indistinguishable from
+   the editor next to it. */
+/* gray-50 is the extreme of the ramp in both themes — white in light, darkest in
+   dark — so the preview reads as a separate surface either way. (There is no
+   --spectrum-gray-75; naming a token that does not exist fails silently.) */
+.rn-preview {
+  background: var(--spectrum-gray-50);
+}
+
+/* Phone width is a wrapping check, not a device emulation: the preview is simply
+   constrained to a handset column and centred so both edges are visible. */
+.rn-phone-frame {
+  width: 100%;
+  max-width: 390px;
+  margin: 1rem auto;
+  min-height: calc(100% - 2rem);
+  background: var(--spectrum-gray-100);
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+/* CodeMirror brings its own layout; these only bind it to the Spectrum palette so it
+   follows the light/dark switch instead of staying on its default white. */
+.rn-editor .cm-editor {
+  height: 100%;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+}
+
+/* WCAG 2.2 §2.4.7. CodeMirror removes its own focus ring, which leaves keyboard
+   users with no indication of where they are. */
+.rn-editor .cm-editor.cm-focused {
+  outline: 2px solid var(--color-brand);
+  outline-offset: -2px;
+}
+
+.rn-editor .cm-gutters {
+  background: var(--spectrum-gray-100);
+  color: var(--spectrum-gray-600);
+  border-right: 1px solid var(--spectrum-gray-300);
+}
+
+.rn-editor .cm-activeLine,
+.rn-editor .cm-activeLineGutter {
+  background: var(--spectrum-gray-200);
+}
+
+.rn-editor .cm-content {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875rem;
+}
+
+.rn-editor .cm-tooltip-autocomplete {
+  background: var(--spectrum-gray-100);
+  border: 1px solid var(--spectrum-gray-300);
+  color: var(--spectrum-gray-900);
+}
+
+.rn-editor .cm-tooltip-autocomplete ul li[aria-selected] {
+  background: var(--spectrum-blue-800);
+  color: var(--spectrum-gray-50);
+}
+
+/* Rendered markdown. Tailwind's preflight strips heading and list styling, so the
+   preview has to put it back rather than inherit browser defaults. */
+.rn-markdown {
+  /* What `@container` above measures: the room this pane actually has. */
+  container-type: inline-size;
+  line-height: 1.65;
+}
+
+/* Side by side, the page itself must never scroll — the panes do. Without this the
+   toolbars and footer push the grid past 100vh and the whole layout gains a stray
+   scrollbar. Below the breakpoint the opposite is true and this is undone: see the
+   small-screen block, where the panes stack and the *page* is what moves. Leaving it
+   on there is what stopped a phone scrolling at all — the layout overflowed a fixed
+   100% box that had been told to hide the overflow. */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.rn-markdown h1,
+.rn-markdown h2,
+.rn-markdown h3 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 1.4em 0 0.5em;
+}
+
+.rn-markdown h1 {
+  font-size: 1.75rem;
+}
+
+.rn-markdown h2 {
+  font-size: 1.35rem;
+}
+
+.rn-markdown h3 {
+  font-size: 1.1rem;
+}
+
+.rn-markdown p,
+.rn-markdown ul,
+.rn-markdown ol,
+.rn-markdown blockquote,
+.rn-markdown pre,
+.rn-markdown table {
+  margin: 0.75em 0;
+}
+
+.rn-markdown ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+
+.rn-markdown ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+
+.rn-markdown li::marker {
+  color: var(--spectrum-gray-600);
+}
+
+.rn-markdown a {
+  color: var(--color-brand);
+  text-decoration: underline;
+}
+
+.rn-markdown code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
+  background: var(--spectrum-gray-200);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+}
+
+.rn-markdown pre {
+  background: var(--spectrum-gray-100);
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+}
+
+.rn-markdown pre code {
+  background: none;
+  padding: 0;
+}
+
+.rn-markdown pre.mermaid {
+  text-align: center;
+}
+
+.rn-markdown blockquote {
+  border-left: 3px solid var(--spectrum-gray-400);
+  padding-left: 0.9em;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-markdown table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.rn-markdown th,
+.rn-markdown td {
+  border: 1px solid var(--spectrum-gray-300);
+  padding: 0.4em 0.7em;
+  text-align: left;
+}
+
+.rn-markdown th {
+  background: var(--spectrum-gray-100);
+  font-weight: 600;
+}
+
+.rn-markdown hr {
+  border: 0;
+  border-top: 1px solid var(--spectrum-gray-300);
+  margin: 1.5em 0;
+}
+
+.rn-markdown img {
+  max-width: 100%;
+}
+
+/* Wide formulas scroll inside their own block instead of stretching the pane. */
+.rn-markdown .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2em 0;
+}
+
+/* BlockNote sizes its editable to the content, so the pane below the last block is
+   dead space: it shows the wrong background and clicking there does not focus the
+   editor. Stretching the editable makes the whole column the editing surface. */
+/* Scoped to .bn-container: the class also lands on BlockNote's portal root, which
+   must stay out of the layout. Container padding is zeroed because the editable
+   below is min-height: 100% — with padding it would overflow by exactly that much
+   and produce a scrollbar with nothing to scroll. BlockNote's visual padding lives
+   on the blocks themselves and is unaffected. */
+.bn-container.rn-blocknote {
+  height: 100%;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.bn-container.rn-blocknote > .tiptap {
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.rn-info {
+  background: var(--spectrum-gray-100);
+}
+
+/* Palettes.
+
+   Each one aliases Spectrum's accent ramp onto one of Spectrum's own hue ramps, all
+   sixteen stops of it. That is the whole mechanism, and it is why every component
+   follows the palette rather than only the ones we thought to name: the accent ramp
+   is what `--spectrum-accent-background-color-*`, the progress bar's fill, a slider's
+   track and a selected menu item all resolve through. Overriding those aliases alone
+   was the bug — they were violet while `--spectrum-accent-color-900`, which the
+   progress bar actually reads, was still Spectrum blue.
+
+   Aliasing rather than inventing is also what keeps the contrast story intact. Adobe
+   calibrated each ramp against both polarities, including the label colour paired
+   with a filled accent, and the ramps flip direction with the theme on their own —
+   `seafoam-900` is dark in light and bright in dark.
+
+   `--color-brand` is the app's own surfaces: the wordmark, the mark, a reactive
+   value, a link. It takes stop 1000 in light and 900 in dark, written out rather than
+   aliased so that what `Palette_test` asserts is what actually renders. Those hexes
+   and core/Palette.res must stay in step. */
+
+.rn-palette-teal {
+  --color-brand: #00635f;
+  --spectrum-accent-color-100: var(--spectrum-seafoam-100);
+  --spectrum-accent-color-200: var(--spectrum-seafoam-200);
+  --spectrum-accent-color-300: var(--spectrum-seafoam-300);
+  --spectrum-accent-color-400: var(--spectrum-seafoam-400);
+  --spectrum-accent-color-500: var(--spectrum-seafoam-500);
+  --spectrum-accent-color-600: var(--spectrum-seafoam-600);
+  --spectrum-accent-color-700: var(--spectrum-seafoam-700);
+  --spectrum-accent-color-800: var(--spectrum-seafoam-800);
+  --spectrum-accent-color-900: var(--spectrum-seafoam-900);
+  --spectrum-accent-color-1000: var(--spectrum-seafoam-1000);
+  --spectrum-accent-color-1100: var(--spectrum-seafoam-1100);
+  --spectrum-accent-color-1200: var(--spectrum-seafoam-1200);
+  --spectrum-accent-color-1300: var(--spectrum-seafoam-1300);
+  --spectrum-accent-color-1400: var(--spectrum-seafoam-1400);
+  --spectrum-accent-color-1500: var(--spectrum-seafoam-1500);
+  --spectrum-accent-color-1600: var(--spectrum-seafoam-1600);
+}
+
+[color="dark"].rn-palette-teal {
+  --color-brand: #36c5bd;
+}
+
+.rn-palette-indigo {
+  --color-brand: #4046ca;
+  --spectrum-accent-color-100: var(--spectrum-indigo-100);
+  --spectrum-accent-color-200: var(--spectrum-indigo-200);
+  --spectrum-accent-color-300: var(--spectrum-indigo-300);
+  --spectrum-accent-color-400: var(--spectrum-indigo-400);
+  --spectrum-accent-color-500: var(--spectrum-indigo-500);
+  --spectrum-accent-color-600: var(--spectrum-indigo-600);
+  --spectrum-accent-color-700: var(--spectrum-indigo-700);
+  --spectrum-accent-color-800: var(--spectrum-indigo-800);
+  --spectrum-accent-color-900: var(--spectrum-indigo-900);
+  --spectrum-accent-color-1000: var(--spectrum-indigo-1000);
+  --spectrum-accent-color-1100: var(--spectrum-indigo-1100);
+  --spectrum-accent-color-1200: var(--spectrum-indigo-1200);
+  --spectrum-accent-color-1300: var(--spectrum-indigo-1300);
+  --spectrum-accent-color-1400: var(--spectrum-indigo-1400);
+  --spectrum-accent-color-1500: var(--spectrum-indigo-1500);
+  --spectrum-accent-color-1600: var(--spectrum-indigo-1600);
+}
+
+[color="dark"].rn-palette-indigo {
+  --color-brand: #a7aaff;
+}
+
+.rn-palette-violet {
+  --color-brand: #7326d3;
+  --spectrum-accent-color-100: var(--spectrum-purple-100);
+  --spectrum-accent-color-200: var(--spectrum-purple-200);
+  --spectrum-accent-color-300: var(--spectrum-purple-300);
+  --spectrum-accent-color-400: var(--spectrum-purple-400);
+  --spectrum-accent-color-500: var(--spectrum-purple-500);
+  --spectrum-accent-color-600: var(--spectrum-purple-600);
+  --spectrum-accent-color-700: var(--spectrum-purple-700);
+  --spectrum-accent-color-800: var(--spectrum-purple-800);
+  --spectrum-accent-color-900: var(--spectrum-purple-900);
+  --spectrum-accent-color-1000: var(--spectrum-purple-1000);
+  --spectrum-accent-color-1100: var(--spectrum-purple-1100);
+  --spectrum-accent-color-1200: var(--spectrum-purple-1200);
+  --spectrum-accent-color-1300: var(--spectrum-purple-1300);
+  --spectrum-accent-color-1400: var(--spectrum-purple-1400);
+  --spectrum-accent-color-1500: var(--spectrum-purple-1500);
+  --spectrum-accent-color-1600: var(--spectrum-purple-1600);
+}
+
+[color="dark"].rn-palette-violet {
+  --color-brand: #ca9ffc;
+}
+
+.rn-palette-amber {
+  --color-brand: #953d00;
+  --spectrum-accent-color-100: var(--spectrum-orange-100);
+  --spectrum-accent-color-200: var(--spectrum-orange-200);
+  --spectrum-accent-color-300: var(--spectrum-orange-300);
+  --spectrum-accent-color-400: var(--spectrum-orange-400);
+  --spectrum-accent-color-500: var(--spectrum-orange-500);
+  --spectrum-accent-color-600: var(--spectrum-orange-600);
+  --spectrum-accent-color-700: var(--spectrum-orange-700);
+  --spectrum-accent-color-800: var(--spectrum-orange-800);
+  --spectrum-accent-color-900: var(--spectrum-orange-900);
+  --spectrum-accent-color-1000: var(--spectrum-orange-1000);
+  --spectrum-accent-color-1100: var(--spectrum-orange-1100);
+  --spectrum-accent-color-1200: var(--spectrum-orange-1200);
+  --spectrum-accent-color-1300: var(--spectrum-orange-1300);
+  --spectrum-accent-color-1400: var(--spectrum-orange-1400);
+  --spectrum-accent-color-1500: var(--spectrum-orange-1500);
+  --spectrum-accent-color-1600: var(--spectrum-orange-1600);
+}
+
+[color="dark"].rn-palette-amber {
+  --color-brand: #fe9a2e;
+}
+
+.rn-palette-rose {
+  --color-brand: #ad0955;
+  --spectrum-accent-color-100: var(--spectrum-magenta-100);
+  --spectrum-accent-color-200: var(--spectrum-magenta-200);
+  --spectrum-accent-color-300: var(--spectrum-magenta-300);
+  --spectrum-accent-color-400: var(--spectrum-magenta-400);
+  --spectrum-accent-color-500: var(--spectrum-magenta-500);
+  --spectrum-accent-color-600: var(--spectrum-magenta-600);
+  --spectrum-accent-color-700: var(--spectrum-magenta-700);
+  --spectrum-accent-color-800: var(--spectrum-magenta-800);
+  --spectrum-accent-color-900: var(--spectrum-magenta-900);
+  --spectrum-accent-color-1000: var(--spectrum-magenta-1000);
+  --spectrum-accent-color-1100: var(--spectrum-magenta-1100);
+  --spectrum-accent-color-1200: var(--spectrum-magenta-1200);
+  --spectrum-accent-color-1300: var(--spectrum-magenta-1300);
+  --spectrum-accent-color-1400: var(--spectrum-magenta-1400);
+  --spectrum-accent-color-1500: var(--spectrum-magenta-1500);
+  --spectrum-accent-color-1600: var(--spectrum-magenta-1600);
+}
+
+[color="dark"].rn-palette-rose {
+  --color-brand: #ff8fb9;
+}
+
+/* Slate is the neutral one, and the gray ramp has no stop above 900 — an accent at
+   gray-900 would be pure black. It is shifted down two stops and clamped at the end,
+   so a filled accent lands on gray-700: a slate, not a shadow. */
+
+.rn-palette-slate {
+  --color-brand: #464646;
+  --spectrum-accent-color-100: var(--spectrum-gray-50);
+  --spectrum-accent-color-200: var(--spectrum-gray-75);
+  --spectrum-accent-color-300: var(--spectrum-gray-100);
+  --spectrum-accent-color-400: var(--spectrum-gray-200);
+  --spectrum-accent-color-500: var(--spectrum-gray-300);
+  --spectrum-accent-color-600: var(--spectrum-gray-400);
+  --spectrum-accent-color-700: var(--spectrum-gray-500);
+  --spectrum-accent-color-800: var(--spectrum-gray-600);
+  --spectrum-accent-color-900: var(--spectrum-gray-700);
+  --spectrum-accent-color-1000: var(--spectrum-gray-800);
+  --spectrum-accent-color-1100: var(--spectrum-gray-900);
+  --spectrum-accent-color-1200: var(--spectrum-gray-900);
+  --spectrum-accent-color-1300: var(--spectrum-gray-900);
+  --spectrum-accent-color-1400: var(--spectrum-gray-900);
+  --spectrum-accent-color-1500: var(--spectrum-gray-900);
+  --spectrum-accent-color-1600: var(--spectrum-gray-900);
+}
+
+[color="dark"].rn-palette-slate {
+  --color-brand: #d1d1d1;
+}
+
+/* A reactive value reads as a live field, not as body text. */
+.rn-value {
+  font-variant-numeric: tabular-nums;
+  padding: 0.05em 0.35em;
+  border-radius: 0.25rem;
+  background: var(--spectrum-gray-200);
+  color: var(--color-brand);
+  font-weight: 600;
+}
+
+
+.rn-accordion-body {
+  padding: 0 0.9em 0.6em;
+  border-top: 1px solid var(--spectrum-gray-300);
+}
+
+.rn-directive-unknown {
+  border-left: 3px dashed var(--spectrum-gray-400);
+  padding-left: 0.9em;
+}
+
+.rn-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.75em 0;
+}
+
+.rn-slider-legend {
+  min-width: 6rem;
+  font-size: 0.875rem;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-slider input[type="range"] {
+  flex: 1 1 auto;
+  accent-color: var(--color-brand);
+}
+
+/* Directive blocks inside BlockNote. They read as controls rather than prose, so a
+   block is recognisable as a directive at a glance. */
+.rn-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-left: 3px solid var(--color-brand);
+  border-radius: 0.4rem;
+  background: var(--spectrum-gray-100);
+  width: 100%;
+}
+
+.rn-block-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.25rem 1rem;
+  flex: 1 1 100%;
+}
+
+.rn-block-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-brand);
+}
+
+.rn-block-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.rn-block-field-name {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--spectrum-gray-600);
+}
+
+.rn-block-input {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.25rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+}
+
+.rn-block-inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.05em 0.35em;
+  border-radius: 0.25rem;
+  background: var(--spectrum-gray-200);
+  font-size: 0.9em;
+}
+
+/* --- Accessibility -------------------------------------------------------
+
+   Visible focus (§2.4.7), at zero specificity so Spectrum's own rings — which are
+   already conformant — keep priority over this fallback. */
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 0.15rem;
+}
+
+/* §2.4.11: both panes scroll, so a focused control must not come to rest flush
+   against the toolbar above it. */
+.rn-markdown :where(a, input, summary),
+.rn-blocknote :where(input, [tabindex]) {
+  scroll-margin-block: 3rem;
+}
+
+/* §2.5.8 target size: 24 by 24 CSS pixels. Spectrum's small controls sit right on
+   that floor, so it is asserted rather than assumed. */
+sp-action-button,
+sp-picker,
+sp-switch {
+  min-inline-size: 24px;
+  min-block-size: 24px;
+}
+
+.rn-block-input,
+.rn-slider input[type="range"] {
+  min-block-size: 24px;
+}
+
+/* §1.4.10 reflow. At 320 CSS px the page must not scroll in two directions, so
+   anything intrinsically wide scrolls inside its own box instead of widening the
+   document. Tables are exempt from reflowing, not from staying inside the page. */
+.rn-scroll-x {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.rn-markdown {
+  overflow-wrap: anywhere;
+}
+
+/* An unbroken URL is otherwise wider than a 320px viewport all by itself. */
+.rn-markdown a,
+.rn-markdown code {
+  word-break: break-word;
+}
+
+/* The legend was a fixed 6rem column, which left the slider almost nothing at narrow
+   widths; it now drops onto its own line instead. */
+.rn-slider {
+  flex-wrap: wrap;
+}
+
+.rn-slider-legend {
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.rn-slider input[type="range"] {
+  flex: 1 1 12rem;
+}
+
+.rn-block-component .rn-block-grid {
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.rn-block-checkbox {
+  accent-color: var(--color-brand);
+  min-block-size: 16px;
+  min-inline-size: 16px;
+}
+
+select.rn-block-input {
+  cursor: pointer;
+}
+
+/* What the component is, next to the directive name: the block is where you learn
+   the schema, so it should not require looking anything up. */
+.rn-block-about {
+  font-size: 0.7rem;
+  color: var(--spectrum-gray-700);
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Gallery ------------------------------------------------------------ */
+
+.rn-gallery {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+/* Sticky rather than a floating action button: creating an app stays reachable at
+   any scroll position without a control parked on top of the cards. */
+.rn-gallery-header {
+  position: sticky;
+  /* Under the app's bar, which is sticky below the breakpoint and taller than this
+     one's z-index can argue with: at top: 0 the two occupy the same strip and the
+     search box hides behind the navbar. Side by side the property is unset and this
+     is 0, which is the top of the scrolling gallery. */
+  top: var(--rn-bar-top, 0px);
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0 1rem;
+  background: var(--spectrum-gray-100);
+}
+
+.rn-gallery-heading {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 650;
+}
+
+/* Only set while the floating button is on screen, so nothing comes to rest
+   underneath it — the §2.4.11 failure a floating button invites. It has to clear the
+   button *and* the footer the button now sits above. */
+.rn-gallery-floating {
+  padding-bottom: calc(var(--rn-footer-height, 1.75rem) + 6.5rem);
+}
+
+.rn-fab {
+  position: fixed;
+  right: 1.5rem;
+  /* Clear of the footer, which is sticky and carries the interface controls: a button
+     floating *over* the language picker is a button that covers the thing underneath
+     it. The offset is the footer's height plus the same gap it keeps from the right
+     edge, so the two read as one corner rather than a collision. */
+  bottom: calc(var(--rn-footer-height, 1.75rem) + 1.5rem);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--rn-brand, var(--spectrum-gray-800));
+  color: var(--spectrum-gray-50);
+  box-shadow: 0 0.35rem 1rem rgb(0 0 0 / 0.28);
+  cursor: pointer;
+}
+
+.rn-fab svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  stroke-width: 2;
+}
+
+.rn-app-card-new {
+  border-style: dashed;
+  background: transparent;
+}
+
+.rn-app-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 8.5rem;
+  padding: 1.25rem;
+  border: none;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--spectrum-gray-800);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rn-app-new:hover {
+  background: var(--spectrum-gray-100);
+  color: var(--rn-brand, inherit);
+}
+
+.rn-app-new-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 50%;
+}
+
+.rn-gallery-note {
+  margin: 1.25rem 0 0;
+  color: var(--spectrum-gray-700);
+}
+
+/* Between the two groups of navbar controls: what you can do with the app, and how
+   you want the interface. A rule rather than a gap, because a gap wide enough to
+   read as a break is a gap wide enough to look like an accident on a narrow bar. */
+.rn-navbar-divider {
+  width: 1px;
+  align-self: stretch;
+  margin-inline: 0.375rem;
+  background: var(--spectrum-gray-300);
+}
+
+.rn-gallery-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  color: var(--spectrum-gray-700);
+  text-align: center;
+}
+
+.rn-app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rn-app-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.75rem;
+  background: var(--spectrum-gray-50);
+  overflow: hidden;
+}
+
+/* The whole card is the link, so the target is far larger than the 24 px floor and
+   the title is the accessible name. */
+.rn-app-card-open {
+  display: block;
+  flex: 1;
+  padding: 1rem 1rem 0.75rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.rn-app-card-open:hover {
+  background: var(--spectrum-gray-100);
+}
+
+.rn-app-card-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.rn-app-card-description {
+  margin: 0 0 0.6rem;
+  color: var(--spectrum-gray-800);
+  font-size: 0.9rem;
+}
+
+.rn-app-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--spectrum-gray-700);
+  font-size: 0.78rem;
+}
+
+.rn-app-card-version {
+  padding: 0 0.35rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.25rem;
+}
+
+/* C'è una versione più nuova nel catalogo. Il colore del marchio e non il verde
+   o l'arancione di una notifica: non è un avviso, è un'informazione — l'app che
+   si ha continua a funzionare. Il testo dice per esteso di che si tratta, così
+   il colore non porta niente da solo (§1.4.1). */
+.rn-app-card-update {
+  padding: 0 0.35rem;
+  border: 1px solid currentcolor;
+  border-radius: 0.25rem;
+  /* `--color-brand` e non un verde di notifica: è il token che `Palette_test`
+     misura contro le tre superfici chiare e scure, quindi è l'unico colore di
+     testo di questa app che si sa già stare sopra 4.5:1 in tutte e dodici le
+     combinazioni. Un colore scelto qui a occhio sarebbe stato il tredicesimo, e
+     non misurato. */
+  color: var(--color-brand);
+  font-weight: 600;
+}
+
+.rn-app-card-meta code {
+  font-family: var(--rn-font-mono, ui-monospace, monospace);
+}
+
+.rn-app-card-actions {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  border-top: 1px solid var(--spectrum-gray-200);
+}
+
+/* --- Data directives ---------------------------------------------------- */
+
+.rn-markdown .rn-form {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1em 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.6rem;
+  background: var(--spectrum-gray-100);
+}
+
+.rn-markdown .rn-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.rn-markdown .rn-field-label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+/* Guidance, not a complaint: quieter than the label and the same size as the error
+   that may replace it, so the field does not jump when one becomes the other. */
+.rn-markdown .rn-field-help {
+  font-size: 0.82rem;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-markdown .rn-field-name {
+  font-size: 0.82rem;
+  color: var(--spectrum-gray-800);
+}
+
+.rn-markdown .rn-field-input {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-50);
+  color: inherit;
+  font: inherit;
+  /* §2.5.8: comfortably past the 24 px floor at any font size. */
+  min-height: 2.25rem;
+}
+
+/* A refused field says so where it is, in the colour Spectrum uses for exactly this,
+   and the input carries aria-invalid so it is announced rather than merely coloured.
+   §1.4.1: the message is the signal, the colour only agrees with it. */
+/* ::python — results first, source behind a button. A document full of Python reads
+   as what it worked out; the code is one press away for whoever wants it. */
+.rn-python {
+  margin: 1rem 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.6rem;
+  background: var(--spectrum-gray-100);
+}
+
+.rn-python-toggle {
+  min-height: 2rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 999px;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-800);
+  font-size: 0.78rem;
+}
+
+.rn-markdown .rn-python-source {
+  margin: 0.6rem 0 0;
+}
+
+.rn-python-output {
+  margin-top: 0.6rem;
+}
+
+.rn-markdown .rn-python-printed,
+.rn-markdown .rn-python-error {
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  white-space: pre-wrap;
+  /* Long output scrolls inside its own box rather than stretching the pane, the same
+     rule a wide table follows. */
+  overflow-x: auto;
+}
+
+.rn-markdown .rn-python-error {
+  border-color: var(--spectrum-red-900);
+  color: var(--spectrum-red-900);
+}
+
+.rn-python-figure {
+  display: block;
+  max-width: 100%;
+  margin-top: 0.6rem;
+  border-radius: 0.4rem;
+  /* matplotlib draws on white and says so; on a dark theme an unpainted PNG is a
+     grey rectangle with invisible axes. */
+  background: #ffffff;
+}
+
+.rn-python-pending {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* The row a governed run needs: its Run button before it starts, and while it runs
+   the bar its own progress() draws plus the Stop that ends it. Empty between the
+   two, and an empty row takes no space. */
+.rn-python-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.4rem 0;
+}
+
+.rn-python-controls:empty {
+  display: none;
+}
+
+/* Native <progress>, so a run with no total is honestly indeterminate rather than a
+   bar sitting at zero pretending to know. */
+.rn-python-bar {
+  flex: 1 1 8rem;
+  max-width: 22rem;
+  height: 0.5rem;
+}
+
+.rn-python-said {
+  font-size: 0.85rem;
+}
+
+/* The sharing dialog: a link you can select, a button that copies it, and the ways
+   out. Laid out on the same dialog chrome as the confirmations. */
+.rn-share-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.rn-share-link {
+  flex: 1 1 18rem;
+  min-width: 0;
+  /* §2.5.8 again, and a link is a thing people drag across. */
+  min-height: 2.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+}
+
+.rn-share-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+}
+
+.rn-share-mail {
+  color: var(--color-brand);
+  text-decoration: underline;
+}
+
+/* The sync dialog's member list: name, role, and — for the owner — the way out. */
+.rn-member-list {
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rn-member-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--spectrum-gray-200);
+}
+
+.rn-member-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.rn-member-role {
+  margin-left: auto;
+  font-size: 0.8rem;
+}
+
+/* The chat panel: the messages of the `chat` collection, newest at the bottom, and
+   the line that writes the next one. The list scrolls inside its own ceiling so a
+   long conversation never pushes the app below it off the pane. */
+.rn-chat-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 14rem;
+  overflow-y: auto;
+}
+
+/* Markdown inside a message — the assistant's answers and what people say to each
+   other in an app. Scoped away from `.rn-markdown`, which is the *document*: this is
+   a narrower column with several messages stacked in it, so everything here is
+   tighter, the headings barely outgrow the body text, and the first and last child
+   carry no margin at all or every bubble would sit in a gap of its own making.
+
+   `white-space: normal` is load-bearing: both panels set `pre-wrap` on the text they
+   used to print raw, and left in place it would double every blank line now that the
+   markdown itself is what makes the paragraphs. */
+.rn-md {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.rn-md > :first-child {
+  margin-top: 0;
+}
+
+.rn-md > :last-child {
+  margin-bottom: 0;
+}
+
+.rn-md p,
+.rn-md ul,
+.rn-md ol,
+.rn-md blockquote,
+.rn-md pre,
+.rn-md .rn-scroll-x {
+  margin: 0.5em 0;
+}
+
+.rn-md h1,
+.rn-md h2,
+.rn-md h3,
+.rn-md h4 {
+  margin: 0.9em 0 0.35em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* A message is not a page: its headings order a few paragraphs, they do not open a
+   document, so they stay within a hair of the body size. */
+.rn-md h1 { font-size: 1.15em; }
+.rn-md h2 { font-size: 1.08em; }
+.rn-md h3,
+.rn-md h4 { font-size: 1em; }
+
+.rn-md ul,
+.rn-md ol {
+  padding-inline-start: 1.3em;
+}
+
+.rn-md ul { list-style: disc; }
+.rn-md ol { list-style: decimal; }
+
+.rn-md li {
+  margin: 0.15em 0;
+}
+
+.rn-md li > ul,
+.rn-md li > ol {
+  margin: 0.15em 0;
+}
+
+.rn-md a {
+  color: var(--color-brand);
+  text-decoration: underline;
+}
+
+.rn-md code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
+  background: var(--spectrum-gray-200);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+}
+
+/* The one thing a narrow panel cannot survive without: a model answers with code,
+   and a single long line would otherwise widen the whole column. It scrolls inside
+   its own box, and is reachable by keyboard to do it. */
+.rn-md pre {
+  background: var(--spectrum-gray-100);
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.rn-md pre code {
+  background: none;
+  padding: 0;
+  overflow-wrap: normal;
+}
+
+.rn-md blockquote {
+  border-inline-start: 3px solid var(--spectrum-gray-400);
+  padding-inline-start: 0.7em;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-md table {
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.rn-md th,
+.rn-md td {
+  border: 1px solid var(--spectrum-gray-300);
+  padding: 0.3em 0.55em;
+  text-align: left;
+}
+
+.rn-md th {
+  background: var(--spectrum-gray-100);
+  font-weight: 600;
+}
+
+.rn-md hr {
+  border: 0;
+  border-top: 1px solid var(--spectrum-gray-300);
+  margin: 0.8em 0;
+}
+
+.rn-md img {
+  max-width: 100%;
+  height: auto;
+}
+
+.rn-chat-message {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--spectrum-gray-200);
+}
+
+.rn-chat-message:last-child {
+  border-bottom: none;
+}
+
+.rn-chat-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+}
+
+.rn-chat-author {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* One's own messages carry the accent along their edge — enough to find your last
+   word in a fast thread without colouring whole bubbles. */
+.rn-chat-mine {
+  border-inline-start: 3px solid var(--color-brand);
+  padding-inline-start: 0.5rem;
+}
+
+/* The markdown carries the line breaks now (`breaks: true` in MessageMarkdown), so
+   pre-wrap here would double every blank line — and it sits on the same element as
+   `.rn-md`, where it would win on source order. */
+.rn-chat-text {
+  margin: 0.1rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+/* An attachment: an image shows itself small (its data is all in the row, so there
+   is nothing to fetch), anything else is a named download link. */
+.rn-chat-file {
+  display: inline-block;
+  margin-top: 0.2rem;
+  color: var(--color-brand);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.rn-chat-image {
+  display: block;
+  max-width: 15rem;
+  max-height: 11rem;
+  border-radius: 0.35rem;
+}
+
+/* The od-* directives: a status line under each, and the search box the binder
+   builds. The stale state is a warning, not an error — the rows on screen are
+   real, just not fresh — and the colour says which. */
+.rn-od-status {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+}
+
+.rn-od-stale {
+  color: var(--spectrum-notice-content-color-default, #b45309);
+}
+
+.rn-od-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rn-od-controls:empty {
+  display: none;
+}
+
+.rn-od-search {
+  flex: 1 1 14rem;
+  min-width: 0;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+}
+
+.rn-od-go {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-100);
+  color: var(--spectrum-gray-900);
+  cursor: pointer;
+}
+
+.rn-od-go:hover {
+  background: var(--spectrum-gray-200);
+}
+
+/* ::workflow — the strip above the steps.
+   Two rules carry the look, and both are decisions rather than taste.
+
+   The steps' own STATUS LINES are hidden, because the strip mirrors them and five
+   engines saying five things about one operation is exactly what the directive
+   exists to stop. Their CONTROLS are NOT hidden: a first-run gate for DuckDB or a
+   model package, and a manual Python block's own button, are how a step that is
+   waiting for a person stays reachable — hiding those would produce a step that
+   silently never runs, which is the failure this codebase has already met once.
+
+   Their fenced bodies go too. A reader looking at an app has no use for three SQL
+   blocks, and `show` brings them back, the same default and the same escape
+   ::python already offers. */
+.rn-workflow {
+  margin: 0.75rem 0;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--spectrum-gray-75, var(--spectrum-gray-100));
+}
+
+.rn-workflow:not(.rn-wf-open) .rn-wf-body .rn-od-status,
+.rn-workflow:not(.rn-wf-open) .rn-wf-body .rn-python-toggle,
+.rn-workflow:not(.rn-wf-open) .rn-wf-body .rn-python-output,
+.rn-workflow:not(.rn-wf-open) .rn-wf-body pre {
+  display: none;
+}
+
+/* With everything a step shows hidden, what is left is its frame around nothing —
+   and for a chain of four that is four empty boxes under the strip. The block keeps
+   its box only when it still has controls in it: a Run button waiting for somebody
+   is the one thing here that must never be hidden. */
+.rn-workflow:not(.rn-wf-open) .rn-wf-body > .rn-python,
+.rn-workflow:not(.rn-wf-open) .rn-wf-body > .rn-od,
+.rn-workflow:not(.rn-wf-open) .rn-wf-body > .rn-sql,
+.rn-workflow:not(.rn-wf-open) .rn-wf-body > .rn-ml,
+.rn-workflow:not(.rn-wf-open) .rn-wf-body > .rn-ai {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.rn-workflow:not(.rn-wf-open) .rn-wf-body > * {
+  margin: 0;
+}
+
+.rn-wf-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+}
+
+.rn-wf-title {
+  font-weight: 600;
+}
+
+.rn-wf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+
+.rn-wf-when {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.rn-wf-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.rn-wf-step {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* The glyph is one of six and the word beside it says the same thing, so the colour
+   is the third carrier and never the only one — §1.4.1. */
+.rn-wf-mark {
+  text-align: center;
+}
+
+.rn-wf-name {
+  font-family: var(--rn-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  overflow-wrap: anywhere;
+}
+
+.rn-wf-say {
+  overflow-wrap: anywhere;
+}
+
+.rn-wf-done .rn-wf-mark {
+  color: var(--spectrum-positive-content-color-default, #15803d);
+}
+
+.rn-wf-error .rn-wf-mark {
+  color: var(--spectrum-negative-content-color-default, #b91c1c);
+}
+
+.rn-wf-cycle .rn-wf-mark {
+  color: var(--spectrum-negative-content-color-default, #b91c1c);
+}
+
+.rn-wf-waiting,
+.rn-wf-skipped {
+  color: var(--spectrum-gray-700);
+}
+
+.rn-wf-running .rn-wf-mark {
+  color: var(--spectrum-gray-800);
+}
+
+/* The ai-* directives. They share the od-* status line and button, and add three
+   things of their own: a question box, a transcript, and the passage a search
+   found. The transcript is a scroll container with a ceiling rather than a box
+   that grows for ever — a chat inside a document must not push the rest of the
+   page off the screen. */
+.rn-ai {
+  margin: 0.75rem 0;
+}
+
+.rn-ai-ask {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rn-ai-input {
+  flex: 1 1 16rem;
+  min-width: 0;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+}
+
+.rn-ai-out {
+  margin-top: 0.5rem;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.rn-ai-out:empty {
+  display: none;
+}
+
+.rn-ai-turn {
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 0.5rem;
+  background: var(--spectrum-gray-100);
+  white-space: pre-wrap;
+}
+
+.rn-ai-user {
+  background: var(--spectrum-gray-200);
+}
+
+/* A tool call is machinery, not conversation: it is there so a reader can check
+   what the agent did, and it should never read as the answer. */
+.rn-ai-tool,
+.rn-ai-plan {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--spectrum-gray-700);
+  background: none;
+  padding: 0.1rem 0;
+}
+
+.rn-ai-error {
+  color: var(--spectrum-negative-content-color-default, #b91c1c);
+}
+
+/* A proposal is the one thing on this page that would change stored data, so it
+   is marked as such and carries its own confirm. */
+.rn-ai-proposal {
+  border: 1px solid var(--spectrum-gray-400);
+  background: var(--spectrum-gray-50);
+}
+
+.rn-ai-confirm {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.rn-ai-answer {
+  margin: 0.25rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.rn-ai-hit {
+  margin: 0 0 0.5rem;
+}
+
+/* A chart: a fixed-height box the binder fills with a canvas. The height is the
+   document's to change (height attribute, applied via setProperty). */
+.rn-chart {
+  position: relative;
+  height: 18rem;
+  margin: 0.5rem 0;
+}
+
+/* The map: a fixed-height canvas Leaflet takes over; the popup template stays
+   hidden inside the same node. On dark themes the default tiles are re-toned by
+   filter — inverted, then hue-rotated back so water stays bluish. */
+.rn-map-canvas {
+  height: 24rem;
+  border-radius: 0.4rem;
+}
+
+.rn-map-popup {
+  font-size: 0.85rem;
+}
+
+sp-theme[color="dark"] .rn-map-canvas .leaflet-layer {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.5);
+}
+
+sp-theme[color="dark"] .rn-map-canvas {
+  background: #16161d;
+}
+
+/* ::geo: the field and its one-click filler side by side. */
+.rn-geo-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rn-geo-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rn-geo-button {
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-100);
+  color: var(--spectrum-gray-900);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.rn-geo-button.rn-error {
+  border-color: currentColor;
+}
+
+/* ::print — a plain button on screen; while printing, only its target section
+   is visible, lifted out of every scroll container so the paper gets all of
+   it. visibility, not display: hiding an ancestor with display would take the
+   target down with it. */
+.rn-print {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-100);
+  color: var(--spectrum-gray-900);
+  cursor: pointer;
+}
+
+.rn-print:hover {
+  background: var(--spectrum-gray-200);
+}
+
+/* The sheets: one per printed page, photographed from the section named by the
+   button. They live in a container of their own, a child of <body> and not of the
+   app, and exist only between the click and the closing of the print dialog. */
+.rn-print-sheets {
+  display: none;
+}
+
+.rn-print-canvas {
+  max-width: 100%;
+}
+
+@page {
+  margin: 12mm;
+}
+
+/* A NAMED page, because @page cannot be chosen by a class: the sheets ask for this
+   box and nothing else does, so a landscape print stays landscape without deciding
+   the orientation of every other document. A weekly grid is six days wide and does
+   not fit a portrait page — it is the difference between a timetable and a column of
+   fragments. */
+@page rn-landscape {
+  size: A4 landscape;
+  margin: 10mm;
+}
+
+@media print {
+  /* display, not visibility: the copies are a SIBLING of everything hidden here and
+     never a descendant, so nothing being hidden is an ancestor of what prints. A
+     hidden-but-laid-out app would push the first sheet past however many blank pages
+     it occupies. */
+  body.rn-print-mode > *:not(.rn-print-sheets) {
+    display: none;
+  }
+
+  body.rn-print-mode .rn-print-sheets {
+    display: block;
+  }
+
+  .rn-print-landscape .rn-print-sheet {
+    page: rn-landscape;
+  }
+
+  /* A page each, and no trailing blank one after the last. */
+  .rn-print-sheet {
+    break-after: page;
+  }
+
+  .rn-print-sheet:last-child {
+    break-after: auto;
+  }
+
+  /* The tints that tell one subject from another are information, and a printer
+     drops backgrounds by default. They are never the only carrier — every card also
+     says what it is in words — but on paper as on screen they are what makes a week
+     readable at a glance. */
+  .rn-print-sheets {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    color: #000;
+  }
+
+  /* A grid taller than one page continues on the next, and a header that does not
+     repeat leaves that page a wall of unlabelled boxes. */
+  .rn-print-sheets thead {
+    display: table-header-group;
+  }
+
+  .rn-print-sheets tr,
+  .rn-print-sheets .rn-timetable-cell,
+  .rn-print-sheets .rn-timetable-card,
+  .rn-print-sheets .rn-card {
+    break-inside: avoid;
+  }
+
+  /* On paper there is nothing to press, nothing to drag and nothing to search: the
+     controls a view builds for the screen are ink spent saying so. The column
+     headers are buttons too and stay — they carry the name of the column. */
+  .rn-print-sheets .rn-row-delete,
+  .rn-print-sheets .rn-row-edit,
+  .rn-print-sheets .rn-list-row-actions,
+  .rn-print-sheets .rn-table-actions,
+  .rn-print-sheets .rn-table-search,
+  .rn-print-sheets .rn-table-pager,
+  .rn-print-sheets .rn-timetable-status,
+  .rn-print-sheets .rn-timetable-mark-drag,
+  .rn-print-sheets .rn-od-controls,
+  .rn-print-sheets .rn-ai-ask,
+  .rn-print-sheets .rn-print {
+    display: none;
+  }
+
+  .rn-print-sheets .rn-th-sort {
+    border: 0;
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+  }
+
+  /* The section was laid out beside an editor and is now alone on a sheet: it gets
+     the whole width, and the columns stop being columns. */
+  .rn-print-sheets .rn-columns {
+    display: block;
+  }
+
+  .rn-print-sheets .rn-timetable-grid,
+  .rn-print-sheets .rn-table-grid {
+    width: 100%;
+  }
+}
+
+/* ::file — the preview beside the input, and the same shapes inside views: an
+   image shows itself small, anything else is a named download link. */
+.rn-file {
+  display: inline-block;
+  color: var(--color-brand);
+  overflow-wrap: anywhere;
+}
+
+a.rn-file {
+  text-decoration: underline;
+}
+
+.rn-file-image {
+  display: block;
+  max-width: 10rem;
+  max-height: 7rem;
+  border-radius: 0.35rem;
+}
+
+.rn-file-preview:not(:empty) {
+  display: block;
+  margin-top: 0.3rem;
+}
+
+/* The calendar's newer views: a taller single week, the agenda list, the
+   matrix planner, the by-legend and the clickable days. */
+.rn-calendar-week .rn-calendar-day {
+  min-height: 12rem;
+}
+
+.rn-calendar-today-button {
+  font-size: 0.8rem;
+  padding-inline: 0.6rem;
+}
+
+.rn-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.3rem 0;
+  font-size: 0.75rem;
+}
+
+.rn-calendar-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.rn-calendar-legend-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.rn-calendar-agenda-day {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--spectrum-gray-200);
+}
+
+.rn-calendar-agenda-heading {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.rn-calendar-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.rn-calendar-matrix th,
+.rn-calendar-matrix td {
+  border: 1px solid var(--spectrum-gray-200);
+  padding: 0.25rem 0.4rem;
+  vertical-align: top;
+  text-align: start;
+}
+
+.rn-calendar-clickable {
+  cursor: pointer;
+}
+
+.rn-calendar-clickable:hover {
+  background: var(--spectrum-gray-100);
+}
+
+/* ::explore — the reader's own pivot: a fixed-height host the viewer fills. */
+.rn-explore-host {
+  height: 24rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.4rem;
+  overflow: hidden;
+}
+
+/* The dashboard's cross-filter chip: what is selected, and the way out. */
+.rn-dashboard-chip:not(:empty) {
+  margin: 0.3rem 0 0.5rem;
+}
+
+.rn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.4rem 0.2rem 0.7rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 1rem;
+  background: var(--spectrum-gray-100);
+  font-size: 0.8rem;
+}
+
+.rn-chip-clear {
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.rn-chip-clear:hover {
+  background: var(--spectrum-gray-300);
+}
+
+/* The account dialog: two labelled fields, and the recovery code shown once. */
+.rn-account-label {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.rn-account-field {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+  font-size: 0.9rem;
+}
+
+.rn-account-subtitle {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* The code is data to copy by hand: monospace, grouped, and allowed to wrap as a
+   unit per group so a narrow dialog never hyphenates inside one. */
+.rn-recovery-code {
+  flex: 1 1 14rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px dashed var(--spectrum-gray-500);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
+}
+
+/* The app's own mark on its card, and the icon drawing inside whatever holds one. */
+.rn-app-card-icon {
+  display: inline-flex;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-right: 0.45rem;
+  vertical-align: -0.15rem;
+  color: var(--color-brand);
+}
+
+/* The same mark as the card, at the size a toolbar's own text is. */
+.rn-pane-icon {
+  display: inline-flex;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-right: 0.4rem;
+  color: var(--color-brand);
+}
+
+.rn-icon-drawing {
+  width: 100%;
+  height: 100%;
+}
+
+/* The mark on a slash-menu entry, sized like BlockNote's own so ours do not read as a
+   second menu bolted under the first. */
+.rn-menu-glyph {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* The reader's own filters, beside the search box: the same question — which rows —
+   so they are asked in the same place. */
+.rn-markdown .rn-table-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.rn-markdown .rn-table-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-markdown .rn-table-filter-input {
+  /* §2.5.8 again: a select the height of its text is a target nobody can hit. */
+  min-height: 2rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.rn-markdown .rn-field-error {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  color: var(--spectrum-red-900);
+}
+
+.rn-markdown .rn-field-input[aria-invalid="true"] {
+  border-color: var(--spectrum-red-900);
+}
+
+/* A tick box is not a field the width of the form: the grid stretches every input to
+   the column, which left it floating in the middle of the row with its label above
+   it. It sits at the start, at the size the platform draws it, and keeps the 24 px
+   target §2.5.8 asks for. */
+.rn-markdown .rn-field-input[type="checkbox"] {
+  justify-self: start;
+  width: 1.5rem;
+  height: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0;
+}
+
+.rn-markdown .rn-form-save {
+  justify-self: start;
+  min-height: 2.25rem;
+  padding: 0.45rem 1rem;
+  border: none;
+  border-radius: 0.35rem;
+  background: var(--rn-brand, var(--spectrum-gray-800));
+  color: var(--spectrum-gray-50);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rn-markdown .rn-list {
+  margin: 1em 0;
+}
+
+.rn-markdown .rn-list-row {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.4rem;
+  background: var(--spectrum-gray-50);
+}
+
+.rn-markdown .rn-list-row + .rn-list-row {
+  margin-top: 0.4rem;
+}
+
+.rn-markdown .rn-list-row > :first-child {
+  margin-top: 0;
+}
+
+.rn-markdown .rn-list-row > :last-child {
+  margin-bottom: 0;
+}
+
+/* --- Gallery search ----------------------------------------------------- */
+
+.rn-gallery-search {
+  flex: 1 1 12rem;
+  min-width: 0;
+  order: 3;
+}
+
+.rn-gallery-search-input {
+  width: 100%;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.4rem;
+  background: var(--spectrum-gray-50);
+  color: inherit;
+  font: inherit;
+}
+
+/* --- Small screens ------------------------------------------------------ */
+/*
+   Below the two-pane breakpoint the panes stack, and a stacked pair inside a
+   100vh box would give each of them half a screen minus two toolbars. The page
+   scrolls instead: each pane keeps a workable height and the document is what
+   moves, which is also what §1.4.10 asks for at 320 px.
+*/
+@media (max-width: 47.99rem) {
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+  }
+
+  /* The footer says what this is and how you want it to look. On a handset only
+     the second half earns its room: the name is the navbar's wordmark two lines
+     up, and the version is a diagnostic — read out when reporting a problem, not
+     while using the app. Dropping them keeps the bar one row, which matters
+     because it is sticky and every row it takes is a row of the document. The
+     legal link stays: it is an obligation, and one nobody can reach is one that
+     is not offered. */
+  .rn-footer-brand {
+    display: none;
+  }
+
+  .rn-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  /* `.rn-panes >`, not `.rn-page >`: both <main>s are inside the box that holds the
+     panes, so the older selector stopped matching anything the day that box was
+     added and took the stacked-pane height with it — silently, because a rule that
+     matches nothing looks exactly like a rule that had no effect. */
+  .rn-panes > main {
+    min-height: 0;
+    /* The gallery's own <main> scrolls side by side. Here the page scrolls, and a
+       scroll container that never scrolls is still the scrollport its sticky
+       children answer to — which is what carried the gallery's search box off the
+       top of the window while `position: sticky` was in force. */
+    overflow: visible;
+  }
+
+  .rn-panes > main > section {
+    min-height: 70vh;
+  }
+
+  /* Not a scroll container here, because the page is. A sticky child sticks to its
+     nearest scrolling ancestor, so leaving this one scrollable pinned the page menu
+     inside a box that itself scrolled away — sticky, and never sticking. */
+  .rn-preview {
+    overflow: visible;
+  }
+
+  /* The same rule, one level further out, and this is the one that was missed: the
+     box holding both panes is `overflow: hidden` so the fixed desktop layout cannot
+     be pushed out of shape. `hidden` is a scroll container too — it just never
+     scrolls — so it became the scrollport for every sticky thing inside it, and the
+     pane's toolbar and the page menu rode up out of the window with the page while
+     `position: sticky` was in force and doing nothing. Below the breakpoint the page
+     is the scroller, so nothing here needs to clip. */
+  .rn-panes {
+    overflow: visible;
+  }
+
+  /* Each bar sits under the one above it, and the offsets are custom properties
+     rather than `top` declarations because both rules are written later in this file
+     and a media query adds no specificity — an override here would lose to source
+     order and silently do nothing.
+
+     --rn-navbar-height is measured and published by shell/BarMetrics, because the
+     navbar wraps at 320 px and is nearly twice as tall there. The fallback is its
+     unwrapped height, which is what a browser with no ResizeObserver would use.
+     2.25rem is the pane toolbar's height, which is fixed. */
+  .rn-page {
+    --rn-bar-top: var(--rn-navbar-height, 2.8125rem);
+  }
+
+  .rn-preview {
+    --rn-nav-top: calc(var(--rn-navbar-height, 2.8125rem) + 2.25rem);
+  }
+
+  /* The divider between panes is vertical only while they are side by side. */
+  .rn-panes > main > section.rn-divider {
+    border-right: none;
+    border-bottom: 1px solid var(--spectrum-gray-300);
+  }
+
+  .rn-gallery {
+    padding: 1rem 0.9rem 2.5rem;
+  }
+
+  .rn-gallery-header {
+    gap: 0.6rem;
+  }
+
+  .rn-app-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The bars stay put while the page moves. Side by side the layout is fixed and the
+   panes scroll inside it, so this changes nothing there; below the breakpoint the page
+   itself scrolls, and the app's bar, a pane's toolbar or the footer sliding away takes
+   its controls with it. They stack in the order they are read: the app's bar over the
+   pane's toolbar over the page menu, which is inside the pane. */
+.rn-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.rn-pane-bar {
+  position: sticky;
+  top: var(--rn-bar-top, 0px);
+  z-index: 3;
+}
+
+.rn-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+}
+
+/* The navbar carries a wordmark, three controls and a switch; on a handset the
+   wordmark alone is enough to identify the app, and the controls wrap under it. */
+@media (max-width: 30rem) {
+  .rn-gallery-heading {
+    font-size: 1.15rem;
+  }
+}
+
+/* --- Confirmation dialog ------------------------------------------------ */
+
+.rn-dialog {
+  /* A modal <dialog> centres itself through `margin: auto`, which the CSS reset
+     zeroes along with every other margin. Without this it lands top-left. */
+  margin: auto;
+  max-width: 26rem;
+  padding: 1.25rem 1.4rem 1.1rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.75rem;
+  background: var(--spectrum-gray-50);
+  color: inherit;
+}
+
+.rn-dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.rn-dialog-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 650;
+}
+
+.rn-dialog-message {
+  margin: 0 0 1.1rem;
+  color: var(--spectrum-gray-800);
+}
+
+.rn-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* --- Pages -------------------------------------------------------------- */
+
+/* The page menu, as an application's navigation rather than a strip of buttons.
+
+   Wide enough, it is a rail down the side: icon and label, the current page marked
+   with a brand-coloured indicator. Narrow, it lays back down into a scrolling bar,
+   because a 13rem rail inside a half-width editor pane is most of the pane.
+
+   The switch is a *container* query, not a media query: what matters is how much room
+   the preview has, which at #/a/<id> is the window and beside an editor is half of
+   it. A media query would give the split view a rail it has no space for. */
+
+.rn-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* Narrow, the menu is a burger: one control that says where you are and opens the
+   list over the page. The alternative, a row of tabs, is right until they stop
+   fitting — then it either wraps and pushes the page down or scrolls sideways, and
+   both hide entries behind an edge nobody can see. Wide, the rail below takes over
+   and the burger goes away. */
+.rn-page-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  /* Sticky in both forms, and the containing block the floating list is positioned
+     against — a sticky box is one, so no extra `relative` is needed. Laid down as a
+     bar it is the app's own navigation, and navigation you have to scroll back for is
+     navigation in the wrong place. */
+  position: sticky;
+  top: var(--rn-nav-top, 0px);
+  z-index: 2;
+  padding: 0.4rem 0 0.5rem;
+  /* No bar. As a burger the menu is one pill floating over the document, so a grey
+     strip the width of the pane would be a background for nothing — the pill carries
+     its own. It stays sticky, which is the point: sticky needs a box, not a colour.
+     The box is left transparent to clicks so the document under it stays reachable;
+     the two things inside it take their events back. */
+  background: transparent;
+  border-bottom: none;
+  pointer-events: none;
+}
+
+.rn-page-burger,
+.rn-page-list {
+  pointer-events: auto;
+}
+
+.rn-page-burger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  /* Right, where a thumb is. The list flips with it — a panel that opened leftwards
+     from a right-hand button would hang off the screen. */
+  align-self: flex-end;
+  flex-direction: row-reverse;
+  /* §2.5.8: comfortably past the 24 px floor. */
+  min-height: 2.25rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.75rem;
+  border: 1px solid var(--spectrum-gray-300);
+  /* A pill, because it is one control that opens one thing — a rectangle reads as a
+     field, and this is not one. */
+  border-radius: 999px;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+  transition: background 120ms ease, box-shadow 120ms ease;
+}
+
+.rn-page-burger:hover {
+  background: var(--spectrum-gray-100);
+}
+
+.rn-page-nav-open .rn-page-burger {
+  background: var(--spectrum-gray-100);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.12);
+}
+
+/* Three lines, drawn rather than shipped: an icon file for this is a request and a
+   cache entry for something a border can say. */
+.rn-page-burger-icon {
+  width: 1rem;
+  height: 0.75rem;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  position: relative;
+}
+
+.rn-page-burger-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 2px solid currentColor;
+  transform: translateY(-1px);
+  transition: opacity 120ms ease;
+}
+
+/* Open, the three lines become the two of a cross: the control says what pressing it
+   again will do, which is what a toggle owes the reader. */
+.rn-page-nav-open .rn-page-burger-icon {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.rn-page-nav-open .rn-page-burger-icon::before,
+.rn-page-nav-open .rn-page-burger-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 2px solid currentColor;
+  opacity: 1;
+}
+
+.rn-page-nav-open .rn-page-burger-icon::before {
+  transform: translateY(-1px) rotate(45deg);
+}
+
+.rn-page-nav-open .rn-page-burger-icon::after {
+  transform: translateY(-1px) rotate(-45deg);
+}
+
+/* Closed by default, and closed is the state the reader arrives in: the page is what
+   they came for. Open, it floats over the page rather than pushing it down — a menu
+   that moves the thing you are reading makes you find your place again. */
+.rn-page-list {
+  display: none;
+  flex-direction: column;
+  gap: 0.15rem;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: auto;
+  z-index: 4;
+  min-width: 12rem;
+  max-width: min(20rem, 100%);
+  padding: 0.35rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.6rem;
+  background: var(--spectrum-gray-50);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.16);
+}
+
+.rn-page-nav-open .rn-page-list {
+  display: flex;
+  animation: rn-page-list-in 120ms ease-out;
+}
+
+@keyframes rn-page-list-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+/* Nobody asked for the movement; some people are hurt by it. */
+@media (prefers-reduced-motion: reduce) {
+  .rn-page-nav-open .rn-page-list {
+    animation: none;
+  }
+
+  .rn-page-nav {
+    transition: none;
+  }
+}
+
+.rn-page-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.rn-page-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  flex-shrink: 0;
+  /* §2.5.8: the floor is 24 px and this clears it at any font size. */
+  min-height: 2.25rem;
+  padding: 0.4rem 0.75rem;
+  border: none;
+  border-radius: 0.45rem;
+  background: transparent;
+  color: var(--spectrum-gray-800);
+  font: inherit;
+  cursor: pointer;
+}
+
+.rn-page-tab:hover {
+  background: var(--spectrum-gray-200);
+}
+
+.rn-page-tab[aria-current="page"] {
+  background: var(--spectrum-gray-200);
+  color: var(--color-brand);
+  font-weight: 600;
+}
+
+.rn-page-icon-host {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.rn-page-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* ::columns — a grid that reflows by itself. `auto-fit` with `minmax` is the whole
+   mechanism: the document says how narrow a column may get, the grid decides how many
+   fit, and there is no breakpoint anywhere to keep in step with the layout. The
+   default is a readable paragraph width, so `::columns` written bare still behaves.
+   `--rn-col-min` is set per block by shell/Columns.res. */
+.rn-markdown .rn-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--rn-col-min, 18rem), 1fr));
+  align-items: start;
+  margin: 1rem 0;
+}
+
+/* A card is a row with a border around it, and the grid is the one ::columns uses:
+   the same question — how narrow may a column be — answered once. */
+.rn-markdown .rn-cards .rn-list-rows {
+  gap: 0.75rem;
+}
+
+.rn-markdown .rn-cards .rn-list-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.6rem;
+  background: var(--spectrum-gray-50);
+}
+
+/* A group heading inside a card grid belongs across the whole width, not in a
+   column of its own. */
+.rn-markdown .rn-cards .rn-list-group {
+  grid-column: 1 / -1;
+}
+
+/* A board is columns of cards, and the columns are the ::columns grid again — the
+   third thing to use it, and the reason it is one mechanism rather than three. */
+.rn-markdown .rn-board-columns {
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.rn-markdown .rn-board-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 6rem;
+  padding: 0.6rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.6rem;
+  background: var(--spectrum-gray-100);
+}
+
+/* The column being dragged over says so, or a drop is a guess. */
+.rn-markdown .rn-board-column-over {
+  border-color: var(--color-brand);
+  background: var(--spectrum-gray-200);
+}
+
+.rn-markdown .rn-board-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--spectrum-gray-800);
+}
+
+.rn-markdown .rn-board-count {
+  font-weight: 400;
+  color: var(--spectrum-gray-600);
+}
+
+.rn-markdown .rn-board-card {
+  margin: 0;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.5rem;
+  background: var(--spectrum-gray-50);
+  cursor: grab;
+}
+
+.rn-markdown .rn-board-card-moving {
+  opacity: 0.5;
+}
+
+/* A timetable is a real table, because rows against columns is a relationship that
+   has to be announced, not merely drawn — the calendar's matrix view settled the
+   same argument. Dense on purpose: six hours by five days has to fit on one screen
+   or it stops being a timetable, so it scrolls sideways inside its own box rather
+   than stretching the page. */
+.rn-markdown .rn-timetable-body {
+  overflow-x: auto;
+}
+
+.rn-markdown .rn-timetable-grid {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.rn-markdown .rn-timetable-grid th {
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--spectrum-gray-300);
+  background: var(--spectrum-gray-100);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--spectrum-gray-800);
+  text-align: center;
+}
+
+.rn-markdown .rn-timetable-cell {
+  min-width: 7rem;
+  height: 3.25rem;
+  padding: 0.2rem;
+  border: 1px solid var(--spectrum-gray-300);
+  background: var(--spectrum-gray-50);
+  vertical-align: top;
+}
+
+.rn-markdown .rn-timetable-card {
+  margin: 0 0 0.2rem;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.35rem;
+  background: var(--spectrum-gray-100);
+  color: var(--spectrum-gray-900);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  cursor: grab;
+}
+
+/* Pinned: the lesson somebody fixed by hand. It is not draggable, and the cursor
+   says so before the reader finds out by pulling at it. */
+.rn-markdown .rn-timetable-card[draggable="false"] {
+  cursor: default;
+}
+
+.rn-markdown .rn-timetable-pin,
+.rn-markdown .rn-timetable-mark {
+  font-size: 0.8rem;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-markdown .rn-timetable-pin {
+  margin-inline-start: 0.25rem;
+}
+
+/* The three answers a cell gives while a card is in the air — free, spoken for by
+   another row, forbidden to this one. Each carries a glyph as well as a tint (the
+   binder adds it for the length of the drag), because a colour on its own says
+   nothing to a reader who cannot tell two of them apart. */
+.rn-markdown .rn-timetable-over {
+  outline: 2px solid var(--color-brand);
+  outline-offset: -2px;
+}
+
+.rn-markdown .rn-timetable-warns {
+  background: var(--spectrum-gray-100);
+  box-shadow: inset 0 0 0 2px var(--spectrum-gray-500);
+}
+
+.rn-markdown .rn-timetable-refuses,
+.rn-markdown .rn-timetable-forbidden {
+  background: var(--spectrum-gray-300);
+  /* Hatched as well as darker: two cells of nearly the same grey are one cell to
+     anybody printing this in black and white. */
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 6px,
+    var(--spectrum-gray-400) 6px 8px
+  );
+}
+
+/* The records placed in no cell yet, under the grid — a lesson without an hour is
+   not lost, it is waiting. */
+.rn-markdown .rn-timetable-waiting {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.rn-markdown .rn-timetable-waiting:empty {
+  display: none;
+}
+
+/* A refusal is a sentence, and an empty one takes no room: the paragraph exists
+   from the first render so a screen reader is already watching it (role="status"),
+   and shows only once there is something to say. */
+.rn-markdown .rn-timetable-status {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+}
+
+.rn-markdown .rn-timetable-status:empty {
+  display: none;
+}
+
+/* A month, laid out as one. Seven columns whatever the width — a calendar that
+   reflowed into fewer would stop being a calendar — so on a narrow pane it scrolls
+   sideways inside its own box rather than stretching the page. */
+.rn-markdown .rn-calendar-body {
+  overflow-x: auto;
+}
+
+.rn-markdown .rn-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.rn-markdown .rn-calendar-title {
+  font-weight: 600;
+  min-width: 10rem;
+  text-align: center;
+}
+
+.rn-markdown .rn-calendar-step {
+  /* §2.5.8. */
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.4rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+}
+
+.rn-markdown .rn-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(6.5rem, 1fr));
+  gap: 1px;
+  background: var(--spectrum-gray-300);
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.rn-markdown .rn-calendar-weekday {
+  padding: 0.35rem 0.5rem;
+  background: var(--spectrum-gray-100);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--spectrum-gray-700);
+  text-align: center;
+}
+
+.rn-markdown .rn-calendar-day {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 5rem;
+  padding: 0.35rem;
+  background: var(--spectrum-gray-50);
+}
+
+/* The days either side are shown, not hidden: a week is seven days even when two of
+   them belong to another month. They are quieter, which is the whole difference. */
+.rn-markdown .rn-calendar-outside {
+  background: var(--spectrum-gray-100);
+  color: var(--spectrum-gray-600);
+}
+
+.rn-markdown .rn-calendar-today .rn-calendar-number {
+  background: var(--color-brand);
+  color: var(--spectrum-gray-50);
+  border-radius: 999px;
+}
+
+.rn-markdown .rn-calendar-number {
+  align-self: flex-start;
+  min-width: 1.5rem;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+/* A span reads as one bar across the days it covers: square where it continues,
+   rounded where it begins and ends, so the shape says how long it is without a
+   second line of text saying so. */
+.rn-markdown .rn-calendar-span {
+  border-radius: 0;
+  margin-left: -0.35rem;
+  margin-right: -0.35rem;
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+  background: var(--spectrum-gray-300);
+}
+
+.rn-markdown .rn-calendar-span-start {
+  border-top-left-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+  margin-left: 0;
+}
+
+.rn-markdown .rn-calendar-span-end {
+  border-top-right-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+  margin-right: 0;
+}
+
+/* Only the day it starts on says what it is; the rest of the bar is the same event
+   continuing, and repeating its name in every cell is noise. */
+.rn-markdown .rn-calendar-span:not(.rn-calendar-span-start) {
+  color: transparent;
+}
+
+.rn-markdown .rn-calendar-entry {
+  margin: 0;
+  padding: 0.2rem 0.35rem;
+  border-radius: 0.3rem;
+  background: var(--spectrum-gray-200);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.rn-markdown .rn-columns-s { gap: 0.5rem; }
+.rn-markdown .rn-columns-m { gap: 1rem; }
+.rn-markdown .rn-columns-l { gap: 2rem; }
+
+/* The floor, and it is a *container* query on purpose. What decides how many columns
+   fit is the room this pane has, which at /a/<id> is the window and beside an editor
+   is half of it; a media query would give the split view three columns it has no
+   space for. Below this width a single column is the only honest answer, whatever
+   minimum the author asked for. */
+@container (max-width: 26rem) {
+  .rn-markdown .rn-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container (min-width: 46rem) {
+  .rn-pages {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.75rem;
+  }
+
+  .rn-page-nav {
+    position: sticky;
+    top: var(--rn-nav-top, 0px);
+    flex: 0 0 13rem;
+    flex-direction: column;
+    overflow-x: visible;
+    padding: 0.25rem 0.75rem 0.25rem 0;
+    border-bottom: none;
+    border-right: 1px solid var(--spectrum-gray-300);
+    /* A rail is a place, not a floating control: it takes its clicks back. */
+    pointer-events: auto;
+  }
+
+  /* There is room for the whole list, so the control that would open it is one press
+     nobody needs. */
+  .rn-page-burger {
+    display: none;
+  }
+
+  /* The rail reads top to bottom on the left, so nothing here is flipped. */
+  .rn-page-nav {
+    align-items: stretch;
+  }
+
+  .rn-page-list {
+    display: flex;
+    position: static;
+    min-width: 0;
+    max-width: none;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .rn-page-tab {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* The indicator is the rail's own convention: a filled row already says
+     "selected", and the bar is what says *where you are* at a glance down the list. */
+  .rn-page-tab[aria-current="page"]::before {
+    content: "";
+    position: absolute;
+    inset-block: 0.4rem;
+    inset-inline-start: -0.75rem;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--color-brand);
+  }
+}
+
+/* --- Tables -------------------------------------------------------------
+
+   Scoped under .rn-markdown because that is where the generic table styling for
+   authored markdown lives: `.rn-markdown td` outranks a bare `.rn-align-end`, so a
+   column asked to sit right against its edge quietly did not. */
+
+.rn-table {
+  margin: 1.25rem 0;
+}
+
+.rn-table-search {
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.rn-table-search-input {
+  width: min(100%, 22rem);
+  min-height: 2.25rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.4rem;
+  background: var(--spectrum-gray-50);
+  color: inherit;
+  font: inherit;
+}
+
+.rn-table-grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rn-markdown .rn-th {
+  padding: 0;
+  text-align: start;
+  border: none;
+  border-bottom: 1px solid var(--spectrum-gray-300);
+  background: transparent;
+}
+
+/* The header is a button because it sorts. A cell that reorders the table on click
+   and cannot be focused is a control only a mouse can reach. */
+.rn-th-sort {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  /* §2.5.8: the floor is 24 px and this clears it. */
+  min-height: 2.25rem;
+  padding: 0.45rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: var(--spectrum-gray-800);
+  font: inherit;
+  font-weight: 600;
+  text-align: start;
+  cursor: pointer;
+}
+
+.rn-th-sort:hover {
+  background: var(--spectrum-gray-200);
+}
+
+/* The glyph says which way, next to the aria-sort that says the same thing to a
+   screen reader. Neither stands alone. */
+.rn-th-sort[data-rn-sorted="asc"]::after {
+  content: "▲";
+  font-size: 0.6em;
+  color: var(--color-brand);
+}
+
+.rn-th-sort[data-rn-sorted="desc"]::after {
+  content: "▼";
+  font-size: 0.6em;
+  color: var(--color-brand);
+}
+
+.rn-markdown .rn-table-row > td {
+  padding: 0.45rem 0.6rem;
+  border: none;
+  border-bottom: 1px solid var(--spectrum-gray-200);
+  vertical-align: baseline;
+}
+
+.rn-markdown .rn-align-center { text-align: center; }
+
+.rn-markdown .rn-align-end {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.rn-table-actions {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.rn-table-pager {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.rn-table-page {
+  font-variant-numeric: tabular-nums;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-table-step {
+  /* §2.5.8 again: a pager is exactly the control people miss on a phone. */
+  min-width: 2rem;
+  min-height: 2rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.4rem;
+  background: var(--spectrum-gray-50);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.rn-table-step:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* A group heading inside a list, from group-by. */
+.rn-list-group {
+  margin: 1rem 0 0.3rem;
+  color: var(--spectrum-gray-700);
+  font-weight: 600;
+}
+
+/* --- Row actions -------------------------------------------------------- */
+
+.rn-list-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.rn-list-row-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.25rem;
+}
+
+.rn-row-edit,
+.rn-row-delete {
+  /* §2.5.8: the floor is 24 px, and these sit above it at any font size. */
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: var(--spectrum-gray-700);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.rn-row-edit:hover,
+.rn-row-delete:hover {
+  border-color: var(--spectrum-gray-400);
+  color: var(--spectrum-gray-900);
+}
+
+
+/* The assistant's panel: a column beside whatever the route is showing, not a dialog
+   over it — it is used *while* looking at the app it is changing, and a modal would
+   put that app behind the conversation.
+
+   The conversation is laid out the way every chat worth reading is: the question in a
+   bubble because it is short and is what you scan back for, the answer as plain text
+   at full width because it is long and a bubble around a long text is a box you read
+   inside instead of a page you read. Nothing is bordered that does not need to be
+   found; the vertical rhythm does the separating. */
+.rn-ai-panel {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: min(28rem, 100%);
+  min-height: 0;
+  border-inline-start: 1px solid var(--spectrum-gray-300);
+  background: var(--spectrum-gray-50);
+}
+
+/* Below the two-pane breakpoint there is no room for a column, so it becomes the
+   whole screen. Fixed rather than absolute: the pane it would otherwise sit inside is
+   itself a scroll container there, and a panel that scrolled away with the document
+   would take its composer with it. */
+@media (width < 48rem) {
+  .rn-ai-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    width: 100%;
+  }
+}
+
+.rn-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.6rem 0.5rem 1.1rem;
+}
+
+.rn-ai-title {
+  flex: 1;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-ai-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 1.1rem 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.9rem;
+  background: var(--spectrum-gray-100);
+}
+
+.rn-ai-presets {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.rn-ai-help {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* The one thing worth saying before the first question: without the documentation
+   server the assistant is guessing, and a guessed directive renders as its own
+   source text. */
+.rn-ai-warning {
+  margin: 0 1.1rem 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.7rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--spectrum-gray-800);
+  background: var(--spectrum-gray-200);
+}
+
+.rn-ai-turns {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.5rem 1.1rem 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.rn-ai-turn {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* The question: a bubble, and against the edge the reader's own text comes from. */
+.rn-ai-user {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 0.5rem 0.85rem;
+  border-radius: 1.1rem 1.1rem 0.3rem 1.1rem;
+  background: var(--spectrum-gray-200);
+  color: var(--spectrum-gray-900);
+}
+
+/* The answer: no bubble, no border, the full width of the column. */
+.rn-ai-assistant {
+  color: var(--spectrum-gray-900);
+}
+
+.rn-ai-empty {
+  margin-block: 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  text-wrap: balance;
+}
+
+/* A tool call is a step, not a message: named, small, and out of the way. The dot in
+   front of it is what makes a run of them read as a list of steps rather than as
+   three stray words. */
+.rn-ai-tool {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-block: -0.35rem;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-ai-tool::before {
+  content: "";
+  flex: none;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--color-brand);
+}
+
+.rn-ai-tool-name {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+}
+
+/* The working indicator. Three dots rather than a spinner: a spinner says "wait",
+   dots say "still talking", and what is happening here is a conversation with pauses
+   in it — the model reads a tool's answer, thinks, calls another. */
+.rn-ai-thinking {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-ai-thinking-label {
+  font-weight: 500;
+}
+
+/* The reasoning, when a thinking model streams any: one line, clipped, and never
+   allowed to grow the panel. It is a sign of life, not a transcript. */
+.rn-ai-thinking-tail {
+  flex: 1 1 100%;
+  min-width: 0;
+  max-height: 2.8rem;
+  overflow: hidden;
+  font-size: 0.72rem;
+  color: var(--spectrum-gray-600, var(--spectrum-gray-700));
+  opacity: 0.8;
+}
+
+.rn-ai-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  flex: none;
+}
+
+.rn-ai-dots i {
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 50%;
+  background: var(--color-brand);
+  animation: rn-ai-pulse 1.2s ease-in-out infinite;
+}
+
+.rn-ai-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.rn-ai-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes rn-ai-pulse {
+  0%, 80%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* §2.3.3: the animation is decoration, and it goes when motion is not wanted. The
+   dots stay — they still say "there are three of these and something is going on" —
+   they simply stop moving. */
+@media (prefers-reduced-motion: reduce) {
+  .rn-ai-dots i {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
+/* What the assistant produced, as against what it said: an app, or a change waiting
+   to be accepted. Both are cards because both carry a button, and a button inside a
+   paragraph of prose is a button nobody sees. */
+.rn-ai-created,
+.rn-ai-proposal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 0.9rem;
+  background: var(--spectrum-gray-100);
+  font-size: 0.85rem;
+}
+
+.rn-ai-created {
+  border-inline-start: 3px solid var(--color-brand);
+}
+
+.rn-ai-proposal {
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0 1.1rem 0.75rem;
+  max-height: 40vh;
+}
+
+.rn-ai-proposal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.rn-ai-diff-counts {
+  margin-inline-start: 0.5rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.75rem;
+  color: var(--spectrum-gray-700);
+}
+
+/* The changed lines, scrolling inside the card so a big rewrite never pushes the
+   Apply button off screen. Colour marks the sign but never carries it alone — the
+   +/- prefix is in the text, which is what a screen reader gets. */
+.rn-ai-diff {
+  margin: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--spectrum-gray-50);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.rn-ai-diff-add {
+  color: var(--spectrum-green-900, #157a3c);
+}
+
+.rn-ai-diff-del {
+  color: var(--spectrum-red-900, #b1300e);
+  text-decoration: line-through;
+}
+
+.rn-ai-proposal-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.rn-ai-note {
+  font-size: 0.8rem;
+  color: var(--spectrum-gray-700);
+}
+
+/* The composer is one box with the field and the button inside it, rather than a
+   field with a button beside it: what is being composed is the whole box, and it is
+   what the eye lands on when the panel opens. */
+.rn-ai-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0 1.1rem 1.1rem;
+  padding: 0.6rem 0.7rem 0.55rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 1.1rem;
+  background: var(--spectrum-gray-100);
+}
+
+/* The ring belongs to the box, not to the field inside it, or the focus outline
+   draws a rectangle inside a rounded box. */
+.rn-ai-composer:focus-within {
+  border-color: var(--color-brand);
+}
+
+.rn-ai-input {
+  width: 100%;
+  min-height: 2.6rem;
+  max-height: 12rem;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--spectrum-gray-900);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  field-sizing: content;
+}
+
+.rn-ai-composer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* «In elaborazione», accanto a Ferma e per tutto il tempo che il lavoro dura.
+   L'indicatore dentro la lista sparisce appena il testo comincia ad arrivare, e da
+   quel momento resterebbe un pulsante Ferma da solo — che non dice se c'è ancora
+   qualcosa da fermare.
+
+   Sta ATTACCATO al pulsante, non spinto all'altro capo della riga: la riga è già
+   allineata a destra, quindi il pulsante non si muove comunque, e una scritta a
+   duecento pixel dal pulsante che spiega è una scritta che si legge come un'altra
+   cosa. Su uno schermo stretto cede il testo, mai il pulsante. */
+.rn-ai-working {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  font-size: 0.82rem;
+  color: var(--spectrum-gray-700);
+}
+
+.rn-ai-working-label {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The opening line, on the page where apps are made. It sits between the heading and
+   the grid because that is the order the two ways of making an app belong in:
+   describe one, or start from a blank one. */
+.rn-gallery-ask {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 1.25rem;
+  padding: 0.65rem 0.75rem 0.65rem 0.9rem;
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 1.2rem;
+  background: var(--spectrum-gray-100);
+}
+
+.rn-gallery-ask:focus-within {
+  border-color: var(--color-brand);
+}
+
+.rn-gallery-ask-icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--color-brand);
+}
+
+/* One row until it is asked for more: `field-sizing` grows the box with the text
+   where it is supported, and where it is not the box scrolls, which is what a
+   textarea does anyway. */
+.rn-gallery-ask-input {
+  flex: 1;
+  min-width: 0;
+  max-height: 8rem;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--spectrum-gray-900);
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  field-sizing: content;
+}
+
+/* The settings fields have their own class rather than borrowing the share dialog's:
+   that one is `flex: 1 1 18rem`, and in a column — which this form is — a flex basis
+   is a HEIGHT. The fields came out eighteen rems tall, each of them. */
+.rn-ai-field {
+  width: 100%;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--spectrum-gray-400);
+  border-radius: 0.5rem;
+  background: var(--spectrum-gray-50);
+  color: var(--spectrum-gray-900);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+}
+
+.rn-ai-field:focus {
+  outline: none;
+  border-color: var(--color-brand);
+}
+
+/* A label belongs to the field under it, not to the field above it. */
+.rn-ai-settings sp-field-label {
+  margin-top: 0.35rem;
+  margin-bottom: -0.15rem;
+}
+
+.rn-ai-settings sp-picker {
+  width: 100%;
+}
+
+/* A flex item's default `min-width: auto` is what pushes the button out of the card:
+   the text refuses to shrink below its own longest word, and `space-between` obliges
+   by moving the button past the edge. */
+.rn-ai-created > span,
+.rn-ai-proposal > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The card's button must not inherit the conversation's text behaviour: a turn is
+   pre-wrap with anywhere-breaks so long answers fold, but inside a 50px-wide button
+   slot that wraps "Apri" onto two lines and reads as a label off its centre. */
+.rn-ai-created sp-button,
+.rn-ai-proposal sp-button {
+  flex: none;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  text-align: center;
+}
+
+/* ---------- Il catalogo pubblicato, nella galleria ---------- */
+/* Sta sotto le proprie app e si distingue da esse: quelle sono qui, queste
+   arrivano dal sito. Il bordo tratteggiato dice «non ancora tua» senza affidare
+   la distinzione al solo colore. */
+.rn-catalogue {
+  max-width: 72rem;
+  margin: 2.5rem auto 0;
+  padding: 0 1rem;
+}
+.rn-catalogue-heading {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.rn-catalogue-lead {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--spectrum-gray-700);
+}
+.rn-catalogue-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.75rem;
+}
+.rn-catalogue-open {
+  display: grid;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--spectrum-gray-400);
+  border-radius: 0.6rem;
+  color: inherit;
+  text-decoration: none;
+}
+.rn-catalogue-open:hover { border-style: solid; border-color: var(--spectrum-accent-color-900); }
+.rn-catalogue-title { font-weight: 600; }
+.rn-catalogue-desc {
+  font-size: 0.8125rem;
+  color: var(--spectrum-gray-700);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rn-catalogue-action {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--spectrum-accent-color-900);
+}

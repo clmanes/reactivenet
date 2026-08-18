@@ -1,0 +1,28 @@
+{{ define "main" }}
+{{ partial "breadcrumbs.html" . }}
+<section class="prose">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+</section>
+{{ with .Pages }}
+<ul class="card-grid">
+  {{ range . }}
+  <li>
+    <a class="doc-card" href="{{ .RelPermalink }}">
+      <span class="doc-card-title">{{ .Title }} <span class="arrow" aria-hidden="true">→</span></span>
+      {{ with .Description }}<span class="doc-card-desc">{{ . }}</span>{{ end }}
+    </a>
+  </li>
+  {{ end }}
+</ul>
+{{ else }}
+{{/* Una sezione senza schede è una pagina che finisce dopo il titolo, e chi ci
+     arriva da un menu non sa se è vuota o rotta. Lo dice, e offre le due strade
+     che esistono davvero: il resto del catalogo, e farsi scrivere l'app dal
+     proprio assistente — che è il modo in cui nasceranno anche queste. */}}
+<p class="section-empty">
+  {{ i18n "sectionEmpty" }}
+  {{ with .Parent }}<a href="{{ .RelPermalink }}">{{ i18n "sectionEmptyBack" }}</a>{{ end }}
+</p>
+{{ end }}
+{{ end }}

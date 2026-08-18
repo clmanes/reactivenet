@@ -1,0 +1,36 @@
+{{/* Paginazione. È un <nav> di link veri — copiabili, apribili in una scheda
+     nuova — con aria-current sulla pagina mostrata e bersagli da 44px, ben
+     sopra il minimo di 24×24 (§2.5.8). Non viene disegnata affatto quando c'è
+     una pagina sola: un controllo con una voce non fa niente. */}}
+{{ $p := .Paginator }}
+{{ if gt $p.TotalPages 1 }}
+<nav class="pager" aria-label="{{ i18n "pagination" }}">
+  {{ with $p.Prev }}
+  <a class="pager-step" href="{{ .URL }}" rel="prev">
+    <span aria-hidden="true">←</span> {{ i18n "prevPage" }}
+  </a>
+  {{ else }}
+  <span class="pager-step is-disabled" aria-hidden="true">← {{ i18n "prevPage" }}</span>
+  {{ end }}
+
+  <ol class="pager-pages">
+    {{ range $p.Pagers }}
+    <li>
+      {{ if eq . $p }}
+      <a href="{{ .URL }}" aria-current="page" aria-label="{{ i18n "page" }} {{ .PageNumber }}">{{ .PageNumber }}</a>
+      {{ else }}
+      <a href="{{ .URL }}" aria-label="{{ i18n "page" }} {{ .PageNumber }}">{{ .PageNumber }}</a>
+      {{ end }}
+    </li>
+    {{ end }}
+  </ol>
+
+  {{ with $p.Next }}
+  <a class="pager-step" href="{{ .URL }}" rel="next">
+    {{ i18n "nextPage" }} <span aria-hidden="true">→</span>
+  </a>
+  {{ else }}
+  <span class="pager-step is-disabled" aria-hidden="true">{{ i18n "nextPage" }} →</span>
+  {{ end }}
+</nav>
+{{ end }}

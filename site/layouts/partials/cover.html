@@ -1,0 +1,43 @@
+{{/* Copertina da Openverse.
+
+     L'immagine è decorativa — alt vuoto — perché quello che dice davvero al
+     lettore, autore e licenza, è testo vero nella didascalia sotto.
+     L'attribuzione non è cortesia: CC BY e CC BY-SA la richiedono.
+
+     Gli originali di Openverse arrivano fino a 750 kB l'uno; qui vengono
+     ridimensionati e convertiti in WebP a build time, e serviti con un srcset,
+     perché uno smartphone non deve scaricare un'immagine da desktop.
+
+     Parametri: `size` (larghezza massima in px), `sizes` (attributo sizes),
+     `class`, e `caption` per mostrare o no l'attribuzione. */}}
+{{ $page := .page }}
+{{ $width := .size | default 960 }}
+{{ $sizes := .sizes | default "100vw" }}
+{{ $class := .class | default "cover-img" }}
+{{ $caption := .caption | default false }}
+
+{{ with $page.Params.cover }}
+{{ $src := resources.Get (strings.TrimPrefix "/" .) }}
+{{ with $src }}
+{{ $small := .Resize (printf "%dx webp q72" (div $width 2)) }}
+{{ $large := .Resize (printf "%dx webp q72" $width) }}
+{{ if $caption }}<figure class="cover">{{ end }}
+  <img class="{{ $class }}"
+       src="{{ $large.RelPermalink }}"
+       srcset="{{ $small.RelPermalink }} {{ $small.Width }}w, {{ $large.RelPermalink }} {{ $large.Width }}w"
+       sizes="{{ $sizes }}"
+       width="{{ $large.Width }}" height="{{ $large.Height }}"
+       alt="" loading="lazy" decoding="async">
+  {{ if $caption }}
+  {{ with $page.Params.coverAuthor }}
+  <figcaption>
+    {{ with $page.Params.coverSource }}<a href="{{ . }}">{{ $page.Params.coverAlt | default "Openverse" }}</a>{{ else }}{{ $page.Params.coverAlt }}{{ end }}
+    · {{ if $page.Params.coverAuthorUrl }}<a href="{{ $page.Params.coverAuthorUrl }}">{{ . }}</a>{{ else }}{{ . }}{{ end }}
+    {{ with $page.Params.coverLicense }} · <a href="{{ $page.Params.coverLicenseUrl }}">{{ . }}</a>{{ end }}
+    · Openverse
+  </figcaption>
+  {{ end }}
+  </figure>
+  {{ end }}
+{{ end }}
+{{ end }}
